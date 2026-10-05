@@ -383,6 +383,12 @@ details.list{display:none}
 .ppart.open .pi{transform:rotate(90deg)}
 .ppart .ucards{padding:10px}
 #ulist{gap:10px}
+.fc-title{font-weight:700;font-size:15px;flex:1}
+#fc-back{border:0;background:none;color:var(--red);font-weight:700;font-size:14px;padding:6px 0;cursor:pointer}
+.pxt.wide{grid-column:1/-1;flex-direction:row;align-items:center;justify-content:space-between;min-height:56px;border-color:var(--ink)}
+.pxt.wide span{font-size:12.5px}
+.fc-end{display:flex;flex-direction:column;gap:8px;align-self:stretch;margin-top:10px}
+.fc-end button{border:1.5px solid var(--rule);background:var(--paper);border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer}
 .foot{font-size:12px;color:var(--muted);border-top:1px solid var(--rule);padding-top:12px;margin:0}
 :focus-visible{outline:2px solid var(--red);outline-offset:2px}
 </style>
@@ -391,12 +397,12 @@ details.list{display:none}
 <body>
 <div class="sheet">
  <header class="top"><span class="seal">办公室汉语</span><h1>Tiếng Trung Văn phòng</h1></header>
- <nav class="modes" aria-label="Chế độ"><button id="m-book" class="on">Bài học</button><button id="m-fc">Ôn tập</button><button id="m-px">Luyện tập</button><span class="prog" id="prog"></span></nav>
+ <nav class="modes" aria-label="Chế độ"><button id="m-book" class="on">Bài học</button><button id="m-fc" hidden>Ôn tập</button><button id="m-px">Luyện tập</button><span class="prog" id="prog"></span></nav>
  <section id="fc" hidden>
-  <div class="fc-bar">
+  <div class="px-top"><button id="fc-back">‹ Luyện tập</button><span id="fc-title" class="fc-title">Thẻ ghi nhớ</span><span id="fc-count" class="count"></span></div>
+  <div class="fc-bar" hidden>
    <select id="fc-unit" aria-label="Chọn bài"></select>
    <select id="fc-mode" aria-label="Chọn nhóm từ"><option value="new">Chưa thuộc</option><option value="hard">Từ khó</option><option value="all">Tất cả</option></select>
-   <span id="fc-count" class="count"></span>
   </div>
   <div class="fc-card" id="fc-card" role="button" tabindex="0" aria-label="Thẻ từ, chạm để lật"></div>
   <div class="fc-acts"><button id="fc-no" class="no">Chưa nhớ</button><button id="fc-flip">Lật thẻ</button><button id="fc-yes" class="yes">Đã nhớ</button></div>
@@ -443,6 +449,7 @@ details.list{display:none}
     <button class="pxt" data-px="py"><b>Pinyin</b><span>Chọn cách đọc đúng</span></button>
     <button class="pxt" data-px="fill"><b>Điền từ</b><span>Hoàn thành câu ví dụ</span></button>
     <button class="pxt" data-px="match"><b>Ghép cặp</b><span>Nối từ với nghĩa</span></button>
+    <button class="pxt wide" data-px="card"><b>Thẻ ghi nhớ</b><span>Tự nhớ nghĩa & pinyin, rồi lật thẻ</span></button>
    </div>
   </section>
   <div class="home-h"><h2>Chọn bài để học</h2><span class="count" id="count" hidden></span></div>
@@ -805,7 +812,7 @@ PARTS.forEach((p,pi)=>{
  U.filter(u=>u.p===pi).forEach(u=>{
   html+=`<section class="unit" id="${uid(u)}">
   <div class="unit-title"><span class="unit-no" style="background:${col(p.k)}">Unit ${u.n}</span><span class="han">${u.han}</span><span class="vi">${esc(u.vi)}</span></div>
-  <div class="ustat"><span class="uprog" data-up="${u.n}"></span><button class="listen" data-dlg="${u.n}" hidden style="color:${col(p.k)};border-color:${col(p.k)}">▶ Hội thoại</button><button class="study" data-study="${u.n}" style="background:${col(p.k)}">Ôn tập bài này</button></div>
+  <div class="ustat"><span class="uprog" data-up="${u.n}"></span><button class="listen" data-dlg="${u.n}" hidden style="color:${col(p.k)};border-color:${col(p.k)}">▶ Hội thoại</button><button class="study" data-study="${u.n}" style="background:${col(p.k)}">Luyện tập bài này</button></div>
   <details class="mapd"><summary>Xem sơ đồ tư duy của bài</summary>
   <div class="umap"><svg data-u="${u.n}" role="img" aria-label="Sơ đồ tư duy Unit ${u.n}"></svg></div>
   <div class="card empty" data-card="${u.n}" style="border-color:${col(p.k)}"><span class="hint">Bấm vào một từ trên sơ đồ để xem câu ví dụ và trang trong sách Boya.</span></div></details>
@@ -830,7 +837,7 @@ function toggleRow(row,open){const x=row.querySelector(".wr-x");if(open===undefi
 document.addEventListener("click",e=>{
  if(e.target.closest("[data-say]"))return;
  const m=e.target.closest(".wr-m");if(m){toggleRow(m.parentNode);return}
- const st=e.target.closest(".acc-study");if(st){FCSET={u:st.dataset.u,hzs:st.dataset.hzs.split(" "),lab:st.dataset.lab};goFC("set")}
+ const st=e.target.closest(".acc-study");if(st){const hz=st.dataset.hzs.split(" ");const ws=ALLW.filter(x=>x.u===st.dataset.u&&hz.includes(x.w[0]));startPx("mix",null,ws);document.getElementById("px-title").textContent="Luyện tập · "+st.dataset.lab}
 });
 document.addEventListener("keydown",e=>{const m=e.target.closest&&e.target.closest(".wr-m");if(m&&(e.key==="Enter"||e.key===" ")){e.preventDefault();toggleRow(m.parentNode)}});
 let FCSET=null;
@@ -945,7 +952,7 @@ const MAP={
    const head=sec.firstChild, body=sec.lastChild;
    head.addEventListener("click",()=>toggleSec(sec,body.hidden));
    sec._build=()=>{if(body.dataset.built)return;body.dataset.built=1;
-    body.innerHTML=isS?b.items.map(it=>sentHtml(it.s)).join(""):b.items.map(it=>rowHtml(it.w)).join("")+`<button class="acc-study" data-u="${u.n}" data-hzs="${hzs.join(" ")}" data-lab="${esc(b.lab)}">Ôn tập mục này · ${hzs.length} từ</button>`;
+    body.innerHTML=isS?b.items.map(it=>sentHtml(it.s)).join(""):b.items.map(it=>rowHtml(it.w)).join("")+`<button class="acc-study" data-u="${u.n}" data-hzs="${hzs.join(" ")}" data-lab="${esc(b.lab)}">Luyện tập mục này · ${hzs.length} từ</button>`;
     paintMarks();filter()};
    mt.appendChild(sec);
   });
@@ -1012,17 +1019,25 @@ document.addEventListener("click",e=>{
 const fcU=document.getElementById("fc-unit"),fcM=document.getElementById("fc-mode"),fcC=document.getElementById("fc-card"),fcN=document.getElementById("fc-count");
 fcU.innerHTML=`<option value="all">Tất cả các bài</option>`+U.map(u=>`<option value="${u.n}">Unit ${u.n} · ${esc(u.vi)}</option>`).join("");
 let deck=[],cur=0,flipped=false;
+let FCSCOPE="all",FCWORDS=null;
 function buildDeck(){
- const un=fcU.value,md=fcM.value;
- const inSet=x=>un==="set"&&FCSET?(x.u===FCSET.u&&FCSET.hzs.includes(x.w[0])):(un==="all"||x.u===un);
- deck=ALLW.filter(x=>inSet(x)&&(md==="all"||(md==="hard"?ST.h[x.w[0]]:!ST.k[x.w[0]])));
- for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}
+ const pool=FCWORDS||pxPool(FCSCOPE);
+ deck=pickWords(pool,Math.min(20,pool.length));
  cur=0;flipped=false;drawCard();
+}
+function startCard(scope,words,title){
+ FCSCOPE=scope||"all";FCWORDS=words||null;
+ document.getElementById("fc-title").textContent=title||"Thẻ ghi nhớ";
+ show("fc");buildDeck();window.scrollTo(0,0);save2({v:"pxhome"});
 }
 function drawCard(){
  if(!deck.length||cur>=deck.length){
   fcC.innerHTML=`<div class="done">${deck.length?"Hết thẻ trong nhóm này. Chọn nhóm khác hoặc ôn lại.":(fcM.value==="hard"?"Chưa có từ khó nào. Bấm “Chưa nhớ” khi ôn để thêm vào đây.":"Bạn đã thuộc hết các từ trong nhóm này.")}</div>`;
-  fcN.textContent=deck.length?`${deck.length}/${deck.length}`:"0 thẻ";return}
+  fcN.textContent=deck.length?`${deck.length}/${deck.length}`:"0 thẻ";
+  fcC.insertAdjacentHTML("beforeend",`<div class="fc-end"><button id="fc-more">Lượt thẻ mới</button><button id="fc-done">Về Luyện tập</button></div>`);
+  document.getElementById("fc-more").onclick=e=>{e.stopPropagation();buildDeck()};
+  document.getElementById("fc-done").onclick=e=>{e.stopPropagation();goHome(true)};
+  return}
  const x=deck[cur],w=x.w,s=SRC[w[0]];
  fcN.textContent=`${cur+1}/${deck.length}`;
  fcC.innerHTML=`<div class="meta">Unit ${x.u}${ST.h[w[0]]?" · Từ khó":""}</div><div class="big">${w[0]}</div>`+
@@ -1145,10 +1160,12 @@ function fillScope(){
 }
 document.getElementById("px-scopes").addEventListener("click",e=>{const b=e.target.closest("[data-scope]");if(!b)return;document.getElementById("px-scope").value=b.dataset.scope;document.querySelectorAll(".pxs").forEach(x=>{const on=x===b;x.classList.toggle("on",on);x.setAttribute("aria-checked",on)})});
 function openPx(){show("px");window.scrollTo(0,0)}
+function scopeTitle(scope,words){return words?" · từ đã chọn":/^p\d$/.test(scope||"")?" · Phần "+(+scope[1]+1):/^\d/.test(scope||"")?" · Unit "+scope:scope==="hard"?" · Từ khó":scope==="new"?" · Chưa thuộc":""}
 function startPx(type,scope,words){
+ if(type==="card"){startCard(scope,words,"Thẻ ghi nhớ"+scopeTitle(scope,words));return}
  const pool=words||pxPool(scope);
- PX={type,scope,i:0,ok:0,wrong:[],qs:[],words:pool};
- document.getElementById("px-title").textContent=PXT[type];
+ PX={type,scope,i:0,ok:0,wrong:[],qs:[],words:pool,custom:words||null};
+ document.getElementById("px-title").textContent=PXT[type]+scopeTitle(scope,words);
  openPx();
  if(!pool.length){PB.innerHTML=`<div class="pempty">${scope==="hard"?"Chưa có từ khó nào. Làm bài luyện tập, từ nào trả lời sai sẽ vào đây.":"Bạn đã thuộc hết các từ trong phạm vi này. Hãy chọn phạm vi khác."}</div>`;pxBar(0,1);document.getElementById("px-score").textContent="";return}
  if(type==="match"){PX.rounds=[];const ws=pickWords(pool,Math.min(15,pool.length));for(let i=0;i<ws.length;i+=5)PX.rounds.push(ws.slice(i,i+5));if(PX.rounds.length>1&&PX.rounds.at(-1).length<3){const last=PX.rounds.pop();PX.rounds[PX.rounds.length-1].push(...last)}PX.r=0;PX.miss=0;PX.total=ws.length;matchRender();return}
@@ -1190,7 +1207,7 @@ function pxEnd(score,total,msg){
   ${ws.length?`<div class="pwrong">${ws.map(x=>`<div><span class="han">${x.w[0]}</span><span class="p">${esc(x.w[1])}</span><span>${esc(x.w[2])}</span></div>`).join("")}</div>`:""}
   <div class="pbtns">${ws.length?`<button class="pri" id="p-redo">Luyện lại ${ws.length} từ sai</button>`:""}<button class="${ws.length?"":"pri"}" id="p-again">Luyện tiếp</button><button id="p-home">Chọn dạng bài khác</button></div></div>`;
  if(ws.length)document.getElementById("p-redo").onclick=()=>startPx(PX.type==="match"?"mix":PX.type,PX.scope,ws);
- document.getElementById("p-again").onclick=()=>startPx(PX.type,PX.scope);
+ document.getElementById("p-again").onclick=()=>startPx(PX.type,PX.scope,PX.custom);
  document.getElementById("p-home").onclick=()=>goHome(true);
 }
 function matchRender(){
@@ -1237,7 +1254,7 @@ function show(view){
  DSEC.hidden=true;
  HOME.hidden=view!=="home";UV.hidden=view!=="unit";FC.hidden=view!=="fc";HDR.hidden=view!=="home";
  mB.classList.toggle("on",view==="home"||view==="unit");mF.classList.toggle("on",view==="fc");
- PXS.hidden=view!=="px";mP.classList.toggle("on",view==="px");
+ PXS.hidden=view!=="px";mP.classList.toggle("on",view==="px"||view==="fc");
  if(view==="home")fillScope();
 }
 function openUnit(i,dir,hz){
@@ -1267,7 +1284,8 @@ document.getElementById("utabs").addEventListener("click",e=>{const b=e.target.c
 document.getElementById("u-home").addEventListener("click",()=>{goHome();const pt=document.querySelector(`.ppart[data-part="${U[cu].p}"]`);if(pt){togglePart(pt,true);setTimeout(()=>pt.scrollIntoView({block:"start"}),20)}});
 document.getElementById("u-prev").addEventListener("click",()=>openUnit(cu-1,-1));
 document.getElementById("u-next").addEventListener("click",()=>openUnit(cu+1,1));
-document.getElementById("units").addEventListener("click",e=>{const b=e.target.closest("[data-study]");if(b)goFC(b.dataset.study)});
+document.getElementById("units").addEventListener("click",e=>{const b=e.target.closest("[data-study]");if(b)startPx("mix",b.dataset.study)});
+document.getElementById("fc-back").addEventListener("click",()=>goHome(true));
 document.getElementById("map").addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;e.preventDefault();const id=(a.getAttribute("href")||"").slice(1);const i=U.findIndex(u=>uid(u)===id);if(i>=0)openUnit(i)});
 mB.addEventListener("click",()=>goHome());
 mF.addEventListener("click",()=>goFC(UV.hidden?null:U[cu].n));
@@ -1292,11 +1310,11 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 (function(){let v=null;try{v=JSON.parse(localStorage.getItem("ttvp-view")||"null")}catch(e){}
  const i=v&&v.u?U.findIndex(u=>u.n===v.u):-1;
  if(v&&v.v==="dlg"&&i>=0){openUnit(i);restoreDlg=()=>{if(DLG[v.u])openDlg(v.u,false);restoreDlg=null}}
- else if(v&&v.v==="unit"&&i>=0)openUnit(i);else if(v&&v.v==="fc")goFC(v.u&&v.u!=="all"?v.u:null);else if(v&&v.v==="pxhome")goHome(true);else show("home");
+ else if(v&&v.v==="unit"&&i>=0)openUnit(i);else if(v&&v.v==="fc")goHome(true);else if(v&&v.v==="pxhome")goHome(true);else show("home");
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="12";
+const APP_VERSION="13";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
