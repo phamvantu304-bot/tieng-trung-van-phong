@@ -1,5 +1,5 @@
 // Offline cache. Tăng VERSION mỗi khi cập nhật nội dung để iPhone tải bản mới.
-const VERSION = "ttvp-v7";
+const VERSION = "ttvp-v8";
 const CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
@@ -23,6 +23,13 @@ self.addEventListener("fetch", e => {
     e.respondWith(fetch(req.url, { cache: "no-cache" }).then(r => {
       const copy = r.clone(); caches.open(VERSION).then(c => c.put("index.html", copy)); return r;
     }).catch(() => caches.match("index.html")));
+    return;
+  }
+  // Dữ liệu hội thoại: luôn lấy bản mới khi có mạng, mất mạng thì dùng bản đã lưu.
+  if (url.origin === location.origin && url.pathname.endsWith(".json")) {
+    e.respondWith(fetch(req.url, { cache: "no-cache" }).then(r => {
+      const copy = r.clone(); caches.open(VERSION).then(c => c.put(req, copy)); return r;
+    }).catch(() => caches.match(req)));
     return;
   }
   // Font Google và file tĩnh: dùng bản đã lưu, nếu chưa có thì tải rồi lưu lại.
