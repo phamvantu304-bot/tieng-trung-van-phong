@@ -272,8 +272,14 @@ details.list{display:none}
 #dlg-back{border:0;background:none;color:var(--red);font-weight:700;font-size:14px;padding:6px 0;cursor:pointer}
 #dlg-title{font-weight:700;font-size:15px}
 .dlg-stage{background:var(--pp);border-radius:14px;padding:22px 16px 20px;min-height:340px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;box-shadow:inset 0 0 40px rgba(120,90,40,.08)}
-.dlg-video{display:block;width:100%;max-width:calc(60vh*9/16);aspect-ratio:9/16;background:#000;border-radius:10px;cursor:pointer}
-#dlg:not(.vid) .dlg-video{display:none}
+.dlg-vwrap{position:relative;width:100%;max-width:calc(60vh*9/16)}
+.dlg-video{display:block;width:100%;aspect-ratio:9/16;background:#000;border-radius:10px;cursor:pointer}
+#dlg:not(.vid) .dlg-vwrap{display:none}
+.dlg-fs{position:absolute;right:8px;bottom:8px;width:42px;height:42px;display:grid;place-items:center;border:0;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;cursor:pointer}
+.dlg-fs .fs-out,.dlg-vwrap.fs .dlg-fs .fs-in{display:none}
+.dlg-vwrap.fs .dlg-fs .fs-out{display:inline}
+.dlg-vwrap.fs{max-width:none;background:#000;display:flex;align-items:center;justify-content:center}
+.dlg-vwrap.fs .dlg-video{width:auto;height:100%;max-width:100%;border-radius:0}
 #dlg.vid #dlg-who,#dlg.vid .dlg-zh,#dlg.vid .dlg-vi{display:none}
 #dlg.vid .dlg-stage{padding-top:14px}
 .dlg-who{font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
@@ -420,7 +426,7 @@ details.list{display:none}
  <section id="dlg" hidden>
   <div class="dlg-top"><button id="dlg-back">‹ Về bài học</button><span id="dlg-title"></span></div>
   <div class="dlg-stage">
-   <video id="dlg-audio" class="dlg-video" preload="metadata" playsinline></video>
+   <div class="dlg-vwrap" id="dlg-vwrap"><video id="dlg-audio" class="dlg-video" preload="metadata" playsinline></video><button id="dlg-fs" class="dlg-fs" aria-label="Xem toàn màn hình" title="Toàn màn hình"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path class="fs-in" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><path class="fs-out" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button></div>
    <div class="dlg-who" id="dlg-who"></div>
    <div class="dlg-zh han" id="dlg-zh"></div>
    <div class="dlg-vi"><span id="dlg-vi"></span></div>
@@ -1084,7 +1090,7 @@ function dlgRender(i){
  const ws=wordsIn(L.zh,dU);
  document.getElementById("dlg-words").innerHTML=ws.length?ws.map(w=>`<button class="dw" data-say="${w[0]}"><span class="han">${w[0]}</span><span class="p py">/ ${esc(w[1])} /:</span><span class="m mn">${esc(w[2])}</span></button>`).join(""):`<span class="dlg-none">Câu này không có từ mới của bài.</span>`;
  document.querySelectorAll("#dlg-list li").forEach((li,j)=>li.classList.toggle("on",j===i));
- const on=document.querySelector("#dlg-list li.on");if(on&&!DA.paused)on.scrollIntoView({block:"nearest"});
+ const on=document.querySelector("#dlg-list li.on");if(on&&!DA.paused&&!DSEC.classList.contains("vid"))on.scrollIntoView({block:"nearest"});
 }
 function lineAt(t){const ls=DLG[dU].lines;let i=0;for(let j=0;j<ls.length;j++)if(t>=ls[j].t-0.05)i=j;return i}
 function openDlg(n,autoplay){
@@ -1100,7 +1106,7 @@ function openDlg(n,autoplay){
  dlgRender(0);window.scrollTo(0,0);save2({v:"dlg",u:n});
  if(autoplay)DA.play().catch(()=>{});
 }
-function closeDlg(){DA.pause();DSEC.hidden=true;const i=U.findIndex(u=>u.n===dU);openUnit(i>=0?i:cu)}
+function closeDlg(){if(fsEl&&fsEl())(document.exitFullscreen||document.webkitExitFullscreen).call(document);DA.pause();DSEC.hidden=true;const i=U.findIndex(u=>u.n===dU);openUnit(i>=0?i:cu)}
 DA.addEventListener("timeupdate",()=>{if(!dU)return;dlgRender(lineAt(DA.currentTime));if(DA.duration)document.getElementById("dlg-fill").style.width=(100*DA.currentTime/DA.duration)+"%"});
 DA.addEventListener("play",()=>{document.getElementById("dlg-play").textContent="❚❚"});
 DA.addEventListener("pause",()=>{document.getElementById("dlg-play").textContent="▶"});
@@ -1114,6 +1120,16 @@ const seekLine=i=>{const ls=DLG[dU].lines;i=Math.max(0,Math.min(ls.length-1,i));
 const dlgToggle=()=>{DA.paused?DA.play().catch(()=>{}):DA.pause()};
 document.getElementById("dlg-play").addEventListener("click",dlgToggle);
 DA.addEventListener("click",dlgToggle);
+// toàn màn hình: bật cho khung video (giữ nút thoát); iPhone chỉ cho phép trình phát video gốc
+const VW=document.getElementById("dlg-vwrap");
+const fsEl=()=>document.fullscreenElement||document.webkitFullscreenElement;
+document.getElementById("dlg-fs").addEventListener("click",()=>{
+ if(fsEl()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return}
+ const req=VW.requestFullscreen||VW.webkitRequestFullscreen;
+ if(req&&(document.fullscreenEnabled||document.webkitFullscreenEnabled))Promise.resolve(req.call(VW)).catch(()=>{});
+ else if(DA.webkitEnterFullscreen)DA.webkitEnterFullscreen();
+});
+["fullscreenchange","webkitfullscreenchange"].forEach(ev=>document.addEventListener(ev,()=>VW.classList.toggle("fs",fsEl()===VW)));
 document.getElementById("dlg-prev").addEventListener("click",()=>seekLine(dIdx-(DA.currentTime-DLG[dU].lines[dIdx].t>1.5?0:1)));
 document.getElementById("dlg-next").addEventListener("click",()=>seekLine(dIdx+1));
 document.getElementById("dlg-loop").addEventListener("click",e=>{DA.loop=!DA.loop;e.currentTarget.setAttribute("aria-pressed",DA.loop);if(DA.loop)setAuto(false)});
@@ -1320,7 +1336,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="14";
+const APP_VERSION="15";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
