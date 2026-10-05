@@ -1,5 +1,7 @@
 # Ảnh nhân vật cho video hội thoại
 
+Các file `u1_A.png … u16_B.png` hiện có là nhân vật hoạt hình do `node video/make_characters.js` vẽ. Muốn đổi ảnh khác thì thay file cùng tên (hoặc xoá đi và dùng ảnh dùng chung như bên dưới).
+
 Đặt ảnh vào thư mục này rồi chạy `python3 video/make_video.py` để làm lại `video/unit1.mp4 … unit16.mp4`.
 Khi một người nói, video sẽ cắt sang ảnh của người đó, giống như trong phim.
 
