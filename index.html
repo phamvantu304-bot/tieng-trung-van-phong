@@ -372,6 +372,17 @@ details.list{display:none}
 .pxs span{font-size:11px;color:var(--muted)}
 .pxs.on{border-color:var(--ink);background:var(--ink);color:var(--paper)}
 .pxs.on span{color:var(--paper);opacity:.8}
+.ppart{border:1.5px solid var(--c);border-radius:14px;background:var(--paper);overflow:hidden}
+.ppart-h{width:100%;display:flex;align-items:center;gap:14px;border:0;background:var(--sf);padding:16px 14px;text-align:left;cursor:pointer}
+.ppart-h .pn{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--c);color:var(--paper);font-size:22px;font-weight:800}
+.ppart-h .pt{flex:1;display:flex;flex-direction:column;gap:1px;min-width:0}
+.ppart-h .pl{font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--c)}
+.ppart-h b{font-size:17px;line-height:1.3}
+.ppart-h .pp{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ppart-h .pi{flex:none;display:inline-block;font-size:26px;color:var(--c);transition:transform .2s}
+.ppart.open .pi{transform:rotate(90deg)}
+.ppart .ucards{padding:10px}
+#ulist{gap:10px}
 .foot{font-size:12px;color:var(--muted);border-top:1px solid var(--rule);padding-top:12px;margin:0}
 :focus-visible{outline:2px solid var(--red);outline-offset:2px}
 </style>
@@ -975,6 +986,7 @@ function paintMarks(){
   n.classList.toggle("known",!!ST.k[hz]);n.classList.toggle("hard",!!ST.h[hz]);
  });
  document.querySelectorAll(".acc").forEach(sec=>{const hz=sec.dataset.hzs?sec.dataset.hzs.split(" "):[];const e=sec.querySelector("[data-secprog]");if(e&&hz.length){const k=hz.filter(x=>ST.k[x]).length;e.textContent=k?`${hz.length} từ · ✓${k}`:`${hz.length} từ`;sec.classList.toggle("done",k===hz.length)}});
+ PARTS.forEach((p,pi)=>{const ws=ALLW.filter(x=>{const u=U.find(y=>y.n===x.u);return u&&u.p===pi}),k=ws.filter(x=>ST.k[x.w[0]]).length,nu=U.filter(u=>u.p===pi).length;document.querySelectorAll(`[data-partprog="${pi}"]`).forEach(e=>e.textContent=`${nu} bài · ${ws.length} từ · ✓ ${k}`)});
  const tot=ALLW.length,kn=ALLW.filter(x=>ST.k[x.w[0]]).length;
  document.getElementById("prog").textContent=`✓ ${kn}/${tot}`;
  U.forEach(u=>{const ws=ALLW.filter(x=>x.u===u.n),k=ws.filter(x=>ST.k[x.w[0]]).length;
@@ -1214,8 +1226,8 @@ let cu=0;
 // home: unit list grouped by part
 document.getElementById("ulist").innerHTML=PARTS.map((p,pi)=>{
  const us=U.filter(u=>u.p===pi);
- return `<div class="ppart"><div class="ppart-h"><span class="tag" style="background:${soft(p.k)};color:${col(p.k)}">${esc(p.vi.split(" · ")[0])}</span><b>${esc(p.vi.split(" · ")[1])}</b></div>
- <div class="ucards">${us.map(u=>`<button class="ucard" data-open="${u.n}" style="--c:${col(p.k)};--sf:${soft(p.k)}"><span class="ok" data-okmark="${u.n}">✓</span><span class="ul">UNIT</span><span class="un">${u.n}</span><span class="uv">${esc(u.vi)}</span><span class="uh">${u.han}</span></button>`).join("")}</div></div>`}).join("");
+ return `<div class="ppart" data-part="${pi}" style="--c:${col(p.k)};--sf:${soft(p.k)}"><button class="ppart-h" aria-expanded="false"><span class="pn">${pi+1}</span><span class="pt"><span class="pl">${esc(p.vi.split(" · ")[0])} · Unit ${us[0].n}–${us.at(-1).n}</span><b>${esc(p.vi.split(" · ")[1])}</b><span class="pp" data-partprog="${pi}"></span></span><span class="pi" aria-hidden="true">›</span></button>
+ <div class="ucards" hidden>${us.map(u=>`<button class="ucard" data-open="${u.n}" style="--c:${col(p.k)};--sf:${soft(p.k)}"><span class="ok" data-okmark="${u.n}">✓</span><span class="ul">UNIT</span><span class="un">${u.n}</span><span class="uv">${esc(u.vi)}</span><span class="uh">${u.han}</span></button>`).join("")}</div></div>`}).join("");
 // unit tabs
 document.getElementById("utabs").innerHTML=U.map(u=>`<button class="utab" role="tab" data-u="${u.n}" style="--c:${col(PARTS[u.p].k)}">Unit ${u.n}</button>`).join("");
 const TABS=[...document.querySelectorAll(".utab")];
@@ -1248,9 +1260,11 @@ function goFC(un){
  else if(o&&un){o.remove();fcM.value="new";FCSET=null}
  if(un)fcU.value=un;show("fc");buildDeck();window.scrollTo(0,0);save2({v:"fc",u:fcU.value==="set"?(FCSET&&FCSET.u):fcU.value});
 }
-document.getElementById("ulist").addEventListener("click",e=>{const b=e.target.closest("[data-open]");if(b)openUnit(U.findIndex(u=>u.n===b.dataset.open))});
+function togglePart(part,open){const head=part.querySelector(".ppart-h"),body=part.querySelector(".ucards");if(open===undefined)open=body.hidden;body.hidden=!open;head.setAttribute("aria-expanded",open);part.classList.toggle("open",open)}
+document.getElementById("ulist").addEventListener("click",e=>{const b=e.target.closest("[data-open]");if(b){openUnit(U.findIndex(u=>u.n===b.dataset.open));return}
+ const ph=e.target.closest(".ppart-h");if(ph)togglePart(ph.parentNode)});
 document.getElementById("utabs").addEventListener("click",e=>{const b=e.target.closest(".utab");if(b){const i=TABS.indexOf(b);openUnit(i,i>cu?1:i<cu?-1:0)}});
-document.getElementById("u-home").addEventListener("click",()=>goHome());
+document.getElementById("u-home").addEventListener("click",()=>{goHome();const pt=document.querySelector(`.ppart[data-part="${U[cu].p}"]`);if(pt){togglePart(pt,true);setTimeout(()=>pt.scrollIntoView({block:"start"}),20)}});
 document.getElementById("u-prev").addEventListener("click",()=>openUnit(cu-1,-1));
 document.getElementById("u-next").addEventListener("click",()=>openUnit(cu+1,1));
 document.getElementById("units").addEventListener("click",e=>{const b=e.target.closest("[data-study]");if(b)goFC(b.dataset.study)});
@@ -1282,7 +1296,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="11";
+const APP_VERSION="12";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
