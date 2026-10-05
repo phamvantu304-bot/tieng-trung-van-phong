@@ -36,6 +36,7 @@
  --red:#E4685A;--red-soft:#3A2522;--p1:#5FB89E;--p1-soft:#1E332D;--p2:#8BA2E0;--p2-soft:#232B40;
  --p3:#DDA05A;--p3-soft:#3A2E1E;--p4:#D883AE;--p4-soft:#3A2330;--shadow:0 18px 40px -18px rgba(0,0,0,.7);--ok:#6CC596;--ok-soft:#1D3327;}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);padding-block:calc(env(safe-area-inset-top,0px) + 20px) calc(env(safe-area-inset-bottom,0px) + 28px);padding-inline:max(12px,env(safe-area-inset-left,0px));line-height:1.5}
 button,select{font:inherit;color:inherit}
@@ -172,6 +173,60 @@ body.hide-py .py, body.hide-py .p{visibility:hidden}
 .fc-acts .no{color:var(--red);border-color:var(--red)}
 .fc-acts .yes{background:var(--ok);border-color:var(--ok);color:var(--paper)}
 .fc-tip{font-size:12.5px;color:var(--muted);margin:0;text-align:center}
+#home{display:flex;flex-direction:column;gap:18px}
+#home[hidden],#uview[hidden],header[hidden]{display:none}
+.srch{position:relative}
+.srch input{width:100%;font:inherit;font-size:15px;padding:11px 14px;border:1px solid var(--rule);border-radius:10px;background:var(--row);color:var(--ink)}
+#results{display:flex;flex-direction:column;margin-top:6px}
+#results:empty{display:none}
+.res{display:grid;grid-template-columns:auto 1fr auto;gap:2px 12px;align-items:baseline;text-align:left;border:0;border-bottom:1px solid var(--rule);background:none;padding:9px 4px;cursor:pointer}
+.res .hz{font-family:var(--han);font-weight:700;font-size:20px}
+.res .rm{font-size:13.5px}
+.res .rm b{font-weight:600;color:var(--red);margin-right:6px}
+.res .ru{font-size:11.5px;color:var(--muted);white-space:nowrap}
+.home-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.home-h h2{margin:0;font-size:17px;letter-spacing:0;text-transform:none;color:var(--ink)}
+#ulist{display:flex;flex-direction:column;gap:20px}
+.ppart{display:flex;flex-direction:column;gap:8px}
+.ppart-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.ppart-h .tag{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:3px}
+.ppart-h b{font-size:15px}
+.ucards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.ucard{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;align-items:center;text-align:left;border:1px solid var(--rule);border-left:4px solid var(--c);background:var(--paper);border-radius:8px;padding:10px 12px;cursor:pointer}
+.ucard:hover{background:var(--sf)}
+.ucard .un{grid-row:span 3;font-size:12px;font-weight:700;color:var(--paper);background:var(--c);border-radius:4px;padding:4px 7px;font-variant-numeric:tabular-nums;align-self:start}
+.ucard .uh{font-family:var(--han);font-weight:700;font-size:18px;line-height:1.25}
+.ucard .uv{font-size:12.5px;color:var(--muted)}
+.ucard .up{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ucard .bar{flex:1;height:5px;border-radius:3px;background:var(--row);overflow:hidden}
+.ucard .bar i{display:block;height:100%;background:var(--ok);width:0}
+.ovw summary{cursor:pointer;font-size:13.5px;font-weight:600;color:var(--muted);padding:6px 0}
+.ovw .map-wrap{margin-top:8px}
+.ubar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);z-index:5;background:var(--paper);display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--rule)}
+#u-home{flex:none;border:0;background:none;color:var(--red);font-weight:700;font-size:14px;padding:6px 4px;cursor:pointer}
+.utabs{display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px}
+.utabs::-webkit-scrollbar{display:none}
+.utab{flex:none;scroll-snap-align:center;border:1px solid var(--rule);background:var(--row);border-radius:18px;padding:6px 12px;font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer}
+.utab.on{background:var(--c);border-color:var(--c);color:var(--paper)}
+.utab.done::after{content:" ✓";color:var(--ok)}
+.utab.on.done::after{color:var(--paper)}
+#uview .tools{position:static;padding:10px 0 4px;border:0}
+#units .part-head{display:none}
+#units .unit{animation:none}
+#units .unit.in-l{animation:slideL .22s ease-out}
+#units .unit.in-r{animation:slideR .22s ease-out}
+@keyframes slideL{from{opacity:.3;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes slideR{from{opacity:.3;transform:translateX(-40px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#units .unit.in-l,#units .unit.in-r{animation:none}}
+.ustat{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ustat .uprog{margin-left:0}
+.study{margin-left:auto;border:0;color:var(--paper);border-radius:18px;padding:8px 16px;font-size:14px;font-weight:700;cursor:pointer}
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.pager button{border:1px solid var(--rule);background:var(--row);border-radius:10px;padding:12px;font-size:14px;font-weight:600;cursor:pointer}
+.pager button:disabled{opacity:.35;cursor:default}
+#uview .legend{margin-top:10px}
+.src-note summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--muted)}
+.src-note p{font-size:13px;color:var(--muted);margin:6px 0 0;max-width:70ch}
 .foot{font-size:12px;color:var(--muted);border-top:1px solid var(--rule);padding-top:12px;margin:0}
 :focus-visible{outline:2px solid var(--red);outline-offset:2px}
 </style>
@@ -181,10 +236,10 @@ body.hide-py .py, body.hide-py .p{visibility:hidden}
 <div class="sheet">
  <header>
   <div class="lesson"><span class="seal">办公室汉语</span><h1>Tiếng Trung Văn phòng · 16 bài</h1></div>
-  <p class="sub">Tổng hợp từ khung chương trình HanTalk: sơ đồ tư duy toàn khoá, rồi từng bài gồm từ vựng (chữ Hán – pinyin – nghĩa – câu ví dụ) và mẫu câu giao tiếp.</p>
-  <p class="note">Từ vựng được lọc từ 8 cuốn giáo trình <b class="han">博雅汉语</b> (初级 → 高级) và sắp theo 16 Unit của khung HanTalk. Mỗi từ có nhãn nguồn <i>tên cuốn · số trang PDF</i> để bạn mở sách tra lại. Những từ thương mại mà Boya không có (báo giá FOB, vận đơn, hải quan…) được đánh dấu <i>Bổ sung chuyên ngành</i>. Câu ví dụ được viết mới theo ngữ cảnh văn phòng.</p>
+  <p class="sub">Khoá học gồm <b>4 phần · 16 bài · 288 từ vựng</b> cho môi trường văn phòng và nhà máy: phỏng vấn, họp hành, báo giá, đàm phán, sản xuất, hợp đồng, logistics, hải quan và hậu mãi. Mỗi từ có pinyin, nghĩa, câu ví dụ, phát âm và flashcard.</p>
+  <details class="src-note"><summary>Nguồn từ vựng</summary><p>Từ vựng được lọc từ 8 cuốn giáo trình <b class="han">博雅汉语</b> (初级 → 高级) và sắp theo 16 Unit của khung HanTalk. Mỗi từ ghi <i>tên cuốn · số trang PDF</i> để tra lại sách. Những từ thương mại mà Boya không có được đánh dấu <i>Bổ sung chuyên ngành</i>. Câu ví dụ được viết mới theo ngữ cảnh văn phòng.</p></details>
  </header>
- <nav class="modes" aria-label="Chế độ"><button id="m-book" class="on">Sổ tay</button><button id="m-fc">Ôn tập</button><span class="prog" id="prog"></span></nav>
+ <nav class="modes" aria-label="Chế độ"><button id="m-book" class="on">Bài học</button><button id="m-fc">Ôn tập</button><span class="prog" id="prog"></span></nav>
  <section id="fc" hidden>
   <div class="fc-bar">
    <select id="fc-unit" aria-label="Chọn bài"></select>
@@ -196,22 +251,23 @@ body.hide-py .py, body.hide-py .p{visibility:hidden}
   <p class="fc-tip">Chạm vào thẻ để lật · “Chưa nhớ” đưa từ vào nhóm Từ khó · tiến độ lưu ngay trên điện thoại</p>
  </section>
  <div id="book">
-
- <section>
-  <h2>Sơ đồ tư duy khoá học</h2>
-  <div class="map-wrap"><svg id="map" role="img" aria-label="Sơ đồ tư duy 4 phần và 16 bài"></svg></div>
+ <section id="home">
+  <div class="srch"><input type="search" id="q" placeholder="Tìm nhanh một từ: chữ Hán, pinyin hoặc tiếng Việt…" aria-label="Tìm từ vựng"><div id="results"></div></div>
+  <div class="home-h"><h2>Chọn bài để bắt đầu</h2><span class="count" id="count"></span></div>
+  <div id="ulist"></div>
+  <details class="ovw"><summary>Xem sơ đồ tư duy toàn khoá</summary><div class="map-wrap"><svg id="map" role="img" aria-label="Sơ đồ tư duy 4 phần và 16 bài"></svg></div></details>
  </section>
-
- <div class="tools">
-  <input type="search" id="q" placeholder="Tìm từ: chữ Hán, pinyin hoặc nghĩa tiếng Việt…" aria-label="Tìm từ vựng">
-  <label><input type="checkbox" id="hm"> Ẩn nghĩa (tự kiểm tra)</label>
-  <label><input type="checkbox" id="hp"> Ẩn pinyin</label>
-  <label><input type="checkbox" id="ob"> Chỉ từ có trong Boya</label>
-  <span class="count" id="count"></span>
- </div>
-
- <div class="legend"><span><i></i>Từ có trong 博雅汉语 <i class="dot" style="margin-left:6px"></i></span><span><i class="d"></i>Bổ sung chuyên ngành</span><span>Bấm vào từ để xem ví dụ · kéo ngang nếu màn hình hẹp</span></div>
- <main id="units"></main>
+ <section id="uview" hidden>
+  <div class="ubar"><button id="u-home" aria-label="Về trang đầu">‹ Các bài</button><div class="utabs" id="utabs" role="tablist"></div></div>
+  <div class="tools">
+   <label><input type="checkbox" id="hm"> Ẩn nghĩa</label>
+   <label><input type="checkbox" id="hp"> Ẩn pinyin</label>
+   <label><input type="checkbox" id="ob"> Chỉ từ Boya</label>
+  </div>
+  <main id="units"></main>
+  <div class="legend"><span><i></i>Có trong 博雅汉语</span><span><i class="d"></i>Bổ sung chuyên ngành</span><span>Vuốt trái/phải để sang bài khác</span></div>
+  <div class="pager"><button id="u-prev">‹ Bài trước</button><button id="u-next">Bài sau ›</button></div>
+ </section>
  </div>
  <p class="foot">Pinyin có dấu thanh; 贵公司 = quý công ty, 我方/贵方 = bên tôi/quý bên. Giá, số lượng trong ví dụ là số minh hoạ.</p>
 </div>
@@ -532,7 +588,8 @@ PARTS.forEach((p,pi)=>{
  html+=`<div class="part-head"><span class="tag" style="background:${soft(p.k)};color:${col(p.k)}">${esc(p.vi.split(" · ")[0])}</span><h3><span class="han">${p.han}</span> · ${esc(p.vi.split(" · ")[1])}</h3></div>`;
  U.filter(u=>u.p===pi).forEach(u=>{
   html+=`<section class="unit" id="${uid(u)}">
-  <div class="unit-title"><span class="unit-no" style="background:${col(p.k)}">Unit ${u.n}</span><span class="han">${u.han}</span><span class="vi">${esc(u.vi)}</span><span class="uprog" data-up="${u.n}"></span></div>
+  <div class="unit-title"><span class="unit-no" style="background:${col(p.k)}">Unit ${u.n}</span><span class="han">${u.han}</span><span class="vi">${esc(u.vi)}</span></div>
+  <div class="ustat"><span class="uprog" data-up="${u.n}"></span><button class="study" data-study="${u.n}" style="background:${col(p.k)}">Ôn tập bài này</button></div>
   <div class="umap"><svg data-u="${u.n}" role="img" aria-label="Sơ đồ tư duy Unit ${u.n}"></svg></div>
   <div class="card empty" data-card="${u.n}" style="border-color:${col(p.k)}"><span class="hint">Bấm vào một từ trên sơ đồ để xem câu ví dụ và trang trong sách Boya.</span></div>
   <details class="list"><summary>Danh sách chi tiết · từ vựng & mẫu câu</summary>
@@ -545,6 +602,7 @@ PARTS.forEach((p,pi)=>{
 host.innerHTML=html;
 
 /* ---------- per-unit mindmaps ---------- */
+const UAPI={};
 const MAP={
 "1":[["Bản thân & hồ sơ","简历 求职信 申请 毕业 专业 能力 性格 经验"],["Tuyển dụng – phỏng vấn","招聘 应聘 职位 面试 录用"],["Điểm mạnh/yếu · lương · kế hoạch","优点 缺点 责任心 薪资 待遇 职业规划 前途"]],
 "2–3":[["Quy trình nhận việc","入职 手续 劳动合同 试用期 培训 规定 制度"],["Giới thiệu công ty","成立 总部 规模 员工"],["Cơ cấu phòng ban","部门 人事部 财务部 销售部 总经理 秘书 负责"],["Khi mới vào làm","同事 上班 加班 请假 适应 岗位"]],
@@ -602,6 +660,7 @@ const MAP={
   txt(cg,{x:xC,y:cy+6,"text-anchor":"middle","font-size":u.han.length>8?16:hl,class:"h t-ink"},u.han);
   txt(cg,{x:xC,y:cy+28,"text-anchor":"middle","font-size":11,class:"t-muted"},clip(u.vi,28));
   const show=it=>{
+   UAPI[u.n]&&(UAPI[u.n].last=it);
    card.classList.remove("empty");
    if(it.s){card.innerHTML=`<div class="c-zh han">${it.s[0]}</div><div class="c-py">${esc(it.s[1])}</div><div class="c-vi">${esc(it.s[2])}</div><div class="acts"><button class="act" data-say="${esc(it.s[0])}">▶ Nghe câu</button></div>`;return}
    const w=it.w,s=SRC[w[0]];
@@ -659,6 +718,7 @@ const MAP={
    mt.appendChild(box);
   });
   svg.parentNode.after(mt);
+  UAPI[u.n]={show,byHz,mt};
  });
 })();
 
@@ -667,19 +727,13 @@ const rows=[...document.querySelectorAll(".w")], total=rows.length, cnt=document
 const strip=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d");
 rows.forEach(r=>r.dataset.s=strip(r.dataset.k));
 function filter(){
- const q=strip(document.getElementById("q").value.trim().toLowerCase());
  const only=document.getElementById("ob").checked;
- let shown=0;
- rows.forEach(r=>{const ok=(!q||r.dataset.k.includes(q)||r.dataset.s.includes(q))&&(!only||r.dataset.b==="1");r.hidden=!ok;if(ok)shown++});
+ rows.forEach(r=>{r.hidden=only&&r.dataset.b!=="1"});
  document.querySelectorAll(".grp").forEach(g=>{let n=g.nextElementSibling,any=false;while(n&&n.classList.contains("w")){if(!n.hidden)any=true;n=n.nextElementSibling}g.hidden=!any});
- document.querySelectorAll(".leaf,.chip").forEach(a=>{const s=strip(a.dataset.k);const ok=a.dataset.b==="s"?!(q||only):((!q||a.dataset.k.includes(q)||s.includes(q))&&(!only||a.dataset.b==="1"));a.classList.toggle("dim",!ok)});
- document.querySelectorAll(".unit").forEach(s=>{s.hidden=!!q&&!s.querySelector(".w:not([hidden])")});
- document.querySelectorAll(".part-head").forEach(h=>{let n=h.nextElementSibling,any=false;while(n&&n.classList.contains("unit")){if(!n.hidden)any=true;n=n.nextElementSibling}h.hidden=!any});
- document.querySelectorAll("details.list").forEach(d=>{if(q)d.open=true});
- cnt.textContent=(q||only)?`${shown} / ${total} từ`:`${total} từ · ${nB} từ trong Boya`;
+ document.querySelectorAll(".leaf,.chip").forEach(a=>{a.classList.toggle("dim",only&&a.dataset.b==="0")});
 }
 const nB=rows.filter(r=>r.dataset.b==="1").length;
-document.getElementById("q").addEventListener("input",filter);
+cnt.textContent=`${total} từ · ${nB} từ trong Boya`;
 document.getElementById("ob").addEventListener("change",filter);
 document.getElementById("hm").addEventListener("change",e=>document.body.classList.toggle("hide-mean",e.target.checked));
 document.getElementById("hp").addEventListener("change",e=>document.body.classList.toggle("hide-py",e.target.checked));
@@ -700,7 +754,10 @@ function paintMarks(){
  });
  const tot=ALLW.length,kn=ALLW.filter(x=>ST.k[x.w[0]]).length;
  document.getElementById("prog").textContent=`Đã thuộc ${kn}/${tot}`;
- U.forEach(u=>{const ws=ALLW.filter(x=>x.u===u.n),k=ws.filter(x=>ST.k[x.w[0]]).length;const e=document.querySelector(`[data-up="${u.n}"]`);if(e)e.textContent=`Đã thuộc ${k}/${ws.length}`});
+ U.forEach(u=>{const ws=ALLW.filter(x=>x.u===u.n),k=ws.filter(x=>ST.k[x.w[0]]).length;
+  document.querySelectorAll(`[data-up="${u.n}"]`).forEach(e=>e.textContent=`Đã thuộc ${k}/${ws.length}`);
+  document.querySelectorAll(`[data-upbar="${u.n}"]`).forEach(e=>e.style.width=(ws.length?100*k/ws.length:0)+"%");
+  document.querySelectorAll(`.utab[data-u="${u.n}"]`).forEach(e=>e.classList.toggle("done",ws.length>0&&k===ws.length))});
 }
 let zhVoice=null;
 function pickVoice(){try{const vs=speechSynthesis.getVoices();zhVoice=vs.find(v=>/zh[-_]CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||null}catch(e){}}
@@ -746,12 +803,73 @@ fcC.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDef
 document.getElementById("fc-flip").addEventListener("click",()=>{if(cur<deck.length){flipped=!flipped;drawCard()}});
 document.getElementById("fc-yes").addEventListener("click",()=>next(true));
 document.getElementById("fc-no").addEventListener("click",()=>next(false));
-fcU.addEventListener("change",buildDeck);fcM.addEventListener("change",buildDeck);
-/* modes */
+fcU.addEventListener("change",()=>{buildDeck();save2({v:"fc",u:fcU.value})});fcM.addEventListener("change",buildDeck);
+/* ---------- views: home · unit · flashcards ---------- */
 const mB=document.getElementById("m-book"),mF=document.getElementById("m-fc");
-function mode(fc){document.getElementById("book").hidden=fc;document.getElementById("fc").hidden=!fc;mB.classList.toggle("on",!fc);mF.classList.toggle("on",fc);if(fc)buildDeck();try{localStorage.setItem("ttvp-mode",fc?"fc":"book")}catch(e){}const nv=document.querySelector(".modes");window.scrollTo(0,nv.offsetTop-8)}
-mB.addEventListener("click",()=>mode(false));mF.addEventListener("click",()=>mode(true));
-try{if(localStorage.getItem("ttvp-mode")==="fc")mode(true)}catch(e){}
+const HOME=document.getElementById("home"),UV=document.getElementById("uview"),FC=document.getElementById("fc"),HDR=document.querySelector("header");
+const SECS=U.map(u=>document.getElementById(uid(u)));
+let cu=0;
+// home: unit list grouped by part
+document.getElementById("ulist").innerHTML=PARTS.map((p,pi)=>{
+ const us=U.filter(u=>u.p===pi);
+ return `<div class="ppart"><div class="ppart-h"><span class="tag" style="background:${soft(p.k)};color:${col(p.k)}">${esc(p.vi.split(" · ")[0])}</span><b>${esc(p.vi.split(" · ")[1])}</b></div>
+ <div class="ucards">${us.map(u=>`<button class="ucard" data-open="${u.n}" style="--c:${col(p.k)};--sf:${soft(p.k)}"><span class="un">${u.n}</span><span class="uh">${u.han}</span><span class="uv">${esc(u.vi)}</span><span class="up"><span class="bar"><i data-upbar="${u.n}"></i></span><span data-up="${u.n}"></span></span></button>`).join("")}</div></div>`}).join("");
+// unit tabs
+document.getElementById("utabs").innerHTML=U.map(u=>`<button class="utab" role="tab" data-u="${u.n}" style="--c:${col(PARTS[u.p].k)}">Unit ${u.n}</button>`).join("");
+const TABS=[...document.querySelectorAll(".utab")];
+function save2(v){try{localStorage.setItem("ttvp-view",JSON.stringify(v))}catch(e){}}
+function topOf(el){return el.getBoundingClientRect().top+window.scrollY}
+function show(view){
+ HOME.hidden=view!=="home";UV.hidden=view!=="unit";FC.hidden=view!=="fc";HDR.hidden=view!=="home";
+ mB.classList.toggle("on",view!=="fc");mF.classList.toggle("on",view==="fc");
+}
+function openUnit(i,dir,hz){
+ i=Math.max(0,Math.min(U.length-1,i));cu=i;show("unit");
+ SECS.forEach((s,j)=>{s.hidden=j!==i;s.classList.remove("in-l","in-r")});
+ if(dir){void SECS[i].offsetWidth;SECS[i].classList.add(dir>0?"in-l":"in-r")}
+ TABS.forEach((t,j)=>t.classList.toggle("on",j===i));
+ TABS[i].scrollIntoView({inline:"center",block:"nearest",behavior:dir?"smooth":"auto"});
+ document.getElementById("u-prev").disabled=i===0;document.getElementById("u-next").disabled=i===U.length-1;
+ const api=UAPI[U[i].n];
+ if(hz&&api&&api.byHz[hz]){api.show({w:api.byHz[hz]});const c=api.mt.querySelector(`.chip[data-hz="${hz}"]`)||SECS[i].querySelector(`.leaf[data-hz="${hz}"]`);if(c){c.classList.add("on");c.scrollIntoView({block:"center"})}}
+ else window.scrollTo(0,0);
+ save2({v:"unit",u:U[i].n});
+}
+function goHome(){show("home");window.scrollTo(0,0);save2({v:"home"})}
+function goFC(un){
+ if(un)fcU.value=un;show("fc");buildDeck();window.scrollTo(0,0);save2({v:"fc",u:fcU.value});
+}
+document.getElementById("ulist").addEventListener("click",e=>{const b=e.target.closest("[data-open]");if(b)openUnit(U.findIndex(u=>u.n===b.dataset.open))});
+document.getElementById("utabs").addEventListener("click",e=>{const b=e.target.closest(".utab");if(b){const i=TABS.indexOf(b);openUnit(i,i>cu?1:i<cu?-1:0)}});
+document.getElementById("u-home").addEventListener("click",goHome);
+document.getElementById("u-prev").addEventListener("click",()=>openUnit(cu-1,-1));
+document.getElementById("u-next").addEventListener("click",()=>openUnit(cu+1,1));
+document.getElementById("units").addEventListener("click",e=>{const b=e.target.closest("[data-study]");if(b)goFC(b.dataset.study)});
+document.getElementById("map").addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;e.preventDefault();const id=(a.getAttribute("href")||"").slice(1);const i=U.findIndex(u=>uid(u)===id);if(i>=0)openUnit(i)});
+mB.addEventListener("click",()=>{if(!UV.hidden||FC.hidden&&HOME.hidden)goHome();else if(!FC.hidden){openUnit(cu)}else goHome()});
+mF.addEventListener("click",()=>goFC(UV.hidden?null:U[cu].n));
+// swipe between units
+(function(){
+ const area=document.getElementById("units");let x0=0,y0=0,t0=0,on=false;
+ area.addEventListener("touchstart",e=>{if(e.touches.length!==1)return;x0=e.touches[0].clientX;y0=e.touches[0].clientY;t0=Date.now();on=true},{passive:true});
+ area.addEventListener("touchend",e=>{if(!on)return;on=false;const t=e.changedTouches[0],dx=t.clientX-x0,dy=t.clientY-y0;
+  if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.6&&Date.now()-t0<700){if(dx<0&&cu<U.length-1)openUnit(cu+1,1);else if(dx>0&&cu>0)openUnit(cu-1,-1)}},{passive:true});
+})();
+document.addEventListener("keydown",e=>{if(UV.hidden||/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))return;if(e.key==="ArrowRight")openUnit(cu+1,1);if(e.key==="ArrowLeft")openUnit(cu-1,-1)});
+// home search
+const RES=document.getElementById("results"),QI=document.getElementById("q");
+QI.addEventListener("input",()=>{
+ const q=strip(QI.value.trim().toLowerCase());
+ if(!q){RES.innerHTML="";return}
+ const hits=ALLW.filter(x=>{const k=(x.w[0]+" "+x.w[1]+" "+x.w[2]).toLowerCase();return k.includes(q)||strip(k).includes(q)}).slice(0,30);
+ RES.innerHTML=hits.length?hits.map(x=>`<button class="res" data-u="${x.u}" data-hz="${x.w[0]}"><span class="hz">${x.w[0]}</span><span class="rm"><b>${esc(x.w[1])}</b>${esc(x.w[2])}</span><span class="ru">Unit ${x.u}</span></button>`).join(""):`<p class="count">Không tìm thấy từ nào khớp “${esc(QI.value)}”.</p>`;
+});
+RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;openUnit(U.findIndex(u=>u.n===b.dataset.u),0,b.dataset.hz)});
+// restore last view
+(function(){let v=null;try{v=JSON.parse(localStorage.getItem("ttvp-view")||"null")}catch(e){}
+ const i=v&&v.u?U.findIndex(u=>u.n===v.u):-1;
+ if(v&&v.v==="unit"&&i>=0)openUnit(i);else if(v&&v.v==="fc")goFC(v.u&&v.u!=="all"?v.u:null);else show("home");
+})();
 paintMarks();
 /* offline */
 if("serviceWorker" in navigator&&location.protocol==="https:"){navigator.serviceWorker.register("sw.js").catch(()=>{})}

@@ -1,5 +1,5 @@
 // Offline cache. Tăng VERSION mỗi khi cập nhật nội dung để iPhone tải bản mới.
-const VERSION = "ttvp-v1";
+const VERSION = "ttvp-v2";
 const CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
