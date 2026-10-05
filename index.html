@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#C23A2B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tiếng Trung VP">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Sổ tay Tiếng Trung Văn phòng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&display=swap">
+<style>
+:root{
+ --ground:#E6E9E4; --paper:#FDFDFB; --ink:#1F2A2A; --muted:#5E6B68; --rule:#D3D9D4; --row:#F4F6F3;
+ --red:#C23A2B; --red-soft:#F8E4DF;
+ --p1:#2E7A66; --p1-soft:#E1F0EA;
+ --p2:#3A5391; --p2-soft:#E6EBF6;
+ --p3:#A8661A; --p3-soft:#F7ECDD;
+ --p4:#9A3D6B; --p4-soft:#F5E3EC;
+ --shadow:0 18px 40px -18px rgba(30,40,40,.35);
+ --ok:#2E7A55; --ok-soft:#DDEFE3;
+ --han:"Noto Serif SC","Songti SC","SimSun",serif;
+ --body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ color-scheme:dark;--ground:#141918;--paper:#1D2322;--ink:#E8ECEA;--muted:#9AA7A3;--rule:#3A4442;--row:#232A29;
+ --red:#E4685A;--red-soft:#3A2522;--p1:#5FB89E;--p1-soft:#1E332D;--p2:#8BA2E0;--p2-soft:#232B40;
+ --p3:#DDA05A;--p3-soft:#3A2E1E;--p4:#D883AE;--p4-soft:#3A2330;--shadow:0 18px 40px -18px rgba(0,0,0,.7);--ok:#6CC596;--ok-soft:#1D3327;}}
+:root[data-theme="dark"]{
+ color-scheme:dark;--ground:#141918;--paper:#1D2322;--ink:#E8ECEA;--muted:#9AA7A3;--rule:#3A4442;--row:#232A29;
+ --red:#E4685A;--red-soft:#3A2522;--p1:#5FB89E;--p1-soft:#1E332D;--p2:#8BA2E0;--p2-soft:#232B40;
+ --p3:#DDA05A;--p3-soft:#3A2E1E;--p4:#D883AE;--p4-soft:#3A2330;--shadow:0 18px 40px -18px rgba(0,0,0,.7);--ok:#6CC596;--ok-soft:#1D3327;}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);padding-block:calc(env(safe-area-inset-top,0px) + 20px) calc(env(safe-area-inset-bottom,0px) + 28px);padding-inline:max(12px,env(safe-area-inset-left,0px));line-height:1.5}
+button,select{font:inherit;color:inherit}
+.sheet{max-width:1180px;margin:0 auto;background:var(--paper);box-shadow:var(--shadow);border-radius:4px;padding:26px clamp(16px,3vw,36px) 40px;display:flex;flex-direction:column;gap:28px}
+.han{font-family:var(--han);font-weight:700}
+header{display:flex;flex-direction:column;gap:12px;border-bottom:1px solid var(--rule);padding-bottom:18px}
+.lesson{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.seal{font-family:var(--han);font-size:26px;font-weight:700;color:var(--paper);background:var(--red);padding:6px 16px;border-radius:3px}
+h1{font-size:clamp(22px,3vw,30px);margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:0;max-width:70ch;font-size:14px}
+.note{font-size:13px;background:var(--red-soft);color:var(--ink);padding:10px 14px;border-radius:4px;max-width:80ch}
+h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.map-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--rule);border-radius:4px;background:var(--paper)}
+.map-wrap svg{display:block;width:100%;min-width:880px;height:auto}
+svg text{font-family:var(--body)}
+svg .h{font-family:var(--han);font-weight:700}
+svg a{cursor:pointer}
+svg a:hover rect,svg a:focus rect{stroke-width:2.6}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)}
+.tools{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule)}
+.tools input[type=search]{flex:1 1 220px;font:inherit;font-size:14px;padding:8px 12px;border:1px solid var(--rule);border-radius:4px;background:var(--row);color:var(--ink)}
+.tools label{font-size:13px;display:inline-flex;gap:6px;align-items:center;color:var(--muted);cursor:pointer}
+.tools .count{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.jump{display:flex;flex-wrap:wrap;gap:6px}
+.jump a{font-size:12px;text-decoration:none;color:var(--ink);border:1px solid var(--rule);padding:3px 9px;border-radius:20px}
+.jump a:hover{border-color:var(--red);color:var(--red)}
+.part-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:8px}
+.part-head .tag{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:3px}
+.part-head h3{margin:0;font-size:19px}
+.unit{display:flex;flex-direction:column;gap:14px;padding-top:6px;scroll-margin-top:80px}
+.unit-title{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.unit-no{font-size:12px;font-weight:700;color:var(--paper);padding:3px 9px;border-radius:3px;font-variant-numeric:tabular-nums}
+.unit-title .han{font-size:24px}
+.unit-title .vi{color:var(--muted);font-size:15px}
+.topics{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.topics li{font-size:12.5px;padding:3px 10px;border-radius:3px}
+.vocab{display:flex;flex-direction:column;border-top:1px solid var(--rule)}
+.w{display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:4px 20px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.w .hz{font-family:var(--han);font-weight:700;font-size:22px;line-height:1.25}
+.w .py{font-size:13px;font-weight:600}
+.w .mn{font-size:14px}
+.w .ex .zh{font-family:var(--han);font-size:16px}
+.w .ex .p{display:block;font-size:12.5px;color:var(--muted)}
+.w .ex .v{display:block;font-size:13px;color:var(--muted);font-style:italic}
+.src{display:inline-block;margin-top:5px;font-size:11px;font-weight:600;padding:1px 7px;border-radius:3px;background:var(--red-soft);color:var(--red);font-variant-numeric:tabular-nums}
+.src.add{background:var(--row);color:var(--muted);font-weight:500}
+.grp{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:12px 0 6px;border-bottom:1px solid var(--rule)}
+.grp b{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--red)}
+.grp.add b{color:var(--muted)}
+.grp span{font-size:12px;color:var(--muted)}
+.pat{border-radius:4px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.pat b{font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+.pat .s{display:flex;flex-direction:column}
+.pat .zh{font-family:var(--han);font-size:17px}
+.pat .p{font-size:12.5px;color:var(--muted)}
+.pat .v{font-size:13px;color:var(--muted);font-style:italic}
+.unit-body{display:grid;grid-template-columns:1.6fr 1fr;gap:22px;align-items:start}
+@media (max-width:820px){.unit-body{grid-template-columns:1fr}}
+@media (max-width:520px){.w{grid-template-columns:1fr}}
+body.hide-mean .mn, body.hide-mean .v{visibility:hidden}
+body.hide-py .py, body.hide-py .p{visibility:hidden}
+.empty{color:var(--muted);font-size:14px}
+.umap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--rule);border-radius:4px;background:var(--paper)}
+.umap svg{display:block;width:100%;height:auto}
+.leaf{cursor:pointer;outline:none}
+.leaf rect{transition:stroke-width .15s}
+.leaf:hover rect,.leaf:focus-visible rect,.leaf.on rect{stroke-width:2.6}
+.leaf.on rect{fill:var(--red-soft)}
+.leaf.dim{opacity:.18}
+.card{border-left:4px solid;background:var(--row);border-radius:4px;padding:12px 16px;display:flex;flex-direction:column;gap:3px;min-height:58px}
+.card .hint{font-size:13px;color:var(--muted)}
+.c-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin-bottom:4px}
+.c-hz{font-family:var(--han);font-weight:700;font-size:24px}
+.c-mn{font-size:14px}
+.c-zh{font-size:18px;font-weight:500}
+.c-py{font-size:13px;color:var(--muted)}
+.c-vi{font-size:13.5px;font-style:italic;color:var(--muted)}
+.list summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);padding:6px 0}
+.list[open] summary{margin-bottom:8px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--muted);align-items:center}
+.legend i{display:inline-block;width:22px;height:12px;border-radius:3px;border:1.5px solid var(--muted);vertical-align:-1px;margin-right:6px}
+.legend i.d{border-style:dashed}
+.legend i.dot{width:7px;height:7px;border:0;border-radius:50%;background:var(--red)}
+.modes{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--paper);display:flex;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid var(--rule)}
+.modes button{border:1px solid var(--rule);background:var(--row);padding:7px 14px;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer}
+.modes button.on{background:var(--red);border-color:var(--red);color:var(--paper)}
+.modes .prog{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tools{top:calc(env(safe-area-inset-top,0px) + 52px)}
+.uprog{margin-left:auto;font-size:12px;color:var(--ok);font-weight:600;font-variant-numeric:tabular-nums}
+.acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.act{border:1px solid var(--rule);background:var(--paper);border-radius:16px;padding:5px 12px;font-size:13px;font-weight:600;cursor:pointer}
+.act.mk.on[data-mark="k"]{background:var(--ok);border-color:var(--ok);color:var(--paper)}
+.act.mk.on[data-mark="h"]{background:var(--red);border-color:var(--red);color:var(--paper)}
+.leaf.known rect{fill:var(--ok-soft);stroke:var(--ok)}
+.leaf.hard rect{stroke:var(--red);stroke-width:2.4}
+.mtree{display:none;flex-direction:column;gap:14px}
+.mb-h{font-size:13px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:flex;flex-direction:column;align-items:flex-start;text-align:left;border:1.3px solid var(--c);background:var(--sf);border-radius:8px;padding:6px 10px;cursor:pointer;max-width:100%}
+.chip.add{border-style:dashed}
+.chip .han{font-size:18px;line-height:1.2}
+.chip .py{font-size:11.5px;font-weight:600;color:var(--c)}
+.chip .mn{font-size:12px;color:var(--muted)}
+.chip.sent{background:var(--paper);width:100%}
+.chip.sent .han{font-size:15px;font-weight:500}
+.chip.on{outline:2px solid var(--red);outline-offset:1px}
+.chip.known{background:var(--ok-soft);border-color:var(--ok)}
+.chip.hard{box-shadow:inset 3px 0 0 var(--red)}
+.chip.dim{opacity:.2}
+@media (max-width:700px){
+ .umap{display:none}
+ .mtree{display:flex}
+ .card{position:sticky;bottom:calc(env(safe-area-inset-bottom,0px) + 8px);z-index:4;box-shadow:0 10px 30px -10px rgba(0,0,0,.35);background:var(--paper)}
+ .card.empty{display:none}
+ .sheet{padding:18px 14px 28px}
+ .tools label{font-size:12.5px}
+ .tools{position:static}
+ .unit{scroll-margin-top:64px}
+}
+#fc{display:flex;flex-direction:column;gap:14px}
+#fc[hidden]{display:none}
+.fc-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.fc-bar select{border:1px solid var(--rule);background:var(--row);border-radius:6px;padding:8px 10px;font-size:14px;max-width:100%}
+.fc-card{min-height:300px;border:1px solid var(--rule);border-radius:12px;background:var(--row);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px 18px;text-align:center;cursor:pointer;user-select:none}
+.fc-card .big{font-family:var(--han);font-weight:700;font-size:clamp(48px,14vw,72px);line-height:1.1}
+.fc-card .py{font-size:20px;font-weight:600;color:var(--red)}
+.fc-card .mn{font-size:18px}
+.fc-card .ex{margin-top:10px;font-family:var(--han);font-size:18px}
+.fc-card .exp,.fc-card .exv{font-size:13.5px;color:var(--muted)}
+.fc-card .meta{font-size:12px;color:var(--muted)}
+.fc-card .done{font-size:16px;color:var(--muted)}
+.fc-acts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.fc-acts button{border:1px solid var(--rule);background:var(--paper);border-radius:10px;padding:14px 8px;font-size:15px;font-weight:700;cursor:pointer}
+.fc-acts .no{color:var(--red);border-color:var(--red)}
+.fc-acts .yes{background:var(--ok);border-color:var(--ok);color:var(--paper)}
+.fc-tip{font-size:12.5px;color:var(--muted);margin:0;text-align:center}
+.foot{font-size:12px;color:var(--muted);border-top:1px solid var(--rule);padding-top:12px;margin:0}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+</style>
+
+</head>
+<body>
+<div class="sheet">
+ <header>
+  <div class="lesson"><span class="seal">办公室汉语</span><h1>Tiếng Trung Văn phòng · 16 bài</h1></div>
+  <p class="sub">Tổng hợp từ khung chương trình HanTalk: sơ đồ tư duy toàn khoá, rồi từng bài gồm từ vựng (chữ Hán – pinyin – nghĩa – câu ví dụ) và mẫu câu giao tiếp.</p>
+  <p class="note">Từ vựng được lọc từ 8 cuốn giáo trình <b class="han">博雅汉语</b> (初级 → 高级) và sắp theo 16 Unit của khung HanTalk. Mỗi từ có nhãn nguồn <i>tên cuốn · số trang PDF</i> để bạn mở sách tra lại. Những từ thương mại mà Boya không có (báo giá FOB, vận đơn, hải quan…) được đánh dấu <i>Bổ sung chuyên ngành</i>. Câu ví dụ được viết mới theo ngữ cảnh văn phòng.</p>
+ </header>
+ <nav class="modes" aria-label="Chế độ"><button id="m-book" class="on">Sổ tay</button><button id="m-fc">Ôn tập</button><span class="prog" id="prog"></span></nav>
+ <section id="fc" hidden>
+  <div class="fc-bar">
+   <select id="fc-unit" aria-label="Chọn bài"></select>
+   <select id="fc-mode" aria-label="Chọn nhóm từ"><option value="new">Chưa thuộc</option><option value="hard">Từ khó</option><option value="all">Tất cả</option></select>
+   <span id="fc-count" class="count"></span>
+  </div>
+  <div class="fc-card" id="fc-card" role="button" tabindex="0" aria-label="Thẻ từ, chạm để lật"></div>
+  <div class="fc-acts"><button id="fc-no" class="no">Chưa nhớ</button><button id="fc-flip">Lật thẻ</button><button id="fc-yes" class="yes">Đã nhớ</button></div>
+  <p class="fc-tip">Chạm vào thẻ để lật · “Chưa nhớ” đưa từ vào nhóm Từ khó · tiến độ lưu ngay trên điện thoại</p>
+ </section>
+ <div id="book">
+
+ <section>
+  <h2>Sơ đồ tư duy khoá học</h2>
+  <div class="map-wrap"><svg id="map" role="img" aria-label="Sơ đồ tư duy 4 phần và 16 bài"></svg></div>
+ </section>
+
+ <div class="tools">
+  <input type="search" id="q" placeholder="Tìm từ: chữ Hán, pinyin hoặc nghĩa tiếng Việt…" aria-label="Tìm từ vựng">
+  <label><input type="checkbox" id="hm"> Ẩn nghĩa (tự kiểm tra)</label>
+  <label><input type="checkbox" id="hp"> Ẩn pinyin</label>
+  <label><input type="checkbox" id="ob"> Chỉ từ có trong Boya</label>
+  <span class="count" id="count"></span>
+ </div>
+
+ <div class="legend"><span><i></i>Từ có trong 博雅汉语 <i class="dot" style="margin-left:6px"></i></span><span><i class="d"></i>Bổ sung chuyên ngành</span><span>Bấm vào từ để xem ví dụ · kéo ngang nếu màn hình hẹp</span></div>
+ <main id="units"></main>
+ </div>
+ <p class="foot">Pinyin có dấu thanh; 贵公司 = quý công ty, 我方/贵方 = bên tôi/quý bên. Giá, số lượng trong ví dụ là số minh hoạ.</p>
+</div>
+
+<script>
+const PARTS=[
+ {k:"p1",han:"职场入门",py:"zhíchǎng rùmén",vi:"Phần 1 · Môi trường công sở"},
+ {k:"p2",han:"国际商务谈判",py:"guójì shāngwù tánpàn",vi:"Phần 2 · Đàm phán thương mại"},
+ {k:"p3",han:"制造与工厂",py:"zhìzào yǔ gōngchǎng",vi:"Phần 3 · Chế tạo & Nhà máy"},
+ {k:"p4",han:"合同·物流·售后",py:"hétong · wùliú · shòuhòu",vi:"Phần 4 · Hợp đồng – Logistics – Hậu mãi"}
+];
+// [hanzi, pinyin, nghĩa, ví dụ, pinyin ví dụ, dịch]
+const U=[
+{n:"1",p:0,han:"求职与面试",vi:"Xin việc & Phỏng vấn",
+ t:["Giới thiệu bản thân & mục tiêu nghề nghiệp","Từ vựng & mẫu câu phỏng vấn","Điểm mạnh/yếu, lương, kế hoạch","Thực hành HR – ứng viên"],
+ w:[
+ ["简历","jiǎnlì","sơ yếu lý lịch, CV","我已经把简历发到您的邮箱了。","Wǒ yǐjīng bǎ jiǎnlì fā dào nín de yóuxiāng le.","Tôi đã gửi CV vào email của anh/chị rồi."],
+ ["应聘","yìngpìn","ứng tuyển","我想应聘贵公司的翻译职位。","Wǒ xiǎng yìngpìn guì gōngsī de fānyì zhíwèi.","Tôi muốn ứng tuyển vị trí phiên dịch của quý công ty."],
+ ["职位","zhíwèi","vị trí công việc","这个职位要求会说中文。","Zhège zhíwèi yāoqiú huì shuō Zhōngwén.","Vị trí này yêu cầu biết nói tiếng Trung."],
+ ["面试","miànshì","phỏng vấn","明天上午九点我有一个面试。","Míngtiān shàngwǔ jiǔ diǎn wǒ yǒu yí ge miànshì.","9 giờ sáng mai tôi có một buổi phỏng vấn."],
+ ["毕业","bìyè","tốt nghiệp","我毕业于河内大学中文系。","Wǒ bìyè yú Hénèi Dàxué Zhōngwén xì.","Tôi tốt nghiệp khoa tiếng Trung, Đại học Hà Nội."],
+ ["经验","jīngyàn","kinh nghiệm","我有三年外贸工作经验。","Wǒ yǒu sān nián wàimào gōngzuò jīngyàn.","Tôi có 3 năm kinh nghiệm làm ngoại thương."],
+ ["优点","yōudiǎn","ưu điểm, điểm mạnh","我的优点是做事认真、有责任心。","Wǒ de yōudiǎn shì zuòshì rènzhēn, yǒu zérènxīn.","Điểm mạnh của tôi là làm việc cẩn thận, có trách nhiệm."],
+ ["缺点","quēdiǎn","khuyết điểm, điểm yếu","我的缺点是有时候太追求完美。","Wǒ de quēdiǎn shì yǒu shíhou tài zhuīqiú wánměi.","Điểm yếu của tôi là đôi khi quá cầu toàn."],
+ ["薪资","xīnzī","lương, thu nhập","您期望的薪资是多少？","Nín qīwàng de xīnzī shì duōshao?","Mức lương mong muốn của bạn là bao nhiêu?"],
+ ["职业规划","zhíyè guīhuà","định hướng nghề nghiệp","你未来三年的职业规划是什么？","Nǐ wèilái sān nián de zhíyè guīhuà shì shénme?","Kế hoạch nghề nghiệp 3 năm tới của bạn là gì?"]],
+ s:[["请先简单介绍一下你自己。","Qǐng xiān jiǎndān jièshào yíxià nǐ zìjǐ.","Mời bạn giới thiệu ngắn gọn về bản thân."],
+ ["你为什么想来我们公司工作？","Nǐ wèishénme xiǎng lái wǒmen gōngsī gōngzuò?","Vì sao bạn muốn làm việc ở công ty chúng tôi?"],
+ ["我相信我能胜任这份工作。","Wǒ xiāngxìn wǒ néng shèngrèn zhè fèn gōngzuò.","Tôi tin mình có thể đảm nhận tốt công việc này."],
+ ["你什么时候可以入职？","Nǐ shénme shíhou kěyǐ rùzhí?","Khi nào bạn có thể bắt đầu đi làm?"]]},
+{n:"2–3",p:0,han:"入职与部门介绍",vi:"Nhận việc & Giới thiệu phòng ban",
+ t:["Quy trình nhận việc","Giới thiệu công ty","Cơ cấu phòng ban","Giao tiếp khi mới vào làm"],
+ w:[
+ ["入职","rùzhí","nhận việc, vào làm","我下周一正式入职。","Wǒ xià zhōuyī zhèngshì rùzhí.","Thứ Hai tuần sau tôi chính thức đi làm."],
+ ["手续","shǒuxù","thủ tục","请先去人事部办理入职手续。","Qǐng xiān qù rénshìbù bànlǐ rùzhí shǒuxù.","Mời bạn đến phòng nhân sự làm thủ tục nhận việc trước."],
+ ["劳动合同","láodòng hétong","hợp đồng lao động","入职当天要签劳动合同。","Rùzhí dàngtiān yào qiān láodòng hétong.","Ngày đầu đi làm phải ký hợp đồng lao động."],
+ ["试用期","shìyòngqī","thời gian thử việc","试用期是两个月。","Shìyòngqī shì liǎng ge yuè.","Thời gian thử việc là hai tháng."],
+ ["成立","chénglì","thành lập","我们公司成立于2010年。","Wǒmen gōngsī chénglì yú èr líng yī líng nián.","Công ty chúng tôi được thành lập năm 2010."],
+ ["部门","bùmén","phòng ban","你在哪个部门工作？","Nǐ zài nǎge bùmén gōngzuò?","Bạn làm ở phòng ban nào?"],
+ ["人事部","rénshìbù","phòng nhân sự","人事部负责招聘和培训。","Rénshìbù fùzé zhāopìn hé péixùn.","Phòng nhân sự phụ trách tuyển dụng và đào tạo."],
+ ["财务部","cáiwùbù","phòng tài chính – kế toán","报销单请交给财务部。","Bàoxiāodān qǐng jiāo gěi cáiwùbù.","Phiếu thanh toán chi phí vui lòng nộp cho phòng tài chính."],
+ ["销售部","xiāoshòubù","phòng kinh doanh","销售部一共有十二个人。","Xiāoshòubù yígòng yǒu shí'èr ge rén.","Phòng kinh doanh có tất cả 12 người."],
+ ["总经理","zǒngjīnglǐ","tổng giám đốc","总经理办公室在三楼。","Zǒngjīnglǐ bàngōngshì zài sān lóu.","Văn phòng tổng giám đốc ở tầng 3."],
+ ["负责","fùzé","phụ trách","我负责越南市场的客户。","Wǒ fùzé Yuènán shìchǎng de kèhù.","Tôi phụ trách khách hàng thị trường Việt Nam."],
+ ["同事","tóngshì","đồng nghiệp","这位是我们的新同事小李。","Zhè wèi shì wǒmen de xīn tóngshì Xiǎo Lǐ.","Đây là đồng nghiệp mới của chúng ta, Tiểu Lý."]],
+ s:[["大家好，我是新来的阿明，请多多关照。","Dàjiā hǎo, wǒ shì xīn lái de Ā Míng, qǐng duōduō guānzhào.","Chào mọi người, tôi là Minh mới đến, mong mọi người giúp đỡ."],
+ ["以后工作上还请您多指教。","Yǐhòu gōngzuò shang hái qǐng nín duō zhǐjiào.","Sau này trong công việc mong anh/chị chỉ bảo thêm."],
+ ["我们公司下设五个部门。","Wǒmen gōngsī xià shè wǔ ge bùmén.","Công ty chúng tôi có 5 phòng ban trực thuộc."],
+ ["有什么不懂的，可以随时问我。","Yǒu shénme bù dǒng de, kěyǐ suíshí wèn wǒ.","Có gì chưa hiểu thì cứ hỏi tôi bất cứ lúc nào."]]},
+{n:"4–5",p:0,han:"商务会议与安排",vi:"Họp hành & Sắp xếp lịch trình",
+ t:["Đặt – xác nhận lịch họp","Mở đầu – kết thúc cuộc họp","Giao việc, phân công","Ghi biên bản họp"],
+ w:[
+ ["会议","huìyì","cuộc họp","会议几点开始？","Huìyì jǐ diǎn kāishǐ?","Cuộc họp mấy giờ bắt đầu?"],
+ ["安排","ānpái","sắp xếp","我来安排下周的会议。","Wǒ lái ānpái xià zhōu de huìyì.","Để tôi sắp xếp cuộc họp tuần sau."],
+ ["日程","rìchéng","lịch trình","请把明天的日程发给我。","Qǐng bǎ míngtiān de rìchéng fā gěi wǒ.","Vui lòng gửi tôi lịch trình ngày mai."],
+ ["预约","yùyuē","đặt lịch hẹn","我想预约王经理星期三下午见面。","Wǒ xiǎng yùyuē Wáng jīnglǐ xīngqīsān xiàwǔ jiànmiàn.","Tôi muốn hẹn gặp giám đốc Vương chiều thứ Tư."],
+ ["确认","quèrèn","xác nhận","我再跟您确认一下时间。","Wǒ zài gēn nín quèrèn yíxià shíjiān.","Tôi xin xác nhận lại thời gian với anh/chị."],
+ ["推迟","tuīchí","hoãn, lùi lại","会议推迟到下午三点。","Huìyì tuīchí dào xiàwǔ sān diǎn.","Cuộc họp lùi đến 3 giờ chiều."],
+ ["议程","yìchéng","chương trình nghị sự","今天的议程一共有三项。","Jīntiān de yìchéng yígòng yǒu sān xiàng.","Chương trình họp hôm nay có ba mục."],
+ ["主持","zhǔchí","chủ trì","这次会议由张总主持。","Zhè cì huìyì yóu Zhāng zǒng zhǔchí.","Cuộc họp lần này do giám đốc Trương chủ trì."],
+ ["分工","fēngōng","phân công","我们先讨论一下分工。","Wǒmen xiān tǎolùn yíxià fēngōng.","Chúng ta thảo luận phân công trước nhé."],
+ ["截止日期","jiézhǐ rìqī","hạn chót, deadline","这个报告的截止日期是周五。","Zhège bàogào de jiézhǐ rìqī shì zhōuwǔ.","Hạn nộp báo cáo này là thứ Sáu."],
+ ["会议记录","huìyì jìlù","biên bản cuộc họp","小王，请你做一下会议记录。","Xiǎo Wáng, qǐng nǐ zuò yíxià huìyì jìlù.","Tiểu Vương, em ghi biên bản cuộc họp nhé."]],
+ s:[["人都到齐了，我们开始吧。","Rén dōu dào qí le, wǒmen kāishǐ ba.","Mọi người đến đủ rồi, chúng ta bắt đầu thôi."],
+ ["今天会议的主要内容是……","Jīntiān huìyì de zhǔyào nèiróng shì……","Nội dung chính của cuộc họp hôm nay là…"],
+ ["这件事就交给你负责。","Zhè jiàn shì jiù jiāo gěi nǐ fùzé.","Việc này giao cho bạn phụ trách."],
+ ["今天的会就开到这里，辛苦大家了。","Jīntiān de huì jiù kāi dào zhèlǐ, xīnkǔ dàjiā le.","Cuộc họp hôm nay đến đây thôi, cảm ơn mọi người đã vất vả."]]},
+{n:"6",p:1,han:"建立业务关系与产品介绍",vi:"Thiết lập quan hệ & Giới thiệu sản phẩm",
+ t:["Chào hỏi, giới thiệu doanh nghiệp","Giới thiệu sản phẩm","Mời hợp tác – đặt hàng thử","Thực hành theo ngành"],
+ w:[
+ ["名片","míngpiàn","danh thiếp","这是我的名片，请多关照。","Zhè shì wǒ de míngpiàn, qǐng duō guānzhào.","Đây là danh thiếp của tôi, mong được giúp đỡ."],
+ ["合作","hézuò","hợp tác","希望我们能长期合作。","Xīwàng wǒmen néng chángqī hézuò.","Hy vọng chúng ta có thể hợp tác lâu dài."],
+ ["客户","kèhù","khách hàng","我们的客户主要在欧洲和东南亚。","Wǒmen de kèhù zhǔyào zài Ōuzhōu hé Dōngnányà.","Khách hàng của chúng tôi chủ yếu ở châu Âu và Đông Nam Á."],
+ ["产品","chǎnpǐn","sản phẩm","这是我们今年的新产品。","Zhè shì wǒmen jīnnián de xīn chǎnpǐn.","Đây là sản phẩm mới năm nay của chúng tôi."],
+ ["目录","mùlù","catalogue, danh mục","这是我们的产品目录，请您过目。","Zhè shì wǒmen de chǎnpǐn mùlù, qǐng nín guòmù.","Đây là catalogue sản phẩm, mời anh/chị xem qua."],
+ ["规格","guīgé","quy cách, thông số","这款产品有三种规格。","Zhè kuǎn chǎnpǐn yǒu sān zhǒng guīgé.","Mẫu sản phẩm này có ba quy cách."],
+ ["性能","xìngnéng","tính năng, hiệu năng","这台机器性能稳定，耗电少。","Zhè tái jīqì xìngnéng wěndìng, hào diàn shǎo.","Máy này vận hành ổn định, ít tốn điện."],
+ ["优势","yōushì","ưu thế, lợi thế","我们的优势是价格合理、交货快。","Wǒmen de yōushì shì jiàgé hélǐ, jiāohuò kuài.","Lợi thế của chúng tôi là giá hợp lý, giao hàng nhanh."],
+ ["样品","yàngpǐn","hàng mẫu","我们可以免费提供样品。","Wǒmen kěyǐ miǎnfèi tígōng yàngpǐn.","Chúng tôi có thể cung cấp mẫu miễn phí."],
+ ["试订单","shì dìngdān","đơn hàng thử","您可以先下一个试订单。","Nín kěyǐ xiān xià yí ge shì dìngdān.","Anh/chị có thể đặt một đơn hàng thử trước."]],
+ s:[["久仰大名，今天终于见面了。","Jiǔyǎng dàmíng, jīntiān zhōngyú jiànmiàn le.","Nghe danh đã lâu, hôm nay cuối cùng cũng được gặp."],
+ ["请允许我介绍一下我们公司。","Qǐng yǔnxǔ wǒ jièshào yíxià wǒmen gōngsī.","Cho phép tôi giới thiệu về công ty chúng tôi."],
+ ["如果您感兴趣，我们可以先寄样品。","Rúguǒ nín gǎn xìngqù, wǒmen kěyǐ xiān jì yàngpǐn.","Nếu anh/chị quan tâm, chúng tôi có thể gửi mẫu trước."],
+ ["期待与贵公司建立合作关系。","Qīdài yǔ guì gōngsī jiànlì hézuò guānxi.","Mong được thiết lập quan hệ hợp tác với quý công ty."]]},
+{n:"7",p:1,han:"询盘与报价",vi:"Yêu cầu báo giá & Báo giá",
+ t:["Tiếp nhận yêu cầu: số lượng, thị trường","Các yếu tố báo giá","Cách viết báo giá","Điều chỉnh báo giá"],
+ w:[
+ ["询盘","xúnpán","hỏi hàng, yêu cầu báo giá","我们收到了一份来自日本的询盘。","Wǒmen shōu dào le yí fèn láizì Rìběn de xúnpán.","Chúng tôi nhận được một yêu cầu báo giá từ Nhật Bản."],
+ ["报价","bàojià","báo giá","请给我们报一个最低价。","Qǐng gěi wǒmen bào yí ge zuìdī jià.","Vui lòng báo cho chúng tôi giá thấp nhất."],
+ ["报价单","bàojiàdān","bảng báo giá","报价单已经发到您的邮箱了。","Bàojiàdān yǐjīng fā dào nín de yóuxiāng le.","Bảng báo giá đã gửi vào email của anh/chị."],
+ ["数量","shùliàng","số lượng","请问您需要的数量是多少？","Qǐngwèn nín xūyào de shùliàng shì duōshao?","Xin hỏi anh/chị cần số lượng bao nhiêu?"],
+ ["起订量","qǐdìngliàng","số lượng đặt tối thiểu (MOQ)","我们的起订量是一千件。","Wǒmen de qǐdìngliàng shì yìqiān jiàn.","MOQ của chúng tôi là 1.000 chiếc."],
+ ["单价","dānjià","đơn giá","单价是每件五美元。","Dānjià shì měi jiàn wǔ měiyuán.","Đơn giá là 5 USD mỗi chiếc."],
+ ["离岸价","lí'ànjià","giá FOB","这是海防港的离岸价。","Zhè shì Hǎifáng gǎng de lí'ànjià.","Đây là giá FOB cảng Hải Phòng."],
+ ["到岸价","dào'ànjià","giá CIF","您要离岸价还是到岸价？","Nín yào lí'ànjià háishi dào'ànjià?","Anh/chị muốn giá FOB hay CIF?"],
+ ["交货期","jiāohuòqī","thời hạn giao hàng","交货期是收到定金后二十五天。","Jiāohuòqī shì shōu dào dìngjīn hòu èrshíwǔ tiān.","Thời gian giao hàng là 25 ngày sau khi nhận tiền cọc."],
+ ["有效期","yǒuxiàoqī","thời hạn hiệu lực","本报价有效期为三十天。","Běn bàojià yǒuxiàoqī wéi sānshí tiān.","Báo giá này có hiệu lực 30 ngày."]],
+ s:[["请问贵方的目标市场是哪里？","Qǐngwèn guì fāng de mùbiāo shìchǎng shì nǎlǐ?","Xin hỏi thị trường mục tiêu của quý bên là ở đâu?"],
+ ["以上报价含包装费，不含运费。","Yǐshàng bàojià hán bāozhuāngfèi, bù hán yùnfèi.","Giá trên đã gồm phí đóng gói, chưa gồm cước vận chuyển."],
+ ["如果数量增加，价格可以再商量。","Rúguǒ shùliàng zēngjiā, jiàgé kěyǐ zài shāngliang.","Nếu tăng số lượng, giá có thể thương lượng thêm."],
+ ["我们会在二十四小时内回复报价。","Wǒmen huì zài èrshísì xiǎoshí nèi huífù bàojià.","Chúng tôi sẽ phản hồi báo giá trong vòng 24 giờ."]]},
+{n:"8",p:1,han:"价格谈判",vi:"Đàm phán giá cả",
+ t:["Chiến lược thương lượng","Giải thích giá: chất lượng/chi phí/logistics","Chiết khấu, giảm theo số lượng","Thực hành đàm phán"],
+ w:[
+ ["谈判","tánpàn","đàm phán","价格谈判进行得很顺利。","Jiàgé tánpàn jìnxíng de hěn shùnlì.","Cuộc đàm phán giá diễn ra rất suôn sẻ."],
+ ["成本","chéngběn","chi phí, giá thành","原材料成本上涨了百分之十。","Yuáncáiliào chéngběn shàngzhǎng le bǎi fēn zhī shí.","Chi phí nguyên liệu đã tăng 10%."],
+ ["利润","lìrùn","lợi nhuận","这个价格我们几乎没有利润了。","Zhège jiàgé wǒmen jīhū méiyǒu lìrùn le.","Với giá này chúng tôi gần như không còn lãi."],
+ ["质量","zhìliàng","chất lượng","一分价钱一分货，我们的质量更好。","Yì fēn jiàqián yì fēn huò, wǒmen de zhìliàng gèng hǎo.","Tiền nào của nấy, chất lượng của chúng tôi tốt hơn."],
+ ["竞争力","jìngzhēnglì","sức cạnh tranh","你们的价格没有竞争力。","Nǐmen de jiàgé méiyǒu jìngzhēnglì.","Giá của các anh không có sức cạnh tranh."],
+ ["运费","yùnfèi","cước vận chuyển","运费由我方承担。","Yùnfèi yóu wǒ fāng chéngdān.","Cước vận chuyển do bên chúng tôi chịu."],
+ ["折扣","zhékòu","chiết khấu","订货量大的话，可以打九五折。","Dìnghuòliàng dà dehuà, kěyǐ dǎ jiǔ wǔ zhé.","Nếu đặt số lượng lớn, có thể giảm 5%."],
+ ["优惠","yōuhuì","ưu đãi","老客户可以享受特别优惠。","Lǎo kèhù kěyǐ xiǎngshòu tèbié yōuhuì.","Khách hàng lâu năm được hưởng ưu đãi đặc biệt."],
+ ["让步","ràngbù","nhượng bộ","我们已经做了很大的让步。","Wǒmen yǐjīng zuò le hěn dà de ràngbù.","Chúng tôi đã nhượng bộ rất nhiều rồi."],
+ ["各让一步","gè ràng yí bù","mỗi bên nhường một bước","我们各让一步吧，每件四块八。","Wǒmen gè ràng yí bù ba, měi jiàn sì kuài bā.","Mỗi bên nhường một chút nhé, 4,8 tệ một chiếc."]],
+ s:[["这个价格太高了，能不能再便宜一点？","Zhège jiàgé tài gāo le, néng bu néng zài piányi yìdiǎn?","Giá này cao quá, có thể rẻ hơn chút không?"],
+ ["这已经是我们的最低价了。","Zhè yǐjīng shì wǒmen de zuìdī jià le.","Đây đã là giá thấp nhất của chúng tôi rồi."],
+ ["如果您订五千件以上，我们可以给百分之三的折扣。","Rúguǒ nín dìng wǔqiān jiàn yǐshàng, wǒmen kěyǐ gěi bǎi fēn zhī sān de zhékòu.","Nếu anh/chị đặt từ 5.000 chiếc, chúng tôi chiết khấu 3%."],
+ ["好，就这么定了。","Hǎo, jiù zhème dìng le.","Được, chốt như vậy nhé."]]},
+{n:"9",p:2,han:"参观工厂",vi:"Tham quan nhà máy",
+ t:["Quy trình đón khách tham quan","Giới thiệu khu vực","Giới thiệu thiết bị – công đoạn","Thực hành giới thiệu nhà máy"],
+ w:[
+ ["参观","cānguān","tham quan","欢迎各位来我们工厂参观。","Huānyíng gèwèi lái wǒmen gōngchǎng cānguān.","Chào mừng quý vị đến tham quan nhà máy chúng tôi."],
+ ["安全帽","ānquánmào","mũ bảo hộ","进车间前请戴好安全帽。","Jìn chējiān qián qǐng dài hǎo ānquánmào.","Trước khi vào xưởng vui lòng đội mũ bảo hộ."],
+ ["占地面积","zhàndì miànjī","diện tích mặt bằng","工厂占地面积两万平方米。","Gōngchǎng zhàndì miànjī liǎngwàn píngfāngmǐ.","Nhà máy rộng 20.000 m²."],
+ ["车间","chējiān","phân xưởng","这是我们的组装车间。","Zhè shì wǒmen de zǔzhuāng chējiān.","Đây là xưởng lắp ráp của chúng tôi."],
+ ["生产线","shēngchǎnxiàn","dây chuyền sản xuất","我们一共有八条生产线。","Wǒmen yígòng yǒu bā tiáo shēngchǎnxiàn.","Chúng tôi có tổng cộng 8 dây chuyền sản xuất."],
+ ["设备","shèbèi","thiết bị","这些设备都是从德国进口的。","Zhèxiē shèbèi dōu shì cóng Déguó jìnkǒu de.","Các thiết bị này đều nhập khẩu từ Đức."],
+ ["工序","gōngxù","công đoạn","这道工序是焊接。","Zhè dào gōngxù shì hànjiē.","Công đoạn này là hàn."],
+ ["自动化","zìdònghuà","tự động hoá","这条线已经实现了全自动化。","Zhè tiáo xiàn yǐjīng shíxiàn le quán zìdònghuà.","Dây chuyền này đã tự động hoá hoàn toàn."],
+ ["产能","chǎnnéng","công suất","工厂每月产能是十万件。","Gōngchǎng měi yuè chǎnnéng shì shíwàn jiàn.","Công suất nhà máy là 100.000 chiếc mỗi tháng."],
+ ["仓库","cāngkù","kho","成品都放在二号仓库。","Chéngpǐn dōu fàng zài èr hào cāngkù.","Thành phẩm đều để ở kho số 2."]],
+ s:[["请跟我来，我先带大家看一下原料区。","Qǐng gēn wǒ lái, wǒ xiān dài dàjiā kàn yíxià yuánliào qū.","Mời đi theo tôi, trước tiên tôi đưa mọi người xem khu nguyên liệu."],
+ ["这边是生产区，那边是办公区。","Zhèbiān shì shēngchǎn qū, nàbiān shì bàngōng qū.","Bên này là khu sản xuất, bên kia là khu văn phòng."],
+ ["首先切割，然后焊接，最后喷漆。","Shǒuxiān qiēgē, ránhòu hànjiē, zuìhòu pēnqī.","Đầu tiên cắt, sau đó hàn, cuối cùng phun sơn."],
+ ["参观过程中请不要拍照。","Cānguān guòchéng zhōng qǐng búyào pāizhào.","Trong lúc tham quan vui lòng không chụp ảnh."]]},
+{n:"10",p:2,han:"生产与质量控制",vi:"Sản xuất & Kiểm soát chất lượng",
+ t:["Lập kế hoạch sản xuất","Theo dõi tiến độ, báo cáo sản lượng","Kiểm tra chất lượng"],
+ w:[
+ ["生产计划","shēngchǎn jìhuà","kế hoạch sản xuất","我们根据订单制定生产计划。","Wǒmen gēnjù dìngdān zhìdìng shēngchǎn jìhuà.","Chúng tôi lập kế hoạch sản xuất dựa trên đơn hàng."],
+ ["原材料","yuáncáiliào","nguyên vật liệu","原材料已经到厂了。","Yuáncáiliào yǐjīng dào chǎng le.","Nguyên vật liệu đã về đến nhà máy."],
+ ["进度","jìndù","tiến độ","目前生产进度正常。","Mùqián shēngchǎn jìndù zhèngcháng.","Hiện tại tiến độ sản xuất bình thường."],
+ ["产量","chǎnliàng","sản lượng","这个月的产量比上个月增加了百分之十五。","Zhège yuè de chǎnliàng bǐ shàng ge yuè zēngjiā le bǎi fēn zhī shíwǔ.","Sản lượng tháng này tăng 15% so với tháng trước."],
+ ["延误","yánwù","chậm trễ","因为停电，生产延误了两天。","Yīnwèi tíngdiàn, shēngchǎn yánwù le liǎng tiān.","Do mất điện, sản xuất bị chậm hai ngày."],
+ ["质检","zhìjiǎn","kiểm tra chất lượng (QC)","每批货出厂前都要经过质检。","Měi pī huò chūchǎng qián dōu yào jīngguò zhìjiǎn.","Mỗi lô hàng trước khi xuất xưởng đều phải qua QC."],
+ ["标准","biāozhǔn","tiêu chuẩn","我们严格按照ISO标准生产。","Wǒmen yángé ànzhào ISO biāozhǔn shēngchǎn.","Chúng tôi sản xuất nghiêm ngặt theo tiêu chuẩn ISO."],
+ ["抽检","chōujiǎn","kiểm tra xác suất","客户要求按百分之十抽检。","Kèhù yāoqiú àn bǎi fēn zhī shí chōujiǎn.","Khách hàng yêu cầu kiểm tra xác suất 10%."],
+ ["合格率","hégélǜ","tỷ lệ đạt chuẩn","产品合格率达到百分之九十九。","Chǎnpǐn hégélǜ dádào bǎi fēn zhī jiǔshíjiǔ.","Tỷ lệ sản phẩm đạt chuẩn lên tới 99%."],
+ ["次品","cìpǐn","hàng lỗi","次品必须单独存放。","Cìpǐn bìxū dāndú cúnfàng.","Hàng lỗi phải để riêng."]],
+ s:[["截至今天，已经完成了百分之七十。","Jiézhì jīntiān, yǐjīng wánchéng le bǎi fēn zhī qīshí.","Tính đến hôm nay đã hoàn thành 70%."],
+ ["预计二十号可以全部完工。","Yùjì èrshí hào kěyǐ quánbù wángōng.","Dự kiến ngày 20 có thể hoàn thành toàn bộ."],
+ ["发现问题要马上报告。","Fāxiàn wèntí yào mǎshàng bàogào.","Phát hiện vấn đề phải báo cáo ngay."],
+ ["这批货的质量完全符合要求。","Zhè pī huò de zhìliàng wánquán fúhé yāoqiú.","Chất lượng lô hàng này hoàn toàn đạt yêu cầu."]]},
+{n:"11",p:2,han:"包装与定制",vi:"Đóng gói & Sản xuất theo yêu cầu (OEM)",
+ t:["Bao bì, tem nhãn, mã vạch","Đặt hàng – thiết kế – xác nhận mẫu","Kiểm soát đóng gói"],
+ w:[
+ ["包装","bāozhuāng","đóng gói, bao bì","包装要结实，适合海运。","Bāozhuāng yào jiēshi, shìhé hǎiyùn.","Bao bì phải chắc chắn, phù hợp vận chuyển đường biển."],
+ ["纸箱","zhǐxiāng","thùng carton","每个纸箱装二十四件。","Měi ge zhǐxiāng zhuāng èrshísì jiàn.","Mỗi thùng carton đựng 24 chiếc."],
+ ["标签","biāoqiān","nhãn, tem","标签上要印上产地和日期。","Biāoqiān shang yào yìn shang chǎndì hé rìqī.","Trên nhãn phải in xuất xứ và ngày sản xuất."],
+ ["条形码","tiáoxíngmǎ","mã vạch","每件商品都要贴条形码。","Měi jiàn shāngpǐn dōu yào tiē tiáoxíngmǎ.","Mỗi sản phẩm đều phải dán mã vạch."],
+ ["唛头","màtóu","shipping mark (ký mã hiệu)","唛头请按我们的要求刷。","Màtóu qǐng àn wǒmen de yāoqiú shuā.","Vui lòng in shipping mark theo yêu cầu của chúng tôi."],
+ ["定制","dìngzhì","đặt làm riêng","我们可以根据客户要求定制。","Wǒmen kěyǐ gēnjù kèhù yāoqiú dìngzhì.","Chúng tôi có thể sản xuất theo yêu cầu khách hàng."],
+ ["贴牌","tiēpái","gia công OEM (gắn nhãn khách)","我们接受贴牌生产。","Wǒmen jiēshòu tiēpái shēngchǎn.","Chúng tôi nhận gia công OEM."],
+ ["商标","shāngbiāo","nhãn hiệu, logo","请把贵公司的商标文件发给我们。","Qǐng bǎ guì gōngsī de shāngbiāo wénjiàn fā gěi wǒmen.","Vui lòng gửi file logo của quý công ty cho chúng tôi."],
+ ["设计稿","shèjìgǎo","bản thiết kế","设计稿确认后才能开始印刷。","Shèjìgǎo quèrèn hòu cái néng kāishǐ yìnshuā.","Phải xác nhận bản thiết kế rồi mới in được."],
+ ["确认样","quèrènyàng","mẫu duyệt","请在确认样上签字。","Qǐng zài quèrènyàng shang qiānzì.","Vui lòng ký lên mẫu duyệt."]],
+ s:[["外包装用五层瓦楞纸箱。","Wài bāozhuāng yòng wǔ céng wǎléng zhǐxiāng.","Bao bì ngoài dùng thùng carton sóng 5 lớp."],
+ ["请先打样，我们确认后再大货生产。","Qǐng xiān dǎyàng, wǒmen quèrèn hòu zài dàhuò shēngchǎn.","Vui lòng làm mẫu trước, chúng tôi duyệt rồi mới sản xuất hàng loạt."],
+ ["包装上必须注明“小心轻放”。","Bāozhuāng shang bìxū zhùmíng “xiǎoxīn qīng fàng”.","Trên bao bì phải ghi rõ “Hàng dễ vỡ, nhẹ tay”."]]},
+{n:"12",p:3,han:"签订合同",vi:"Ký kết hợp đồng",
+ t:["Điều khoản: giá, giao hàng, thanh toán","Bảo hành, phạt hợp đồng, trách nhiệm","Thương lượng & chốt hợp đồng","Ký kết, đóng dấu"],
+ w:[
+ ["合同","hétong","hợp đồng","合同一式两份，双方各执一份。","Hétong yí shì liǎng fèn, shuāngfāng gè zhí yí fèn.","Hợp đồng lập thành 2 bản, mỗi bên giữ 1 bản."],
+ ["条款","tiáokuǎn","điều khoản","我们再看一下付款条款。","Wǒmen zài kàn yíxià fùkuǎn tiáokuǎn.","Chúng ta xem lại điều khoản thanh toán nhé."],
+ ["付款方式","fùkuǎn fāngshì","phương thức thanh toán","我们的付款方式是电汇。","Wǒmen de fùkuǎn fāngshì shì diànhuì.","Phương thức thanh toán của chúng tôi là chuyển khoản (T/T)."],
+ ["定金","dìngjīn","tiền đặt cọc","签合同后请先付百分之三十定金。","Qiān hétong hòu qǐng xiān fù bǎi fēn zhī sānshí dìngjīn.","Sau khi ký hợp đồng vui lòng đặt cọc trước 30%."],
+ ["信用证","xìnyòngzhèng","thư tín dụng (L/C)","我们接受即期信用证。","Wǒmen jiēshòu jíqī xìnyòngzhèng.","Chúng tôi chấp nhận L/C trả ngay."],
+ ["保修期","bǎoxiūqī","thời hạn bảo hành","保修期为一年。","Bǎoxiūqī wéi yì nián.","Thời hạn bảo hành là một năm."],
+ ["违约","wéiyuē","vi phạm hợp đồng","如果一方违约，要承担赔偿责任。","Rúguǒ yì fāng wéiyuē, yào chéngdān péicháng zérèn.","Nếu một bên vi phạm hợp đồng phải chịu trách nhiệm bồi thường."],
+ ["违约金","wéiyuējīn","tiền phạt hợp đồng","每延期一天，扣千分之五的违约金。","Měi yánqī yì tiān, kòu qiān fēn zhī wǔ de wéiyuējīn.","Mỗi ngày giao chậm bị phạt 0,5%."],
+ ["签字盖章","qiānzì gàizhāng","ký tên đóng dấu","合同需要双方签字盖章。","Hétong xūyào shuāngfāng qiānzì gàizhāng.","Hợp đồng cần hai bên ký tên đóng dấu."],
+ ["生效","shēngxiào","có hiệu lực","合同自签订之日起生效。","Hétong zì qiāndìng zhī rì qǐ shēngxiào.","Hợp đồng có hiệu lực kể từ ngày ký."]],
+ s:[["关于交货时间，我们还需要再商量一下。","Guānyú jiāohuò shíjiān, wǒmen hái xūyào zài shāngliang yíxià.","Về thời gian giao hàng, chúng ta cần bàn thêm."],
+ ["这一条我们不能接受。","Zhè yì tiáo wǒmen bù néng jiēshòu.","Điều khoản này chúng tôi không thể chấp nhận."],
+ ["如果没有其他问题，我们就签合同吧。","Rúguǒ méiyǒu qítā wèntí, wǒmen jiù qiān hétong ba.","Nếu không còn vấn đề gì, chúng ta ký hợp đồng nhé."],
+ ["合作愉快！","Hézuò yúkuài!","Hợp tác vui vẻ!"]]},
+{n:"13",p:3,han:"国际运输与物流",vi:"Vận tải quốc tế & Logistics",
+ t:["Đường biển / bộ / hàng không","Booking, lịch tàu, container","Báo giá, tracking, chứng từ","Sự cố: delay, thiếu hàng, mất hàng"],
+ w:[
+ ["海运","hǎiyùn","vận chuyển đường biển","大货一般走海运。","Dàhuò yìbān zǒu hǎiyùn.","Hàng số lượng lớn thường đi đường biển."],
+ ["空运","kōngyùn","vận chuyển hàng không","样品走空运，三天就到。","Yàngpǐn zǒu kōngyùn, sān tiān jiù dào.","Hàng mẫu đi máy bay, 3 ngày là tới."],
+ ["陆运","lùyùn","vận chuyển đường bộ","从凭祥到河内可以走陆运。","Cóng Píngxiáng dào Hénèi kěyǐ zǒu lùyùn.","Từ Bằng Tường về Hà Nội có thể đi đường bộ."],
+ ["货代","huòdài","công ty giao nhận (forwarder)","我们的货代会跟您联系。","Wǒmen de huòdài huì gēn nín liánxì.","Forwarder của chúng tôi sẽ liên hệ với anh/chị."],
+ ["订舱","dìngcāng","đặt chỗ (booking)","请尽快帮我们订舱。","Qǐng jǐnkuài bāng wǒmen dìngcāng.","Vui lòng booking giúp chúng tôi sớm nhất có thể."],
+ ["船期","chuánqī","lịch tàu","下一班船期是十五号。","Xià yì bān chuánqī shì shíwǔ hào.","Chuyến tàu kế tiếp là ngày 15."],
+ ["集装箱","jízhuāngxiāng","container","这批货需要两个四十尺集装箱。","Zhè pī huò xūyào liǎng ge sìshí chǐ jízhuāngxiāng.","Lô hàng này cần hai container 40 feet."],
+ ["提单","tídān","vận đơn (B/L)","提单号是多少？","Tídān hào shì duōshao?","Số vận đơn là bao nhiêu?"],
+ ["跟踪","gēnzōng","theo dõi (tracking)","您可以在网上跟踪货物状态。","Nín kěyǐ zài wǎngshang gēnzōng huòwù zhuàngtài.","Anh/chị có thể theo dõi trạng thái hàng trên mạng."],
+ ["延迟","yánchí","chậm, trễ","因为台风，船期延迟了三天。","Yīnwèi táifēng, chuánqī yánchí le sān tiān.","Do bão, lịch tàu bị trễ ba ngày."],
+ ["短少","duǎnshǎo","thiếu hàng","收货时发现短少两箱。","Shōuhuò shí fāxiàn duǎnshǎo liǎng xiāng.","Khi nhận hàng phát hiện thiếu hai thùng."],
+ ["丢失","diūshī","thất lạc, mất","如果货物丢失，保险公司会赔偿。","Rúguǒ huòwù diūshī, bǎoxiǎn gōngsī huì péicháng.","Nếu hàng bị mất, công ty bảo hiểm sẽ bồi thường."]],
+ s:[["这批货走海运还是空运？","Zhè pī huò zǒu hǎiyùn háishi kōngyùn?","Lô hàng này đi biển hay đi máy bay?"],
+ ["货已经装船了，预计月底到港。","Huò yǐjīng zhuāng chuán le, yùjì yuèdǐ dào gǎng.","Hàng đã lên tàu, dự kiến cuối tháng cập cảng."],
+ ["请把提单副本发给我们。","Qǐng bǎ tídān fùběn fā gěi wǒmen.","Vui lòng gửi cho chúng tôi bản copy vận đơn."]]},
+{n:"14",p:3,han:"海关与保险",vi:"Hải quan & Bảo hiểm",
+ t:["Thủ tục khai báo hải quan","Các loại chứng từ","Kiểm tra hàng hoá","Xử lý vướng mắc giấy tờ"],
+ w:[
+ ["海关","hǎiguān","hải quan","货物正在海关等待查验。","Huòwù zhèngzài hǎiguān děngdài cháyàn.","Hàng đang chờ hải quan kiểm tra."],
+ ["报关","bàoguān","khai báo hải quan","报关需要哪些单据？","Bàoguān xūyào nǎxiē dānjù?","Khai hải quan cần những chứng từ nào?"],
+ ["清关","qīngguān","thông quan","清关大概需要三天。","Qīngguān dàgài xūyào sān tiān.","Thông quan mất khoảng ba ngày."],
+ ["关税","guānshuì","thuế quan","这类产品的进口关税是百分之五。","Zhè lèi chǎnpǐn de jìnkǒu guānshuì shì bǎi fēn zhī wǔ.","Thuế nhập khẩu mặt hàng này là 5%."],
+ ["商业发票","shāngyè fāpiào","hoá đơn thương mại (Invoice)","请提供商业发票和装箱单。","Qǐng tígōng shāngyè fāpiào hé zhuāngxiāngdān.","Vui lòng cung cấp invoice và packing list."],
+ ["装箱单","zhuāngxiāngdān","phiếu đóng gói (Packing list)","装箱单上的件数要和实际一致。","Zhuāngxiāngdān shang de jiànshù yào hé shíjì yízhì.","Số kiện trên packing list phải khớp thực tế."],
+ ["原产地证","yuánchǎndì zhèng","giấy chứng nhận xuất xứ (C/O)","有原产地证可以享受关税优惠。","Yǒu yuánchǎndì zhèng kěyǐ xiǎngshòu guānshuì yōuhuì.","Có C/O thì được hưởng ưu đãi thuế."],
+ ["查验","cháyàn","kiểm hoá","海关要求开箱查验。","Hǎiguān yāoqiú kāi xiāng cháyàn.","Hải quan yêu cầu mở thùng kiểm hoá."],
+ ["投保","tóubǎo","mua bảo hiểm","我们按发票金额的百分之一百一十投保。","Wǒmen àn fāpiào jīn'é de bǎi fēn zhī yìbǎi yīshí tóubǎo.","Chúng tôi mua bảo hiểm bằng 110% giá trị hoá đơn."],
+ ["保险单","bǎoxiǎndān","đơn bảo hiểm","保险单已经随单据寄出。","Bǎoxiǎndān yǐjīng suí dānjù jì chū.","Đơn bảo hiểm đã gửi kèm bộ chứng từ."]],
+ s:[["单据上的品名和实际货物不一致。","Dānjù shang de pǐnmíng hé shíjì huòwù bù yízhì.","Tên hàng trên chứng từ không khớp với hàng thực tế."],
+ ["请问还缺什么文件？","Qǐngwèn hái quē shénme wénjiàn?","Xin hỏi còn thiếu giấy tờ gì?"],
+ ["我们会尽快补交材料。","Wǒmen huì jǐnkuài bǔjiāo cáiliào.","Chúng tôi sẽ bổ sung hồ sơ sớm nhất."]]},
+{n:"15",p:3,han:"索赔与投诉处理",vi:"Giải quyết khiếu nại & Bồi thường",
+ t:["Tiếp nhận phản hồi – khiếu nại","Phân loại: chất lượng, giao hàng, đóng gói","Xin lỗi – giải thích – đề xuất giải pháp"],
+ w:[
+ ["投诉","tóusù","khiếu nại","我们收到了客户的投诉。","Wǒmen shōu dào le kèhù de tóusù.","Chúng tôi đã nhận được khiếu nại của khách hàng."],
+ ["质量问题","zhìliàng wèntí","lỗi chất lượng","这批货有严重的质量问题。","Zhè pī huò yǒu yánzhòng de zhìliàng wèntí.","Lô hàng này có lỗi chất lượng nghiêm trọng."],
+ ["损坏","sǔnhuài","hư hỏng","有十箱货在运输中损坏了。","Yǒu shí xiāng huò zài yùnshū zhōng sǔnhuài le.","Có 10 thùng hàng bị hỏng trong quá trình vận chuyển."],
+ ["证据","zhèngjù","bằng chứng","请提供照片作为证据。","Qǐng tígōng zhàopiàn zuòwéi zhèngjù.","Vui lòng cung cấp ảnh làm bằng chứng."],
+ ["索赔","suǒpéi","đòi bồi thường","客户要求索赔五千美元。","Kèhù yāoqiú suǒpéi wǔqiān měiyuán.","Khách hàng yêu cầu bồi thường 5.000 USD."],
+ ["赔偿","péicháng","bồi thường","我们会赔偿您的全部损失。","Wǒmen huì péicháng nín de quánbù sǔnshī.","Chúng tôi sẽ bồi thường toàn bộ thiệt hại cho anh/chị."],
+ ["退货","tuìhuò","trả hàng","不合格的产品可以退货。","Bù hégé de chǎnpǐn kěyǐ tuìhuò.","Sản phẩm không đạt chuẩn có thể trả lại."],
+ ["换货","huànhuò","đổi hàng","我们马上给您安排换货。","Wǒmen mǎshàng gěi nín ānpái huànhuò.","Chúng tôi sẽ sắp xếp đổi hàng cho anh/chị ngay."],
+ ["道歉","dàoqiàn","xin lỗi","我代表公司向您道歉。","Wǒ dàibiǎo gōngsī xiàng nín dàoqiàn.","Tôi thay mặt công ty xin lỗi anh/chị."],
+ ["解决方案","jiějué fāng'àn","phương án giải quyết","我们明天给您一个解决方案。","Wǒmen míngtiān gěi nín yí ge jiějué fāng'àn.","Ngày mai chúng tôi sẽ đưa ra phương án giải quyết."]],
+ s:[["给您带来不便，非常抱歉。","Gěi nín dàilái búbiàn, fēicháng bàoqiàn.","Rất xin lỗi vì đã gây bất tiện cho anh/chị."],
+ ["我们马上调查原因。","Wǒmen mǎshàng diàochá yuányīn.","Chúng tôi sẽ điều tra nguyên nhân ngay."],
+ ["我们建议在下批货中免费补发。","Wǒmen jiànyì zài xià pī huò zhōng miǎnfèi bǔfā.","Chúng tôi đề xuất gửi bù miễn phí trong lô hàng sau."],
+ ["这种情况以后不会再发生。","Zhè zhǒng qíngkuàng yǐhòu bú huì zài fāshēng.","Tình trạng này sẽ không tái diễn nữa."]]},
+{n:"16",p:3,han:"售后服务与长期合作",vi:"Dịch vụ hậu mãi & Hợp tác lâu dài",
+ t:["Bảo hành, đổi trả, hỗ trợ kỹ thuật","Chăm sóc khách hàng định kỳ","Tổng kết đơn hàng: rủi ro & cải tiến"],
+ w:[
+ ["售后服务","shòuhòu fúwù","dịch vụ hậu mãi","我们提供完善的售后服务。","Wǒmen tígōng wánshàn de shòuhòu fúwù.","Chúng tôi cung cấp dịch vụ hậu mãi chu đáo."],
+ ["保修","bǎoxiū","bảo hành","这台机器保修两年。","Zhè tái jīqì bǎoxiū liǎng nián.","Máy này được bảo hành hai năm."],
+ ["技术支持","jìshù zhīchí","hỗ trợ kỹ thuật","我们提供二十四小时技术支持。","Wǒmen tígōng èrshísì xiǎoshí jìshù zhīchí.","Chúng tôi hỗ trợ kỹ thuật 24 giờ."],
+ ["回访","huífǎng","thăm hỏi lại khách hàng","我们每季度对客户进行一次回访。","Wǒmen měi jìdù duì kèhù jìnxíng yí cì huífǎng.","Mỗi quý chúng tôi chăm sóc lại khách hàng một lần."],
+ ["反馈","fǎnkuì","phản hồi","感谢您的宝贵反馈。","Gǎnxiè nín de bǎoguì fǎnkuì.","Cảm ơn phản hồi quý báu của anh/chị."],
+ ["满意度","mǎnyìdù","mức độ hài lòng","今年客户满意度达到百分之九十五。","Jīnnián kèhù mǎnyìdù dádào bǎi fēn zhī jiǔshíwǔ.","Năm nay mức độ hài lòng của khách hàng đạt 95%."],
+ ["总结","zǒngjié","tổng kết","每个订单完成后都要做总结。","Měi ge dìngdān wánchéng hòu dōu yào zuò zǒngjié.","Mỗi đơn hàng hoàn thành đều phải tổng kết."],
+ ["风险","fēngxiǎn","rủi ro","我们要提前评估风险。","Wǒmen yào tíqián pínggū fēngxiǎn.","Chúng ta cần đánh giá rủi ro trước."],
+ ["改进","gǎijìn","cải tiến","我们会根据您的意见不断改进。","Wǒmen huì gēnjù nín de yìjiàn búduàn gǎijìn.","Chúng tôi sẽ không ngừng cải tiến theo ý kiến của anh/chị."],
+ ["长期","chángqī","lâu dài","我们希望和贵公司建立长期的合作关系。","Wǒmen xīwàng hé guì gōngsī jiànlì chángqī de hézuò guānxi.","Chúng tôi mong xây dựng quan hệ hợp tác lâu dài với quý công ty."]],
+ s:[["使用过程中有任何问题，请随时联系我们。","Shǐyòng guòchéng zhōng yǒu rènhé wèntí, qǐng suíshí liánxì wǒmen.","Trong quá trình sử dụng có vấn đề gì, xin cứ liên hệ chúng tôi."],
+ ["感谢您一直以来的支持。","Gǎnxiè nín yìzhí yǐlái de zhīchí.","Cảm ơn sự ủng hộ của anh/chị trong suốt thời gian qua."],
+ ["期待明年继续合作。","Qīdài míngnián jìxù hézuò.","Mong năm sau tiếp tục hợp tác."]]}
+];
+
+const EXTRA={"1": [["招聘", "zhāopìn", "tuyển dụng", "我们公司正在招聘销售人员。", "Wǒmen gōngsī zhèngzài zhāopìn xiāoshòu rényuán.", "Công ty chúng tôi đang tuyển nhân viên kinh doanh."], ["求职信", "qiúzhíxìn", "thư xin việc", "我在求职信里写了自己的工作经验。", "Wǒ zài qiúzhíxìn li xiě le zìjǐ de gōngzuò jīngyàn.", "Tôi đã viết kinh nghiệm làm việc của mình trong thư xin việc."], ["申请", "shēnqǐng", "nộp đơn, xin", "我想申请这个职位。", "Wǒ xiǎng shēnqǐng zhège zhíwèi.", "Tôi muốn nộp đơn cho vị trí này."], ["专业", "zhuānyè", "chuyên ngành", "你大学学的是什么专业？", "Nǐ dàxué xué de shì shénme zhuānyè?", "Đại học bạn học chuyên ngành gì?"], ["能力", "nénglì", "năng lực, khả năng", "这份工作需要很强的沟通能力。", "Zhè fèn gōngzuò xūyào hěn qiáng de gōutōng nénglì.", "Công việc này cần khả năng giao tiếp tốt."], ["性格", "xìnggé", "tính cách", "我性格开朗，喜欢和人打交道。", "Wǒ xìnggé kāilǎng, xǐhuan hé rén dǎ jiāodao.", "Tôi tính cách cởi mở, thích giao tiếp với mọi người."], ["责任心", "zérènxīn", "tinh thần trách nhiệm", "做这份工作一定要有责任心。", "Zuò zhè fèn gōngzuò yídìng yào yǒu zérènxīn.", "Làm công việc này nhất định phải có trách nhiệm."], ["待遇", "dàiyù", "đãi ngộ", "这家公司的待遇很好。", "Zhè jiā gōngsī de dàiyù hěn hǎo.", "Đãi ngộ của công ty này rất tốt."], ["前途", "qiántú", "tiền đồ, triển vọng", "这个行业很有前途。", "Zhège hángyè hěn yǒu qiántú.", "Ngành này rất có triển vọng."], ["录用", "lùyòng", "tuyển dụng, nhận vào làm", "恭喜您，您被我们公司录用了。", "Gōngxǐ nín, nín bèi wǒmen gōngsī lùyòng le.", "Chúc mừng, bạn đã được công ty chúng tôi nhận."]], "2–3": [["员工", "yuángōng", "nhân viên", "我们公司有三百多名员工。", "Wǒmen gōngsī yǒu sānbǎi duō míng yuángōng.", "Công ty chúng tôi có hơn 300 nhân viên."], ["秘书", "mìshū", "thư ký", "有事可以先找总经理的秘书。", "Yǒu shì kěyǐ xiān zhǎo zǒngjīnglǐ de mìshū.", "Có việc có thể tìm thư ký của tổng giám đốc trước."], ["总部", "zǒngbù", "trụ sở chính", "公司总部设在上海。", "Gōngsī zǒngbù shè zài Shànghǎi.", "Trụ sở chính của công ty đặt tại Thượng Hải."], ["规模", "guīmó", "quy mô", "我们公司规模不大，但发展很快。", "Wǒmen gōngsī guīmó bú dà, dàn fāzhǎn hěn kuài.", "Công ty quy mô không lớn nhưng phát triển nhanh."], ["上班", "shàngbān", "đi làm, vào ca", "我们早上八点上班，下午五点下班。", "Wǒmen zǎoshang bā diǎn shàngbān, xiàwǔ wǔ diǎn xiàbān.", "Chúng tôi vào làm 8 giờ sáng, tan làm 5 giờ chiều."], ["加班", "jiābān", "tăng ca", "这周订单多，大家都要加班。", "Zhè zhōu dìngdān duō, dàjiā dōu yào jiābān.", "Tuần này nhiều đơn, mọi người đều phải tăng ca."], ["请假", "qǐngjià", "xin nghỉ phép", "我明天想请一天假。", "Wǒ míngtiān xiǎng qǐng yì tiān jià.", "Ngày mai tôi muốn xin nghỉ một ngày."], ["规定", "guīdìng", "quy định", "公司规定上班不能迟到。", "Gōngsī guīdìng shàngbān bù néng chídào.", "Công ty quy định đi làm không được đến muộn."], ["制度", "zhìdù", "chế độ, nội quy", "新员工要先学习公司的规章制度。", "Xīn yuángōng yào xiān xuéxí gōngsī de guīzhāng zhìdù.", "Nhân viên mới phải học nội quy công ty trước."], ["培训", "péixùn", "đào tạo", "入职第一周有新员工培训。", "Rùzhí dì yī zhōu yǒu xīn yuángōng péixùn.", "Tuần đầu đi làm có đào tạo nhân viên mới."], ["适应", "shìyìng", "thích nghi", "我很快就适应了新环境。", "Wǒ hěn kuài jiù shìyìng le xīn huánjìng.", "Tôi nhanh chóng thích nghi với môi trường mới."], ["岗位", "gǎngwèi", "vị trí công tác", "每个人都要做好自己岗位上的工作。", "Měi ge rén dōu yào zuò hǎo zìjǐ gǎngwèi shang de gōngzuò.", "Mỗi người phải làm tốt công việc ở vị trí của mình."]], "4–5": [["开会", "kāihuì", "họp", "下午两点在三楼开会。", "Xiàwǔ liǎng diǎn zài sān lóu kāihuì.", "2 giờ chiều họp ở tầng 3."], ["通知", "tōngzhī", "thông báo", "请通知各部门经理参加会议。", "Qǐng tōngzhī gè bùmén jīnglǐ cānjiā huìyì.", "Vui lòng thông báo các trưởng phòng dự họp."], ["准时", "zhǔnshí", "đúng giờ", "请大家明天准时参加会议。", "Qǐng dàjiā míngtiān zhǔnshí cānjiā huìyì.", "Mai mọi người dự họp đúng giờ nhé."], ["提前", "tíqián", "dời sớm, trước thời hạn", "会议提前到上午十点。", "Huìyì tíqián dào shàngwǔ shí diǎn.", "Cuộc họp dời sớm lên 10 giờ sáng."], ["取消", "qǔxiāo", "huỷ bỏ", "因为客户有事，今天的会议取消了。", "Yīnwèi kèhù yǒu shì, jīntiān de huìyì qǔxiāo le.", "Vì khách bận, cuộc họp hôm nay bị huỷ."], ["讨论", "tǎolùn", "thảo luận", "这个问题我们下次开会再讨论。", "Zhège wèntí wǒmen xià cì kāihuì zài tǎolùn.", "Vấn đề này lần họp sau chúng ta bàn tiếp."], ["发言", "fāyán", "phát biểu", "下面请李经理发言。", "Xiàmiàn qǐng Lǐ jīnglǐ fāyán.", "Tiếp theo xin mời giám đốc Lý phát biểu."], ["建议", "jiànyì", "đề xuất, kiến nghị", "我建议先做一个市场调查。", "Wǒ jiànyì xiān zuò yí ge shìchǎng diàochá.", "Tôi đề xuất làm khảo sát thị trường trước."], ["决定", "juédìng", "quyết định", "最后大家决定下个月开始生产。", "Zuìhòu dàjiā juédìng xià ge yuè kāishǐ shēngchǎn.", "Cuối cùng mọi người quyết định tháng sau bắt đầu sản xuất."], ["任务", "rènwu", "nhiệm vụ", "这个任务必须在周五前完成。", "Zhège rènwu bìxū zài zhōuwǔ qián wánchéng.", "Nhiệm vụ này phải hoàn thành trước thứ Sáu."], ["报告", "bàogào", "báo cáo", "请把销售报告发给我。", "Qǐng bǎ xiāoshòu bàogào fā gěi wǒ.", "Vui lòng gửi tôi báo cáo bán hàng."]], "6": [["企业", "qǐyè", "doanh nghiệp", "我们是一家中型民营企业。", "Wǒmen shì yì jiā zhōngxíng mínyíng qǐyè.", "Chúng tôi là doanh nghiệp tư nhân quy mô vừa."], ["经营", "jīngyíng", "kinh doanh", "我们公司主要经营电子产品。", "Wǒmen gōngsī zhǔyào jīngyíng diànzǐ chǎnpǐn.", "Công ty chúng tôi chủ yếu kinh doanh hàng điện tử."], ["品牌", "pǐnpái", "thương hiệu", "这个品牌在越南很有名。", "Zhège pǐnpái zài Yuènán hěn yǒumíng.", "Thương hiệu này rất nổi tiếng ở Việt Nam."], ["特点", "tèdiǎn", "đặc điểm", "这款产品的特点是轻便、耐用。", "Zhè kuǎn chǎnpǐn de tèdiǎn shì qīngbiàn, nàiyòng.", "Đặc điểm của sản phẩm này là nhẹ và bền."], ["功能", "gōngnéng", "chức năng", "这台机器有很多功能。", "Zhè tái jīqì yǒu hěn duō gōngnéng.", "Máy này có nhiều chức năng."], ["市场", "shìchǎng", "thị trường", "我们想开拓越南市场。", "Wǒmen xiǎng kāituò Yuènán shìchǎng.", "Chúng tôi muốn mở rộng thị trường Việt Nam."], ["广告", "guǎnggào", "quảng cáo", "我们在网上做了很多广告。", "Wǒmen zài wǎngshang zuò le hěn duō guǎnggào.", "Chúng tôi đã quảng cáo nhiều trên mạng."], ["信任", "xìnrèn", "tin tưởng", "合作的基础是互相信任。", "Hézuò de jīchǔ shì hùxiāng xìnrèn.", "Nền tảng của hợp tác là tin tưởng lẫn nhau."], ["联系", "liánxì", "liên lạc", "回国后我们保持联系。", "Huí guó hòu wǒmen bǎochí liánxì.", "Sau khi về nước chúng ta giữ liên lạc nhé."], ["订购", "dìnggòu", "đặt mua", "贵公司打算订购多少？", "Guì gōngsī dǎsuàn dìnggòu duōshao?", "Quý công ty định đặt mua bao nhiêu?"]], "7": [["价格", "jiàgé", "giá cả", "价格会随着原材料的变化调整。", "Jiàgé huì suízhe yuáncáiliào de biànhuà tiáozhěng.", "Giá sẽ điều chỉnh theo biến động nguyên liệu."], ["询问", "xúnwèn", "hỏi, dò hỏi", "有客户打电话询问价格。", "Yǒu kèhù dǎ diànhuà xúnwèn jiàgé.", "Có khách gọi điện hỏi giá."], ["订货", "dìnghuò", "đặt hàng", "您打算什么时候订货？", "Nín dǎsuàn shénme shíhou dìnghuò?", "Khi nào anh/chị định đặt hàng?"], ["包括", "bāokuò", "bao gồm", "这个价格包括包装和运费吗？", "Zhège jiàgé bāokuò bāozhuāng hé yùnfèi ma?", "Giá này có bao gồm đóng gói và cước vận chuyển không?"], ["费用", "fèiyong", "chi phí", "样品费用由我们承担。", "Yàngpǐn fèiyong yóu wǒmen chéngdān.", "Phí làm mẫu do chúng tôi chịu."], ["货款", "huòkuǎn", "tiền hàng", "货款请在发货前付清。", "Huòkuǎn qǐng zài fāhuò qián fùqīng.", "Vui lòng thanh toán đủ tiền hàng trước khi giao."], ["人民币", "rénmínbì", "nhân dân tệ (CNY)", "可以用人民币报价吗？", "Kěyǐ yòng rénmínbì bàojià ma?", "Có thể báo giá bằng nhân dân tệ không?"], ["出口", "chūkǒu", "xuất khẩu", "我们的产品主要出口到美国和日本。", "Wǒmen de chǎnpǐn zhǔyào chūkǒu dào Měiguó hé Rìběn.", "Sản phẩm của chúng tôi chủ yếu xuất sang Mỹ và Nhật."], ["进口", "jìnkǒu", "nhập khẩu", "这些原料是从中国进口的。", "Zhèxiē yuánliào shì cóng Zhōngguó jìnkǒu de.", "Những nguyên liệu này nhập khẩu từ Trung Quốc."]], "8": [["竞争", "jìngzhēng", "cạnh tranh", "现在市场竞争越来越激烈。", "Xiànzài shìchǎng jìngzhēng yuè lái yuè jīliè.", "Hiện nay cạnh tranh thị trường ngày càng gay gắt."], ["讨价还价", "tǎojià-huánjià", "mặc cả", "做生意难免要讨价还价。", "Zuò shēngyi nánmiǎn yào tǎojià-huánjià.", "Làm ăn khó tránh khỏi mặc cả."], ["货比三家", "huò bǐ sān jiā", "so sánh nhiều nơi", "客户说要货比三家再决定。", "Kèhù shuō yào huò bǐ sān jiā zài juédìng.", "Khách nói sẽ so sánh vài nơi rồi mới quyết định."], ["协商", "xiéshāng", "thương lượng", "价格问题双方可以再协商。", "Jiàgé wèntí shuāngfāng kěyǐ zài xiéshāng.", "Vấn đề giá hai bên có thể thương lượng thêm."], ["降价", "jiàngjià", "giảm giá", "竞争对手降价了百分之五。", "Jìngzhēng duìshǒu jiàngjià le bǎi fēn zhī wǔ.", "Đối thủ đã giảm giá 5%."], ["涨价", "zhǎngjià", "tăng giá", "明年原材料可能还会涨价。", "Míngnián yuáncáiliào kěnéng hái huì zhǎngjià.", "Sang năm nguyên liệu có thể còn tăng giá."], ["赔本", "péiběn", "lỗ vốn", "这个价格我们是赔本的。", "Zhège jiàgé wǒmen shì péiběn de.", "Với giá này chúng tôi bị lỗ vốn."], ["考虑", "kǎolǜ", "cân nhắc", "我们考虑一下，明天给您答复。", "Wǒmen kǎolǜ yíxià, míngtiān gěi nín dáfù.", "Chúng tôi cân nhắc, mai sẽ trả lời anh/chị."], ["接受", "jiēshòu", "chấp nhận", "这个价格我们可以接受。", "Zhège jiàgé wǒmen kěyǐ jiēshòu.", "Giá này chúng tôi có thể chấp nhận."], ["拒绝", "jùjué", "từ chối", "对方拒绝了我们的报价。", "Duìfāng jùjué le wǒmen de bàojià.", "Phía đối tác đã từ chối báo giá của chúng tôi."]], "9": [["工厂", "gōngchǎng", "nhà máy", "我们的工厂在北宁工业区。", "Wǒmen de gōngchǎng zài Běiníng gōngyèqū.", "Nhà máy chúng tôi ở khu công nghiệp Bắc Ninh."], ["现代化", "xiàndàihuà", "hiện đại hoá", "这是一家现代化的工厂。", "Zhè shì yì jiā xiàndàihuà de gōngchǎng.", "Đây là một nhà máy hiện đại."], ["面积", "miànjī", "diện tích", "这个车间面积有三千平方米。", "Zhège chējiān miànjī yǒu sānqiān píngfāngmǐ.", "Xưởng này rộng 3.000 m²."], ["工人", "gōngrén", "công nhân", "工厂一共有四百多名工人。", "Gōngchǎng yígòng yǒu sìbǎi duō míng gōngrén.", "Nhà máy có tổng cộng hơn 400 công nhân."], ["机器", "jīqì", "máy móc", "这台机器每小时能生产五百件。", "Zhè tái jīqì měi xiǎoshí néng shēngchǎn wǔbǎi jiàn.", "Máy này mỗi giờ sản xuất được 500 chiếc."], ["技术", "jìshù", "kỹ thuật, công nghệ", "我们的技术人员都受过专业培训。", "Wǒmen de jìshù rényuán dōu shòu guo zhuānyè péixùn.", "Nhân viên kỹ thuật của chúng tôi đều được đào tạo bài bản."], ["原料", "yuánliào", "nguyên liệu", "原料仓库在工厂的东边。", "Yuánliào cāngkù zài gōngchǎng de dōngbian.", "Kho nguyên liệu ở phía đông nhà máy."], ["安全", "ānquán", "an toàn", "安全第一，请在黄线内行走。", "Ānquán dì yī, qǐng zài huángxiàn nèi xíngzǒu.", "An toàn là trên hết, vui lòng đi trong vạch vàng."], ["管理", "guǎnlǐ", "quản lý", "我们采用科学的管理方法。", "Wǒmen cǎiyòng kēxué de guǎnlǐ fāngfǎ.", "Chúng tôi áp dụng phương pháp quản lý khoa học."], ["效率", "xiàolǜ", "hiệu suất", "新设备大大提高了工作效率。", "Xīn shèbèi dàdà tígāo le gōngzuò xiàolǜ.", "Thiết bị mới nâng cao đáng kể hiệu suất làm việc."]], "10": [["检查", "jiǎnchá", "kiểm tra", "出货前要再检查一遍。", "Chū huò qián yào zài jiǎnchá yí biàn.", "Trước khi xuất hàng phải kiểm tra lại một lượt."], ["合格", "hégé", "đạt chuẩn", "这批产品全部合格。", "Zhè pī chǎnpǐn quánbù hégé.", "Lô sản phẩm này đạt chuẩn toàn bộ."], ["控制", "kòngzhì", "kiểm soát", "我们要严格控制产品质量。", "Wǒmen yào yángé kòngzhì chǎnpǐn zhìliàng.", "Chúng ta phải kiểm soát chặt chẽ chất lượng sản phẩm."], ["统计", "tǒngjì", "thống kê", "请统计一下这个月的产量。", "Qǐng tǒngjì yíxià zhège yuè de chǎnliàng.", "Vui lòng thống kê sản lượng tháng này."], ["完成", "wánchéng", "hoàn thành", "订单已经完成了百分之八十。", "Dìngdān yǐjīng wánchéng le bǎi fēn zhī bāshí.", "Đơn hàng đã hoàn thành 80%."], ["提高", "tígāo", "nâng cao", "今年的目标是提高产量。", "Jīnnián de mùbiāo shì tígāo chǎnliàng.", "Mục tiêu năm nay là nâng cao sản lượng."], ["降低", "jiàngdī", "giảm, hạ thấp", "怎样才能降低生产成本？", "Zěnyàng cái néng jiàngdī shēngchǎn chéngběn?", "Làm sao để giảm chi phí sản xuất?"], ["改进", "gǎijìn", "cải tiến", "我们改进了生产工艺。", "Wǒmen gǎijìn le shēngchǎn gōngyì.", "Chúng tôi đã cải tiến quy trình sản xuất."], ["失误", "shīwù", "sai sót", "这是操作失误造成的。", "Zhè shì cāozuò shīwù zàochéng de.", "Việc này do sai sót thao tác gây ra."], ["原因", "yuányīn", "nguyên nhân", "我们正在查找质量问题的原因。", "Wǒmen zhèngzài cházhǎo zhìliàng wèntí de yuányīn.", "Chúng tôi đang tìm nguyên nhân lỗi chất lượng."]], "11": [["设计", "shèjì", "thiết kế", "包装设计请贵方提供。", "Bāozhuāng shèjì qǐng guì fāng tígōng.", "Thiết kế bao bì xin quý bên cung cấp."], ["尺寸", "chǐcun", "kích thước", "请告诉我们纸箱的尺寸。", "Qǐng gàosu wǒmen zhǐxiāng de chǐcun.", "Vui lòng cho chúng tôi biết kích thước thùng carton."], ["颜色", "yánsè", "màu sắc", "颜色可以按客户要求定制。", "Yánsè kěyǐ àn kèhù yāoqiú dìngzhì.", "Màu sắc có thể làm theo yêu cầu khách hàng."], ["包装盒", "bāozhuānghé", "hộp đóng gói", "每件产品单独装一个包装盒。", "Měi jiàn chǎnpǐn dāndú zhuāng yí ge bāozhuānghé.", "Mỗi sản phẩm đóng riêng một hộp."], ["箱子", "xiāngzi", "thùng, hòm", "箱子上要写清楚件数和重量。", "Xiāngzi shang yào xiě qīngchu jiànshù hé zhòngliàng.", "Trên thùng phải ghi rõ số kiện và trọng lượng."], ["生产日期", "shēngchǎn rìqī", "ngày sản xuất", "生产日期印在盒子底部。", "Shēngchǎn rìqī yìn zài hézi dǐbù.", "Ngày sản xuất in ở đáy hộp."], ["定做", "dìngzuò", "đặt làm", "这批杯子是为客户专门定做的。", "Zhè pī bēizi shì wèi kèhù zhuānmén dìngzuò de.", "Lô cốc này được làm riêng cho khách hàng."], ["礼品", "lǐpǐn", "quà tặng", "节日礼品需要精美的包装。", "Jiérì lǐpǐn xūyào jīngměi de bāozhuāng.", "Quà tặng dịp lễ cần bao bì đẹp."], ["名牌", "míngpái", "hàng hiệu", "我们给很多名牌做代工。", "Wǒmen gěi hěn duō míngpái zuò dàigōng.", "Chúng tôi gia công cho nhiều thương hiệu lớn."]], "12": [["签约", "qiānyuē", "ký kết", "双方下周一正式签约。", "Shuāngfāng xià zhōuyī zhèngshì qiānyuē.", "Hai bên chính thức ký kết vào thứ Hai tuần sau."], ["协议", "xiéyì", "thoả thuận", "我们先签一个合作协议。", "Wǒmen xiān qiān yí ge hézuò xiéyì.", "Chúng ta ký một thoả thuận hợp tác trước."], ["双方", "shuāngfāng", "hai bên", "双方都应遵守合同条款。", "Shuāngfāng dōu yīng zūnshǒu hétong tiáokuǎn.", "Hai bên đều phải tuân thủ điều khoản hợp đồng."], ["遵守", "zūnshǒu", "tuân thủ", "请遵守付款期限。", "Qǐng zūnshǒu fùkuǎn qīxiàn.", "Vui lòng tuân thủ thời hạn thanh toán."], ["违反", "wéifǎn", "vi phạm", "违反合同要支付违约金。", "Wéifǎn hétong yào zhīfù wéiyuējīn.", "Vi phạm hợp đồng phải nộp tiền phạt."], ["期限", "qīxiàn", "thời hạn", "付款期限是三十天。", "Fùkuǎn qīxiàn shì sānshí tiān.", "Thời hạn thanh toán là 30 ngày."], ["保证", "bǎozhèng", "bảo đảm", "我们保证按时交货。", "Wǒmen bǎozhèng ànshí jiāohuò.", "Chúng tôi bảo đảm giao hàng đúng hạn."], ["责任", "zérèn", "trách nhiệm", "运输中的损失由谁承担责任？", "Yùnshū zhōng de sǔnshī yóu shéi chéngdān zérèn?", "Tổn thất trong vận chuyển do ai chịu trách nhiệm?"], ["利益", "lìyì", "lợi ích", "我们要照顾双方的利益。", "Wǒmen yào zhàogù shuāngfāng de lìyì.", "Chúng ta phải cân nhắc lợi ích của cả hai bên."], ["法律", "fǎlǜ", "pháp luật", "本合同受越南法律保护。", "Běn hétong shòu Yuènán fǎlǜ bǎohù.", "Hợp đồng này được pháp luật Việt Nam bảo vệ."], ["合同纠纷", "hétong jiūfēn", "tranh chấp hợp đồng", "出现合同纠纷时，双方先友好协商。", "Chūxiàn hétong jiūfēn shí, shuāngfāng xiān yǒuhǎo xiéshāng.", "Khi có tranh chấp hợp đồng, hai bên thương lượng thiện chí trước."]], "13": [["港口", "gǎngkǒu", "cảng", "海防是越南北部最大的港口。", "Hǎifáng shì Yuènán běibù zuì dà de gǎngkǒu.", "Hải Phòng là cảng lớn nhất miền Bắc Việt Nam."], ["轮船", "lúnchuán", "tàu thuỷ", "这批货用轮船运到新加坡。", "Zhè pī huò yòng lúnchuán yùn dào Xīnjiāpō.", "Lô hàng này đi tàu thuỷ đến Singapore."], ["航空公司", "hángkōng gōngsī", "hãng hàng không", "我们和几家航空公司有合作。", "Wǒmen hé jǐ jiā hángkōng gōngsī yǒu hézuò.", "Chúng tôi hợp tác với vài hãng hàng không."], ["货车", "huòchē", "xe tải", "货车明天早上来工厂装货。", "Huòchē míngtiān zǎoshang lái gōngchǎng zhuāng huò.", "Sáng mai xe tải đến nhà máy đóng hàng."], ["火车", "huǒchē", "tàu hoả", "中越之间也可以用火车运货。", "Zhōng-Yuè zhījiān yě kěyǐ yòng huǒchē yùn huò.", "Giữa Trung Quốc và Việt Nam cũng có thể chở hàng bằng tàu hoả."], ["快递", "kuàidì", "chuyển phát nhanh", "样品已经用快递寄出了。", "Yàngpǐn yǐjīng yòng kuàidì jì chū le.", "Hàng mẫu đã gửi chuyển phát nhanh."], ["包裹", "bāoguǒ", "bưu kiện", "包裹的单号我发给您了。", "Bāoguǒ de dānhào wǒ fā gěi nín le.", "Tôi đã gửi anh/chị mã vận đơn của bưu kiện."], ["货物", "huòwù", "hàng hoá", "货物已经全部装车。", "Huòwù yǐjīng quánbù zhuāng chē.", "Hàng hoá đã lên xe toàn bộ."], ["到达", "dàodá", "đến nơi", "货物预计下周三到达。", "Huòwù yùjì xià zhōusān dàodá.", "Hàng dự kiến đến vào thứ Tư tuần sau."], ["耽误", "dānwu", "làm lỡ, làm chậm", "天气不好，耽误了两天。", "Tiānqì bù hǎo, dānwu le liǎng tiān.", "Thời tiết xấu nên chậm mất hai ngày."], ["路线", "lùxiàn", "tuyến đường", "走这条路线比较快。", "Zǒu zhè tiáo lùxiàn bǐjiào kuài.", "Đi tuyến này nhanh hơn."]], "14": [["进出口", "jìnchūkǒu", "xuất nhập khẩu", "我们公司有进出口经营权。", "Wǒmen gōngsī yǒu jìnchūkǒu jīngyíngquán.", "Công ty chúng tôi có quyền kinh doanh xuất nhập khẩu."], ["手续", "shǒuxù", "thủ tục", "进口手续比较复杂。", "Jìnkǒu shǒuxù bǐjiào fùzá.", "Thủ tục nhập khẩu khá phức tạp."], ["文件", "wénjiàn", "văn bản, giấy tờ", "报关文件已经准备好了。", "Bàoguān wénjiàn yǐjīng zhǔnbèi hǎo le.", "Hồ sơ khai báo hải quan đã chuẩn bị xong."], ["填写", "tiánxiě", "điền (biểu mẫu)", "请认真填写报关单。", "Qǐng rènzhēn tiánxiě bàoguāndān.", "Vui lòng điền tờ khai hải quan cẩn thận."], ["表格", "biǎogé", "biểu mẫu", "这张表格需要盖公司的章。", "Zhè zhāng biǎogé xūyào gài gōngsī de zhāng.", "Biểu mẫu này cần đóng dấu công ty."], ["证明", "zhèngmíng", "giấy chứng nhận", "海关要求提供质量证明。", "Hǎiguān yāoqiú tígōng zhìliàng zhèngmíng.", "Hải quan yêu cầu cung cấp chứng nhận chất lượng."], ["证件", "zhèngjiàn", "giấy tờ tuỳ thân", "进港时请带好证件。", "Jìn gǎng shí qǐng dài hǎo zhèngjiàn.", "Khi vào cảng nhớ mang theo giấy tờ."], ["护照", "hùzhào", "hộ chiếu", "出差前请检查护照的有效期。", "Chūchāi qián qǐng jiǎnchá hùzhào de yǒuxiàoqī.", "Trước khi đi công tác hãy kiểm tra hạn hộ chiếu."], ["签证", "qiānzhèng", "thị thực, visa", "去中国出差需要办商务签证。", "Qù Zhōngguó chūchāi xūyào bàn shāngwù qiānzhèng.", "Đi công tác Trung Quốc cần làm visa thương mại."], ["保险", "bǎoxiǎn", "bảo hiểm", "这批货买了全程保险。", "Zhè pī huò mǎi le quánchéng bǎoxiǎn.", "Lô hàng này đã mua bảo hiểm toàn hành trình."]], "15": [["意见", "yìjiàn", "ý kiến", "我们很重视您的意见。", "Wǒmen hěn zhòngshì nín de yìjiàn.", "Chúng tôi rất coi trọng ý kiến của anh/chị."], ["不满", "bùmǎn", "bất mãn", "客户对交货时间很不满。", "Kèhù duì jiāohuò shíjiān hěn bùmǎn.", "Khách hàng rất không hài lòng về thời gian giao hàng."], ["抱怨", "bàoyuàn", "phàn nàn", "有客户抱怨包装太简单。", "Yǒu kèhù bàoyuàn bāozhuāng tài jiǎndān.", "Có khách phàn nàn bao bì quá sơ sài."], ["损失", "sǔnshī", "tổn thất", "这次延误给客户造成了损失。", "Zhè cì yánwù gěi kèhù zàochéng le sǔnshī.", "Lần chậm trễ này gây thiệt hại cho khách hàng."], ["调查", "diàochá", "điều tra", "我们会马上调查清楚。", "Wǒmen huì mǎshàng diàochá qīngchu.", "Chúng tôi sẽ điều tra rõ ngay."], ["误会", "wùhuì", "hiểu lầm", "这可能是个误会，我解释一下。", "Zhè kěnéng shì ge wùhuì, wǒ jiěshì yíxià.", "Có lẽ là hiểu lầm, để tôi giải thích."], ["处理", "chǔlǐ", "xử lý", "这件事我会亲自处理。", "Zhè jiàn shì wǒ huì qīnzì chǔlǐ.", "Việc này tôi sẽ đích thân xử lý."], ["解决", "jiějué", "giải quyết", "问题已经解决了。", "Wèntí yǐjīng jiějué le.", "Vấn đề đã được giải quyết."], ["原谅", "yuánliàng", "tha thứ, thông cảm", "希望您能原谅我们的失误。", "Xīwàng nín néng yuánliàng wǒmen de shīwù.", "Mong anh/chị thông cảm cho sai sót của chúng tôi."], ["满意", "mǎnyì", "hài lòng", "您对这个解决方案满意吗？", "Nín duì zhège jiějué fāng'àn mǎnyì ma?", "Anh/chị có hài lòng với phương án này không?"]], "16": [["服务态度", "fúwù tàidu", "thái độ phục vụ", "客户称赞我们的服务态度好。", "Kèhù chēngzàn wǒmen de fúwù tàidu hǎo.", "Khách hàng khen thái độ phục vụ của chúng tôi."], ["维修站", "wéixiūzhàn", "trạm bảo hành, sửa chữa", "我们在河内和胡志明市都有维修站。", "Wǒmen zài Hénèi hé Húzhìmíng shì dōu yǒu wéixiūzhàn.", "Chúng tôi có trạm bảo hành ở Hà Nội và TP.HCM."], ["顾客", "gùkè", "khách hàng", "顾客满意是我们最大的目标。", "Gùkè mǎnyì shì wǒmen zuì dà de mùbiāo.", "Khách hàng hài lòng là mục tiêu lớn nhất của chúng tôi."], ["信赖", "xìnlài", "tin cậy", "谢谢您对我们的信赖。", "Xièxie nín duì wǒmen de xìnlài.", "Cảm ơn anh/chị đã tin cậy chúng tôi."], ["经验", "jīngyàn", "kinh nghiệm", "这次合作让我们积累了很多经验。", "Zhè cì hézuò ràng wǒmen jīlěi le hěn duō jīngyàn.", "Lần hợp tác này giúp chúng tôi tích luỹ nhiều kinh nghiệm."], ["教训", "jiàoxun", "bài học", "我们要从这次事故中吸取教训。", "Wǒmen yào cóng zhè cì shìgù zhōng xīqǔ jiàoxun.", "Chúng ta phải rút ra bài học từ sự cố lần này."], ["建议", "jiànyì", "góp ý", "欢迎您提出宝贵的建议。", "Huānyíng nín tíchū bǎoguì de jiànyì.", "Rất hoan nghênh anh/chị góp ý."], ["联系", "liánxì", "liên hệ", "我们会定期和您联系。", "Wǒmen huì dìngqī hé nín liánxì.", "Chúng tôi sẽ liên hệ với anh/chị định kỳ."], ["发展", "fāzhǎn", "phát triển", "希望我们共同发展。", "Xīwàng wǒmen gòngtóng fāzhǎn.", "Mong chúng ta cùng phát triển."], ["机会", "jīhuì", "cơ hội", "期待下次还有合作的机会。", "Qīdài xià cì hái yǒu hézuò de jīhuì.", "Mong lần sau lại có cơ hội hợp tác."]]};
+const SRC={"上班": ["c2", 36, 46], "不满": ["c2", 29, 47], "专业": ["c1", 45, 60], "丢失": ["q2", 138, 3], "主持": ["c2", 156, 15], "交货期": ["g2", 132, 1], "产品": ["q2", 39, 55], "产量": ["c1", 150, 6], "人民币": ["c1", 78, 8], "仓库": ["q2", 217, 5], "价格": ["c1", 79, 27], "任务": ["c2", 22, 51], "企业": ["q2", 78, 17], "优势": ["z1", 198, 8], "优惠": ["g1", 35, 18], "优点": ["q1", 80, 33], "会议": ["q1", 44, 32], "会议记录": ["q2", 219, 1], "保证": ["q2", 154, 22], "保险": ["q1", 196, 11], "保险单": ["q2", 105, 1], "信任": ["q1", 177, 36], "信赖": ["z2", 89, 20], "入职": ["q1", 179, 1], "决定": ["c1", 21, 133], "准时": ["q2", 88, 5], "出口": ["q2", 112, 10], "利润": ["z2", 42, 3], "利益": ["q2", 31, 49], "到达": ["q1", 182, 15], "制度": ["c2", 145, 34], "前途": ["q2", 46, 19], "功能": ["c1", 110, 75], "加班": ["q2", 47, 26], "包括": ["c1", 104, 87], "包装": ["z1", 128, 5], "包装盒": ["z2", 178, 1], "包裹": ["q2", 61, 8], "协商": ["z1", 130, 2], "协议": ["g1", 69, 1], "原因": ["c1", 155, 155], "原料": ["c2", 81, 17], "原谅": ["c2", 94, 16], "参观": ["c2", 48, 30], "双方": ["c1", 104, 36], "发展": ["c2", 36, 251], "发言": ["q2", 94, 7], "取消": ["q1", 19, 13], "合作": ["c2", 78, 23], "合同": ["z1", 132, 9], "合同纠纷": ["g2", 184, 2], "合格": ["g1", 161, 2], "同事": ["q1", 89, 39], "名片": ["z2", 115, 1], "名牌": ["q2", 254, 16], "员工": ["q2", 57, 10], "品牌": ["q2", 181, 2], "售后服务": ["z2", 85, 3], "商标": ["g1", 100, 2], "培训": ["q2", 245, 5], "填写": ["q1", 32, 28], "处理": ["q1", 168, 44], "失误": ["z2", 38, 10], "安全": ["q1", 80, 41], "安排": ["c1", 99, 110], "完成": ["c1", 29, 334], "定做": ["c1", 192, 5], "客户": ["z2", 72, 2], "尺寸": ["q2", 111, 2], "岗位": ["g1", 76, 6], "工人": ["c2", 88, 14], "工厂": ["c2", 78, 18], "工序": ["g2", 101, 1], "市场": ["q1", 171, 43], "广告": ["c2", 48, 57], "应聘": ["q2", 47, 15], "建议": ["c1", 71, 49], "开会": ["q2", 29, 27], "录用": ["z1", 102, 4], "待遇": ["z2", 168, 5], "快递": ["g2", 102, 1], "性格": ["c2", 151, 127], "性能": ["g2", 79, 1], "总经理": ["q2", 158, 9], "总结": ["q2", 31, 34], "总部": ["g1", 89, 2], "意见": ["c1", 170, 88], "成本": ["c1", 150, 6], "成立": ["q1", 119, 23], "手续": ["c2", 48, 18], "技术": ["q1", 95, 51], "折扣": ["g1", 57, 6], "护照": ["c1", 72, 12], "报告": ["c1", 195, 22], "抱怨": ["q2", 80, 25], "拒绝": ["q2", 254, 17], "招聘": ["q2", 46, 24], "损坏": ["g1", 194, 2], "损失": ["q2", 193, 15], "接受": ["q1", 156, 56], "控制": ["c2", 144, 52], "推迟": ["z2", 19, 12], "提前": ["q2", 48, 16], "提高": ["c2", 52, 98], "改进": ["g1", 199, 15], "效率": ["q2", 237, 9], "教训": ["q2", 31, 23], "数量": ["c1", 77, 71], "文件": ["q2", 36, 18], "日程": ["g1", 196, 5], "服务态度": ["g1", 208, 1], "期限": ["z2", 78, 6], "机会": ["c2", 18, 76], "机器": ["c1", 21, 20], "条款": ["g2", 235, 1], "标准": ["c1", 39, 80], "标签": ["g2", 264, 1], "检查": ["q1", 38, 30], "毕业": ["c1", 189, 141], "求职信": ["q1", 17, 3], "法律": ["q1", 119, 43], "海关": ["q2", 238, 5], "涨价": ["q2", 235, 2], "港口": ["g1", 39, 2], "满意": ["c2", 29, 66], "火车": ["c1", 58, 71], "特点": ["c2", 80, 150], "现代化": ["q2", 27, 34], "生产日期": ["g2", 140, 1], "申请": ["q1", 17, 7], "目录": ["z2", 85, 5], "确认": ["c1", 64, 4], "礼品": ["q2", 125, 4], "秘书": ["q2", 46, 14], "竞争": ["q1", 76, 31], "竞争力": ["q2", 245, 1], "签约": ["z2", 184, 1], "签证": ["z2", 133, 3], "简历": ["q2", 47, 18], "管理": ["q2", 153, 22], "箱子": ["c2", 65, 31], "纸箱": ["c2", 88, 3], "经营": ["z1", 201, 14], "经验": ["c2", 133, 110], "统计": ["q2", 133, 4], "维修站": ["z2", 85, 1], "缺点": ["q1", 80, 50], "考虑": ["c1", 78, 108], "耽误": ["z2", 152, 3], "职位": ["q2", 77, 8], "联系": ["c2", 31, 88], "能力": ["c1", 129, 106], "航空公司": ["z1", 161, 4], "表格": ["c2", 105, 13], "规定": ["q1", 119, 50], "规格": ["z2", 164, 1], "规模": ["z1", 80, 19], "解决": ["c1", 196, 96], "订货": ["g1", 96, 1], "订购": ["g1", 35, 1], "讨价还价": ["z2", 184, 1], "讨论": ["c2", 45, 97], "让步": ["q1", 72, 17], "设备": ["q2", 186, 15], "设计": ["q1", 17, 73], "证件": ["g1", 126, 3], "证据": ["z2", 161, 5], "证明": ["q1", 185, 14], "试用期": ["q2", 48, 8], "询问": ["c1", 44, 16], "误会": ["z2", 147, 3], "请假": ["c1", 78, 16], "调查": ["q1", 107, 54], "谈判": ["z2", 88, 8], "负责": ["q2", 76, 40], "责任": ["q2", 77, 46], "责任心": ["q2", 77, 2], "货款": ["c2", 29, 3], "货比三家": ["z2", 129, 1], "货物": ["g1", 129, 4], "货车": ["q2", 57, 1], "质检": ["g1", 206, 1], "质量": ["c1", 102, 39], "质量问题": ["q1", 185, 5], "费用": ["q1", 144, 20], "赔偿": ["g1", 107, 3], "赔本": ["q2", 34, 1], "跟踪": ["g1", 138, 1], "路线": ["q2", 193, 10], "轮船": ["z2", 175, 3], "进出口": ["q2", 249, 1], "进口": ["q2", 112, 11], "进度": ["z2", 92, 1], "违反": ["q1", 152, 9], "适应": ["q1", 29, 23], "通知": ["c2", 48, 32], "道歉": ["g1", 42, 7], "遵守": ["q1", 171, 20], "部门": ["q2", 46, 30], "销售部": ["g2", 129, 2], "长期": ["q2", 130, 41], "降价": ["q2", 193, 9], "降低": ["q2", 156, 17], "面积": ["c2", 36, 26], "面试": ["q2", 48, 14], "顾客": ["q1", 100, 25], "预约": ["z2", 92, 1], "颜色": ["c1", 108, 114], "风险": ["g2", 18, 16]};
+const col=k=>`var(--${k})`, soft=k=>`var(--${k}-soft)`;
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const uid=u=>"u"+u.n.split("–")[0];
+
+/* ---------- mindmap ---------- */
+(function(){
+ const NS="http://www.w3.org/2000/svg", svg=document.getElementById("map");
+ const el=(t,a,p)=>{const n=document.createElementNS(NS,t);for(const k in a)n.setAttribute(k,a[k]);(p||svg).appendChild(n);return n};
+ const links=el("g",{fill:"none","stroke-linecap":"round"}), nodes=el("g",{});
+ const link=(x1,y1,x2,y2,c,w)=>{const m=(x1+x2)/2;el("path",{d:`M${x1} ${y1} C${m} ${y1},${m} ${y2},${x2} ${y2}`,stroke:c,"stroke-width":w},links)};
+ const W=1120, LH=56, GAP=26, TOP=20, X={root:110,part:370,leaf:560,leafW:530};
+ let y=TOP+LH/2; const groups=[];
+ PARTS.forEach((p,pi)=>{const us=U.filter(u=>u.p===pi);const ys=us.map((_,i)=>y+i*LH);y=ys[ys.length-1]+LH+GAP;groups.push({p,us,ys,cy:(ys[0]+ys[ys.length-1])/2})});
+ const H=y-GAP-LH/2+TOP, rootY=(groups[0].cy+groups[3].cy)/2;
+ // root
+ const g=el("g",{},nodes);
+ el("rect",{x:X.root-95,y:rootY-58,width:190,height:116,rx:16,fill:soft("red"),stroke:col("red"),"stroke-width":3},g);
+ let t=el("text",{x:X.root,y:rootY-8,"text-anchor":"middle","font-size":30,class:"h",fill:col("red")},g);t.textContent="办公室汉语";
+ t=el("text",{x:X.root,y:rootY+16,"text-anchor":"middle","font-size":14,"font-weight":600,class:"t-ink"},g);t.textContent="bàngōngshì Hànyǔ";
+ t=el("text",{x:X.root,y:rootY+36,"text-anchor":"middle","font-size":12.5,class:"t-muted"},g);t.textContent="Tiếng Trung văn phòng";
+ groups.forEach(G=>{
+  const c=col(G.p.k), s=soft(G.p.k), pw=200, ph=78;
+  link(X.root+95,rootY,X.part-pw/2,G.cy,c,4.5);
+  const pg=el("g",{},nodes);
+  el("rect",{x:X.part-pw/2,y:G.cy-ph/2,width:pw,height:ph,rx:12,fill:s,stroke:c,"stroke-width":2},pg);
+  let a=el("text",{x:X.part,y:G.cy-8,"text-anchor":"middle","font-size":20,class:"h",fill:c},pg);a.textContent=G.p.han;
+  a=el("text",{x:X.part,y:G.cy+12,"text-anchor":"middle","font-size":11.5,"font-weight":600,class:"t-ink"},pg);a.textContent=G.p.py;
+  a=el("text",{x:X.part,y:G.cy+28,"text-anchor":"middle","font-size":11,class:"t-muted"},pg);a.textContent=G.p.vi;
+  G.us.forEach((u,i)=>{
+   const cy=G.ys[i], h=44;
+   link(X.part+pw/2,G.cy,X.leaf,cy,c,1.8);
+   const A=el("a",{href:"#"+uid(u),"aria-label":"Unit "+u.n+": "+u.vi},nodes);
+   el("rect",{x:X.leaf,y:cy-h/2,width:X.leafW,height:h,rx:8,fill:s,stroke:c,"stroke-width":1.4},A);
+   const b=el("rect",{x:X.leaf+8,y:cy-11,width:44,height:22,rx:3,fill:c},A);
+   const n=el("text",{x:X.leaf+30,y:cy+4.5,"text-anchor":"middle","font-size":12,"font-weight":700,fill:"var(--paper)"},A);n.textContent=u.n;
+   const hz=el("text",{x:X.leaf+64,y:cy+6,"font-size":17,class:"h t-ink"},A);hz.textContent=u.han;
+   const vi=el("tspan",{dx:12,"font-size":12.5,class:"t-muted","font-family":"var(--body)","font-weight":400},hz);vi.textContent=u.vi;
+  });
+ });
+ svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+})();
+
+/* ---------- unit sections ---------- */
+const BOOK={c1:"初级起步篇1",c2:"初级起步篇2",q1:"准中级加速篇1",q2:"准中级加速篇2",z1:"中级冲刺篇1",z2:"中级冲刺篇2",g1:"高级飞翔篇1",g2:"高级飞翔篇2"};
+function wordHtml(w,p){
+ const s=SRC[w[0]];
+ const badge=s?`<span class="src" title="Xuất hiện ${s[2]} lần trong bộ 博雅汉语">博雅 · ${BOOK[s[0]]} · tr.${s[1]}</span>`:`<span class="src add">Bổ sung chuyên ngành</span>`;
+ return `<div class="w" data-b="${s?1:0}" data-k="${esc((w[0]+" "+w[1]+" "+w[2]).toLowerCase())}">
+  <div><div class="hz">${w[0]}</div><div class="py" style="color:${col(p.k)}">${esc(w[1])}</div><div class="mn">${esc(w[2])}</div>${badge}</div>
+  <div class="ex"><span class="zh">${w[3]}</span><span class="p">${esc(w[4])}</span><span class="v">${esc(w[5])}</span></div></div>`;
+}
+function groupHtml(u,p){
+ const seen=new Set(u.w.map(w=>w[0]));
+ const all=u.w.concat((EXTRA[u.n]||[]).filter(w=>!seen.has(w[0])));
+ const inB=all.filter(w=>SRC[w[0]]), add=all.filter(w=>!SRC[w[0]]);
+ return `<div class="grp"><b>Từ có trong giáo trình 博雅汉语</b><span>${inB.length} từ</span></div>${inB.map(w=>wordHtml(w,p)).join("")}`+
+  (add.length?`<div class="grp add"><b>Bổ sung chuyên ngành</b><span>${add.length} từ · không có trong Boya</span></div>${add.map(w=>wordHtml(w,p)).join("")}`:"");
+}
+const host=document.getElementById("units");
+let html="";
+PARTS.forEach((p,pi)=>{
+ html+=`<div class="part-head"><span class="tag" style="background:${soft(p.k)};color:${col(p.k)}">${esc(p.vi.split(" · ")[0])}</span><h3><span class="han">${p.han}</span> · ${esc(p.vi.split(" · ")[1])}</h3></div>`;
+ U.filter(u=>u.p===pi).forEach(u=>{
+  html+=`<section class="unit" id="${uid(u)}">
+  <div class="unit-title"><span class="unit-no" style="background:${col(p.k)}">Unit ${u.n}</span><span class="han">${u.han}</span><span class="vi">${esc(u.vi)}</span><span class="uprog" data-up="${u.n}"></span></div>
+  <div class="umap"><svg data-u="${u.n}" role="img" aria-label="Sơ đồ tư duy Unit ${u.n}"></svg></div>
+  <div class="card empty" data-card="${u.n}" style="border-color:${col(p.k)}"><span class="hint">Bấm vào một từ trên sơ đồ để xem câu ví dụ và trang trong sách Boya.</span></div>
+  <details class="list"><summary>Danh sách chi tiết · từ vựng & mẫu câu</summary>
+  <div class="unit-body">
+   <div class="vocab">${groupHtml(u,p)}</div>
+   <div class="pat" style="background:${soft(p.k)}"><b style="color:${col(p.k)}">Mẫu câu giao tiếp</b>${u.s.map(s=>`<div class="s"><span class="zh">${s[0]}</span><span class="p">${esc(s[1])}</span><span class="v">${esc(s[2])}</span></div>`).join("")}</div>
+  </div></details></section>`;
+ });
+});
+host.innerHTML=html;
+
+/* ---------- per-unit mindmaps ---------- */
+const MAP={
+"1":[["Bản thân & hồ sơ","简历 求职信 申请 毕业 专业 能力 性格 经验"],["Tuyển dụng – phỏng vấn","招聘 应聘 职位 面试 录用"],["Điểm mạnh/yếu · lương · kế hoạch","优点 缺点 责任心 薪资 待遇 职业规划 前途"]],
+"2–3":[["Quy trình nhận việc","入职 手续 劳动合同 试用期 培训 规定 制度"],["Giới thiệu công ty","成立 总部 规模 员工"],["Cơ cấu phòng ban","部门 人事部 财务部 销售部 总经理 秘书 负责"],["Khi mới vào làm","同事 上班 加班 请假 适应 岗位"]],
+"4–5":[["Đặt – xác nhận lịch họp","安排 日程 预约 确认 推迟 提前 取消 通知 准时"],["Mở đầu – điều hành họp","会议 开会 议程 主持 发言 讨论"],["Giao việc – phân công","分工 任务 截止日期 决定 建议"],["Biên bản – báo cáo","会议记录 报告"]],
+"6":[["Giới thiệu doanh nghiệp","名片 企业 经营 品牌 市场 广告 客户"],["Giới thiệu sản phẩm","产品 目录 规格 性能 优势 特点 功能"],["Mời hợp tác – đặt thử","合作 信任 联系 样品 试订单 订购"]],
+"7":[["Tiếp nhận yêu cầu","询盘 询问 数量 起订量 出口 进口"],["Các yếu tố báo giá","价格 单价 离岸价 到岸价 人民币 费用 包括 交货期 货款"],["Viết – điều chỉnh báo giá","报价 报价单 有效期 订货"]],
+"8":[["Chiến lược thương lượng","谈判 协商 讨价还价 货比三家 竞争 竞争力 考虑"],["Giải thích giá","成本 利润 质量 运费 赔本 涨价"],["Chiết khấu – ưu đãi","折扣 优惠 降价 让步 各让一步"],["Chốt hoặc từ chối","接受 拒绝"]],
+"9":[["Đón khách tham quan","参观 安全帽 安全"],["Giới thiệu khu vực","工厂 占地面积 面积 车间 仓库 现代化 工人 管理"],["Thiết bị – công đoạn","生产线 设备 机器 工序 自动化 技术 原料 产能 效率"]],
+"10":[["Lập kế hoạch sản xuất","生产计划 原材料 提高 降低"],["Tiến độ – sản lượng","进度 产量 延误 统计 完成"],["Kiểm tra chất lượng","质检 标准 抽检 合格率 合格 次品 检查 控制 改进 失误 原因"]],
+"11":[["Bao bì – tem nhãn – mã vạch","包装 纸箱 包装盒 标签 条形码 生产日期"],["Đặt hàng – thiết kế – mẫu","定制 定做 贴牌 商标 名牌 设计 设计稿 确认样 颜色 礼品"],["Kiểm soát đóng gói","尺寸 箱子 唛头"]],
+"12":[["Giá – giao hàng – thanh toán","合同 条款 付款方式 定金 信用证 期限"],["Bảo hành – phạt – trách nhiệm","保修期 违约 违约金 违反 责任 保证 合同纠纷 法律"],["Thương lượng & chốt","双方 利益 遵守 协议"],["Ký kết – đóng dấu","签约 签字盖章 生效"]],
+"13":[["Hình thức vận chuyển","海运 空运 陆运 轮船 航空公司 货车 火车 快递"],["Booking – lịch tàu – container","货代 订舱 船期 集装箱 港口 路线"],["Tracking – chứng từ","提单 跟踪 包裹 货物 到达"],["Sự cố vận chuyển","延迟 耽误 短少 丢失"]],
+"14":[["Khai báo hải quan","海关 报关 清关 关税 进出口 手续"],["Các loại chứng từ","商业发票 装箱单 原产地证 保险单 文件 证明"],["Kiểm hoá – bảo hiểm","查验 投保 保险"],["Giấy tờ – vướng mắc","填写 表格 证件 护照 签证"]],
+"15":[["Tiếp nhận khiếu nại","投诉 意见 不满 抱怨 证据"],["Phân loại vấn đề","质量问题 损坏 损失 索赔"],["Xin lỗi – giải thích – giải pháp","道歉 原谅 误会 调查 处理 解决 解决方案 赔偿 退货 换货 满意"]],
+"16":[["Bảo hành – hỗ trợ kỹ thuật","售后服务 保修 技术支持 维修站"],["Chăm sóc định kỳ","回访 反馈 满意度 服务态度 顾客 信赖 联系"],["Tổng kết – rủi ro – cải tiến","总结 风险 改进 经验 教训 建议 长期 发展 机会"]]
+};
+(function(){
+ const NS="http://www.w3.org/2000/svg";
+ const el=(t,a,par)=>{const n=document.createElementNS(NS,t);for(const k in a)n.setAttribute(k,a[k]);par.appendChild(n);return n};
+ const txt=(par,a,s)=>{const t=el("text",a,par);t.textContent=s;return t};
+ const clip=(s,n)=>s.length>n?s.slice(0,n-1)+"…":s;
+ U.forEach(u=>{
+  const p=PARTS[u.p], c=col(p.k), sf=soft(p.k);
+  const svg=document.querySelector(`svg[data-u="${u.n}"]`), card=document.querySelector(`[data-card="${u.n}"]`);
+  const seen=new Set(u.w.map(w=>w[0]));
+  const all=u.w.concat((EXTRA[u.n]||[]).filter(w=>!seen.has(w[0])));
+  const byHz=Object.fromEntries(all.map(w=>[w[0],w]));
+  const used=new Set();
+  const branches=(MAP[u.n]||[]).map(([lab,ws])=>{const items=ws.split(" ").filter(h=>byHz[h]).map(h=>(used.add(h),{w:byHz[h]}));return {lab,items,kind:"w"}});
+  const rest=all.filter(w=>!used.has(w[0])).map(w=>({w}));
+  if(rest.length) branches[branches.length-1].items.push(...rest);
+  branches.push({lab:"Mẫu câu giao tiếp",items:u.s.map(s=>({s})),kind:"s"});
+  // balance sides by leaf count; sentences on the side with fewer rows
+  const L=[],R=[];let nl=0,nr=0;
+  [...branches].sort((a,b)=>b.items.length-a.items.length).forEach(b=>{if(nr<=nl){R.push(b);nr+=b.items.length}else{L.push(b);nl+=b.items.length}});
+  const order=b=>branches.indexOf(b); L.sort((a,b)=>order(a)-order(b)); R.sort((a,b)=>order(a)-order(b));
+  const LH=46,GAP=18,TOP=16;
+  const leafW=side=>side.some(b=>b.kind==="s")?330:196;
+  const lw=leafW(L), rw=leafW(R), BW=176, CW=196, G=46, M=12;
+  const xLleaf=M, xLbr=M+lw+G+BW/2, xC=xLbr+BW/2+G+CW/2, xRbr=xC+CW/2+G+BW/2, xRleaf=xRbr+BW/2+G, W=xRleaf+rw+M;
+  const place=side=>{let y=TOP+LH/2;return side.map(b=>{const ys=b.items.map((_,i)=>y+i*LH);y=ys[ys.length-1]+LH+GAP;return {b,ys,cy:(ys[0]+ys[ys.length-1])/2}})};
+  const PL=place(L), PR=place(R);
+  const hOf=P=>P.length?P[P.length-1].ys.at(-1)+LH/2+TOP:0;
+  const H=Math.max(hOf(PL),hOf(PR),160);
+  const shift=(P,h)=>{const d=(H-h)/2;P.forEach(o=>{o.ys=o.ys.map(y=>y+d);o.cy+=d})};
+  shift(PL,hOf(PL)); shift(PR,hOf(PR));
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`); svg.style.minWidth=Math.min(W,1100)+"px";
+  const links=el("g",{fill:"none","stroke-linecap":"round"},svg), nodes=el("g",{},svg);
+  const link=(x1,y1,x2,y2,w)=>{const m=(x1+x2)/2;el("path",{d:`M${x1} ${y1} C${m} ${y1},${m} ${y2},${x2} ${y2}`,stroke:c,"stroke-width":w},links)};
+  const cy=H/2;
+  const cg=el("g",{},nodes);
+  el("rect",{x:xC-CW/2,y:cy-52,width:CW,height:104,rx:16,fill:sf,stroke:c,"stroke-width":3},cg);
+  txt(cg,{x:xC,y:cy-22,"text-anchor":"middle","font-size":12,"font-weight":700,fill:c},"UNIT "+u.n);
+  const hl=u.han.length>6?20:24;
+  txt(cg,{x:xC,y:cy+6,"text-anchor":"middle","font-size":u.han.length>8?16:hl,class:"h t-ink"},u.han);
+  txt(cg,{x:xC,y:cy+28,"text-anchor":"middle","font-size":11,class:"t-muted"},clip(u.vi,28));
+  const show=it=>{
+   card.classList.remove("empty");
+   if(it.s){card.innerHTML=`<div class="c-zh han">${it.s[0]}</div><div class="c-py">${esc(it.s[1])}</div><div class="c-vi">${esc(it.s[2])}</div><div class="acts"><button class="act" data-say="${esc(it.s[0])}">▶ Nghe câu</button></div>`;return}
+   const w=it.w,s=SRC[w[0]];
+   card.innerHTML=`<div class="c-head"><span class="c-hz">${w[0]}</span><span class="c-py">${esc(w[1])}</span><span class="c-mn">${esc(w[2])}</span>${s?`<span class="src">博雅 · ${BOOK[s[0]]} · tr.${s[1]} · ${s[2]} lần</span>`:`<span class="src add">Bổ sung chuyên ngành</span>`}</div>
+   <div class="c-zh han">${w[3]}</div><div class="c-py">${esc(w[4])}</div><div class="c-vi">${esc(w[5])}</div>
+   <div class="acts"><button class="act" data-say="${w[0]}">▶ Nghe từ</button><button class="act" data-say="${esc(w[3])}">▶ Nghe câu</button><button class="act mk" data-mark="k" data-hz="${w[0]}">Đã thuộc</button><button class="act mk" data-mark="h" data-hz="${w[0]}">Từ khó</button></div>`;
+   paintMarks();
+  };
+  const drawSide=(P,left)=>P.forEach(o=>{
+   const bx=left?xLbr:xRbr, bh=48;
+   link(left?xC-CW/2:xC+CW/2,cy,left?bx+BW/2:bx-BW/2,o.cy,4);
+   const bg=el("g",{},nodes);
+   el("rect",{x:bx-BW/2,y:o.cy-bh/2,width:BW,height:bh,rx:10,fill:o.b.kind==="s"?"var(--paper)":sf,stroke:c,"stroke-width":2},bg);
+   const words=o.b.lab.split(" "), l1=[],l2=[];words.forEach(x=>((l1.join(" ")+" "+x).length<=22&&!l2.length?l1:l2).push(x));
+   txt(bg,{x:bx,y:o.cy-(l2.length?3:-4),"text-anchor":"middle","font-size":12.5,"font-weight":700,class:"t-ink"},l1.join(" "));
+   if(l2.length) txt(bg,{x:bx,y:o.cy+13,"text-anchor":"middle","font-size":12.5,"font-weight":700,class:"t-ink"},clip(l2.join(" "),24));
+   const lw2=left?lw:rw, lx=left?xLleaf:xRleaf;
+   o.b.items.forEach((it,i)=>{
+    const y=o.ys[i];
+    link(left?bx-BW/2:bx+BW/2,o.cy,left?lx+lw2:lx,y,1.5);
+    const a=el("a",{href:"#","class":"leaf",tabindex:"0"},nodes);
+    const inB=it.w&&SRC[it.w[0]];
+    a.dataset.k=it.w?(it.w[0]+" "+it.w[1]+" "+it.w[2]).toLowerCase():"";
+    a.dataset.b=it.w?(inB?"1":"0"):"s";
+    if(it.w) a.dataset.hz=it.w[0];
+    el("rect",{x:lx,y:y-19,width:lw2,height:38,rx:7,fill:it.s?"var(--paper)":sf,stroke:c,"stroke-width":1.2,"stroke-dasharray":it.w&&!inB?"4 3":"none"},a);
+    if(it.s){
+     txt(a,{x:lx+10,y:y-2,"font-size":13.5,class:"h t-ink"},clip(it.s[0],23));
+     txt(a,{x:lx+10,y:y+13,"font-size":10.5,class:"t-muted v"},clip(it.s[2],56));
+    }else{
+     const t=txt(a,{x:lx+10,y:y-2,"font-size":16,class:"h t-ink"},it.w[0]);
+     const sp=el("tspan",{dx:7,"font-size":11,"font-weight":600,fill:c,class:"py","font-family":"var(--body)"},t);sp.textContent=clip(it.w[1],18);
+     txt(a,{x:lx+10,y:y+13,"font-size":11,class:"t-muted mn"},clip(it.w[2],30));
+     if(inB) el("circle",{cx:lx+lw2-10,cy:y-9,r:3.5,fill:"var(--red)"},a);
+    }
+    a.addEventListener("click",e=>{e.preventDefault();svg.querySelectorAll(".leaf.on").forEach(n=>n.classList.remove("on"));a.classList.add("on");show(it)});
+   });
+  });
+  drawSide(PL,true); drawSide(PR,false);
+  // vertical tree for phones
+  const mt=document.createElement("div");mt.className="mtree";
+  branches.forEach(b=>{
+   const box=document.createElement("div");box.className="mb";
+   box.innerHTML=`<div class="mb-h" style="color:${c}">${esc(b.lab)}</div><div class="chips"></div>`;
+   const ch=box.lastChild;
+   b.items.forEach(it=>{
+    const bt=document.createElement("button");bt.className="chip"+(it.s?" sent":"");
+    bt.style.setProperty("--c",c);bt.style.setProperty("--sf",sf);
+    if(it.s){bt.innerHTML=`<span class="han">${it.s[0]}</span><span class="mn">${esc(it.s[2])}</span>`;bt.dataset.b="s";bt.dataset.k=""}
+    else{const inB=SRC[it.w[0]];bt.dataset.hz=it.w[0];bt.dataset.b=inB?"1":"0";bt.dataset.k=(it.w[0]+" "+it.w[1]+" "+it.w[2]).toLowerCase();if(!inB)bt.classList.add("add");
+     bt.innerHTML=`<span class="han">${it.w[0]}</span><span class="py">${esc(it.w[1])}</span><span class="mn">${esc(it.w[2])}</span>`}
+    bt.addEventListener("click",()=>{mt.querySelectorAll(".chip.on").forEach(n=>n.classList.remove("on"));bt.classList.add("on");show(it)});
+    ch.appendChild(bt);
+   });
+   mt.appendChild(box);
+  });
+  svg.parentNode.after(mt);
+ });
+})();
+
+/* ---------- tools ---------- */
+const rows=[...document.querySelectorAll(".w")], total=rows.length, cnt=document.getElementById("count");
+const strip=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d");
+rows.forEach(r=>r.dataset.s=strip(r.dataset.k));
+function filter(){
+ const q=strip(document.getElementById("q").value.trim().toLowerCase());
+ const only=document.getElementById("ob").checked;
+ let shown=0;
+ rows.forEach(r=>{const ok=(!q||r.dataset.k.includes(q)||r.dataset.s.includes(q))&&(!only||r.dataset.b==="1");r.hidden=!ok;if(ok)shown++});
+ document.querySelectorAll(".grp").forEach(g=>{let n=g.nextElementSibling,any=false;while(n&&n.classList.contains("w")){if(!n.hidden)any=true;n=n.nextElementSibling}g.hidden=!any});
+ document.querySelectorAll(".leaf,.chip").forEach(a=>{const s=strip(a.dataset.k);const ok=a.dataset.b==="s"?!(q||only):((!q||a.dataset.k.includes(q)||s.includes(q))&&(!only||a.dataset.b==="1"));a.classList.toggle("dim",!ok)});
+ document.querySelectorAll(".unit").forEach(s=>{s.hidden=!!q&&!s.querySelector(".w:not([hidden])")});
+ document.querySelectorAll(".part-head").forEach(h=>{let n=h.nextElementSibling,any=false;while(n&&n.classList.contains("unit")){if(!n.hidden)any=true;n=n.nextElementSibling}h.hidden=!any});
+ document.querySelectorAll("details.list").forEach(d=>{if(q)d.open=true});
+ cnt.textContent=(q||only)?`${shown} / ${total} từ`:`${total} từ · ${nB} từ trong Boya`;
+}
+const nB=rows.filter(r=>r.dataset.b==="1").length;
+document.getElementById("q").addEventListener("input",filter);
+document.getElementById("ob").addEventListener("change",filter);
+document.getElementById("hm").addEventListener("change",e=>document.body.classList.toggle("hide-mean",e.target.checked));
+document.getElementById("hp").addEventListener("change",e=>document.body.classList.toggle("hide-py",e.target.checked));
+filter();
+
+/* ---------- app: state, speech, flashcards ---------- */
+const KEY="ttvp-state-v1";
+let ST={k:{},h:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&s.k&&s.h)ST=s}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}}
+const ALLW=[];
+U.forEach(u=>{const seen=new Set(u.w.map(w=>w[0]));u.w.concat((EXTRA[u.n]||[]).filter(w=>!seen.has(w[0]))).forEach(w=>ALLW.push({u:u.n,w}))});
+function paintMarks(){
+ document.querySelectorAll("[data-hz]").forEach(n=>{
+  const hz=n.dataset.hz;
+  if(n.classList.contains("mk")){n.classList.toggle("on",!!ST[n.dataset.mark][hz]);return}
+  n.classList.toggle("known",!!ST.k[hz]);n.classList.toggle("hard",!!ST.h[hz]);
+ });
+ const tot=ALLW.length,kn=ALLW.filter(x=>ST.k[x.w[0]]).length;
+ document.getElementById("prog").textContent=`Đã thuộc ${kn}/${tot}`;
+ U.forEach(u=>{const ws=ALLW.filter(x=>x.u===u.n),k=ws.filter(x=>ST.k[x.w[0]]).length;const e=document.querySelector(`[data-up="${u.n}"]`);if(e)e.textContent=`Đã thuộc ${k}/${ws.length}`});
+}
+let zhVoice=null;
+function pickVoice(){try{const vs=speechSynthesis.getVoices();zhVoice=vs.find(v=>/zh[-_]CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||null}catch(e){}}
+if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function speak(t){
+ if(!("speechSynthesis" in window))return;
+ try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="zh-CN";u.rate=.8;if(zhVoice)u.voice=zhVoice;speechSynthesis.speak(u)}catch(e){}
+}
+document.addEventListener("click",e=>{
+ const s=e.target.closest("[data-say]");if(s){e.stopPropagation();speak(s.dataset.say);return}
+ const m=e.target.closest(".act.mk");if(m){const hz=m.dataset.hz,g=m.dataset.mark;
+  if(ST[g][hz])delete ST[g][hz];else{ST[g][hz]=1;if(g==="k")delete ST.h[hz];else delete ST.k[hz]}
+  save();paintMarks()}
+});
+/* flashcards */
+const fcU=document.getElementById("fc-unit"),fcM=document.getElementById("fc-mode"),fcC=document.getElementById("fc-card"),fcN=document.getElementById("fc-count");
+fcU.innerHTML=`<option value="all">Tất cả các bài</option>`+U.map(u=>`<option value="${u.n}">Unit ${u.n} · ${esc(u.vi)}</option>`).join("");
+let deck=[],cur=0,flipped=false;
+function buildDeck(){
+ const un=fcU.value,md=fcM.value;
+ deck=ALLW.filter(x=>(un==="all"||x.u===un)&&(md==="all"||(md==="hard"?ST.h[x.w[0]]:!ST.k[x.w[0]])));
+ for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}
+ cur=0;flipped=false;drawCard();
+}
+function drawCard(){
+ if(!deck.length||cur>=deck.length){
+  fcC.innerHTML=`<div class="done">${deck.length?"Hết thẻ trong nhóm này. Chọn nhóm khác hoặc ôn lại.":(fcM.value==="hard"?"Chưa có từ khó nào. Bấm “Chưa nhớ” khi ôn để thêm vào đây.":"Bạn đã thuộc hết các từ trong nhóm này.")}</div>`;
+  fcN.textContent=deck.length?`${deck.length}/${deck.length}`:"0 thẻ";return}
+ const x=deck[cur],w=x.w,s=SRC[w[0]];
+ fcN.textContent=`${cur+1}/${deck.length}`;
+ fcC.innerHTML=`<div class="meta">Unit ${x.u}${ST.h[w[0]]?" · Từ khó":""}</div><div class="big">${w[0]}</div>`+
+  (flipped?`<div class="py">${esc(w[1])}</div><div class="mn">${esc(w[2])}</div><div class="ex">${w[3]}</div><div class="exp">${esc(w[4])}</div><div class="exv">${esc(w[5])}</div><div class="meta">${s?`博雅 · ${BOOK[s[0]]} · tr.${s[1]}`:"Bổ sung chuyên ngành"}</div>`:`<div class="meta">Nhớ nghĩa và pinyin, rồi chạm để lật</div>`)+
+  `<div class="acts"><button class="act" data-say="${w[0]}">▶ Nghe</button>${flipped?`<button class="act" data-say="${esc(w[3])}">▶ Nghe câu</button>`:""}</div>`;
+}
+function next(ok){
+ if(cur>=deck.length)return;
+ const hz=deck[cur].w[0];
+ if(ok){ST.k[hz]=1;delete ST.h[hz]}else{ST.h[hz]=1;delete ST.k[hz]}
+ save();paintMarks();cur++;flipped=false;drawCard();
+}
+fcC.addEventListener("click",e=>{if(e.target.closest("[data-say]"))return;if(cur<deck.length){flipped=!flipped;drawCard()}});
+fcC.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();flipped=!flipped;drawCard()}});
+document.getElementById("fc-flip").addEventListener("click",()=>{if(cur<deck.length){flipped=!flipped;drawCard()}});
+document.getElementById("fc-yes").addEventListener("click",()=>next(true));
+document.getElementById("fc-no").addEventListener("click",()=>next(false));
+fcU.addEventListener("change",buildDeck);fcM.addEventListener("change",buildDeck);
+/* modes */
+const mB=document.getElementById("m-book"),mF=document.getElementById("m-fc");
+function mode(fc){document.getElementById("book").hidden=fc;document.getElementById("fc").hidden=!fc;mB.classList.toggle("on",!fc);mF.classList.toggle("on",fc);if(fc)buildDeck();try{localStorage.setItem("ttvp-mode",fc?"fc":"book")}catch(e){}const nv=document.querySelector(".modes");window.scrollTo(0,nv.offsetTop-8)}
+mB.addEventListener("click",()=>mode(false));mF.addEventListener("click",()=>mode(true));
+try{if(localStorage.getItem("ttvp-mode")==="fc")mode(true)}catch(e){}
+paintMarks();
+/* offline */
+if("serviceWorker" in navigator&&location.protocol==="https:"){navigator.serviceWorker.register("sw.js").catch(()=>{})}
+</script>
+</body>
+</html>
