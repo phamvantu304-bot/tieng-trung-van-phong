@@ -227,6 +227,44 @@ body.hide-py .py, body.hide-py .p{visibility:hidden}
 #uview .legend{margin-top:10px}
 .src-note summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--muted)}
 .src-note p{font-size:13px;color:var(--muted);margin:6px 0 0;max-width:70ch}
+header.top{display:flex;flex-direction:row;justify-content:flex-start;align-items:center;gap:10px;padding:0 0 4px;border:0;text-align:left}
+header.top .seal{font-size:16px;padding:3px 9px}
+header.top h1{font-size:17px;margin:0}
+.sheet{gap:14px}
+@media (max-width:700px){body{padding-inline:0;padding-block:calc(env(safe-area-inset-top,0px) + 6px) calc(env(safe-area-inset-bottom,0px) + 16px)}.sheet{border-radius:0;box-shadow:none;padding:10px 14px 24px}}
+.mapd>summary{cursor:pointer;font-size:13.5px;font-weight:600;color:var(--muted);padding:4px 0}
+.mapd[open]>summary{margin-bottom:8px}
+.mapd .card{margin-top:10px}
+details.list{display:none}
+.mtree{display:flex!important;flex-direction:column;gap:10px}
+.acc{border:1px solid var(--rule);border-radius:12px;background:var(--paper);overflow:hidden}
+.acc-h{width:100%;display:flex;align-items:center;gap:12px;border:0;background:var(--sf);padding:14px;text-align:left;cursor:pointer;min-height:58px}
+.acc-n{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:var(--paper);font-size:13px;font-weight:700}
+.acc.done .acc-n{background:var(--ok)}
+.acc-t{flex:1;font-size:16px;font-weight:700;line-height:1.3}
+.acc-c{font-size:12.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.acc-i{flex:none;display:inline-block;font-size:24px;line-height:1;color:var(--c);transition:transform .2s}
+.acc.open .acc-i{transform:rotate(90deg)}
+.acc-b{display:flex;flex-direction:column}
+.wr{border-top:1px solid var(--rule)}
+.wr-m{display:flex;align-items:center;gap:14px;padding:12px 14px;cursor:pointer;min-height:64px}
+.wr-hz{flex:none;min-width:76px;font-family:var(--han);font-weight:700;font-size:28px;line-height:1.15}
+.wr-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.wr-tx .py{font-size:14.5px;font-weight:600;color:var(--c)}
+.wr-tx .mn{font-size:15px;line-height:1.35}
+.say{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--rule);background:var(--row);color:var(--c);font-size:13px;cursor:pointer}
+.wr.open{background:var(--row)}
+.wr.open .say{background:var(--paper)}
+.wr-x{padding:0 14px 14px;display:flex;flex-direction:column;gap:3px}
+.wr-x .c-zh{font-size:19px}
+.wr-x .src{align-self:flex-start;margin-top:6px}
+.wr.known .wr-hz{color:var(--ok)}
+.wr.known .wr-m::after{content:"✓";color:var(--ok);font-weight:700}
+.wr.hard .wr-m{box-shadow:inset 4px 0 0 var(--red)}
+.sr{border-top:1px solid var(--rule);padding:12px 14px;display:flex;flex-direction:column;gap:3px;align-items:flex-start}
+.sr .c-zh{font-size:18px}
+.acc-study{margin:12px 14px 14px;border:0;border-radius:10px;background:var(--c);color:var(--paper);font-size:15px;font-weight:700;padding:13px;cursor:pointer}
+@media (max-width:700px){.mapd{display:none}}
 .foot{font-size:12px;color:var(--muted);border-top:1px solid var(--rule);padding-top:12px;margin:0}
 :focus-visible{outline:2px solid var(--red);outline-offset:2px}
 </style>
@@ -234,11 +272,7 @@ body.hide-py .py, body.hide-py .p{visibility:hidden}
 </head>
 <body>
 <div class="sheet">
- <header>
-  <div class="lesson"><span class="seal">办公室汉语</span><h1>Tiếng Trung Văn phòng · 16 bài</h1></div>
-  <p class="sub">4 phần · 16 bài · 288 từ vựng có phát âm, câu ví dụ và flashcard.</p>
-  <details class="src-note"><summary>Nguồn từ vựng</summary><p>Từ vựng được lọc từ 8 cuốn giáo trình <b class="han">博雅汉语</b> (初级 → 高级) và sắp theo 16 Unit của khung HanTalk. Mỗi từ ghi <i>tên cuốn · số trang PDF</i> để tra lại sách. Những từ thương mại mà Boya không có được đánh dấu <i>Bổ sung chuyên ngành</i>. Câu ví dụ được viết mới theo ngữ cảnh văn phòng.</p></details>
- </header>
+ <header class="top"><span class="seal">办公室汉语</span><h1>Tiếng Trung Văn phòng</h1></header>
  <nav class="modes" aria-label="Chế độ"><button id="m-book" class="on">Bài học</button><button id="m-fc">Ôn tập</button><span class="prog" id="prog"></span></nav>
  <section id="fc" hidden>
   <div class="fc-bar">
@@ -253,7 +287,7 @@ body.hide-py .py, body.hide-py .p{visibility:hidden}
  <div id="book">
  <section id="home">
   <div class="srch"><input type="search" id="q" placeholder="Tìm nhanh một từ: chữ Hán, pinyin hoặc tiếng Việt…" aria-label="Tìm từ vựng"><div id="results"></div></div>
-  <div class="home-h"><h2>Chọn bài để học</h2><span class="count" id="count"></span></div>
+  <div class="home-h"><h2>Chọn bài để học</h2><span class="count" id="count" hidden></span></div>
   <div id="ulist"></div>
   <details class="ovw"><summary>Xem sơ đồ tư duy toàn khoá</summary><div class="map-wrap"><svg id="map" role="img" aria-label="Sơ đồ tư duy 4 phần và 16 bài"></svg></div></details>
  </section>
@@ -269,6 +303,7 @@ body.hide-py .py, body.hide-py .p{visibility:hidden}
   <div class="pager"><button id="u-prev">‹ Bài trước</button><button id="u-next">Bài sau ›</button></div>
  </section>
  </div>
+<details class="src-note"><summary>Nguồn từ vựng</summary><p>Từ vựng được lọc từ 8 cuốn giáo trình <b class="han">博雅汉语</b> (初级 → 高级) và sắp theo 16 Unit của khung HanTalk. Mỗi từ ghi <i>tên cuốn · số trang PDF</i> để tra lại sách. Những từ thương mại mà Boya không có được đánh dấu <i>Bổ sung chuyên ngành</i>. Câu ví dụ được viết mới theo ngữ cảnh văn phòng.</p></details>
  <p class="foot">Pinyin có dấu thanh; 贵公司 = quý công ty, 我方/贵方 = bên tôi/quý bên. Giá, số lượng trong ví dụ là số minh hoạ.</p>
 </div>
 
@@ -613,8 +648,9 @@ PARTS.forEach((p,pi)=>{
   html+=`<section class="unit" id="${uid(u)}">
   <div class="unit-title"><span class="unit-no" style="background:${col(p.k)}">Unit ${u.n}</span><span class="han">${u.han}</span><span class="vi">${esc(u.vi)}</span></div>
   <div class="ustat"><span class="uprog" data-up="${u.n}"></span><button class="study" data-study="${u.n}" style="background:${col(p.k)}">Ôn tập bài này</button></div>
+  <details class="mapd"><summary>Xem sơ đồ tư duy của bài</summary>
   <div class="umap"><svg data-u="${u.n}" role="img" aria-label="Sơ đồ tư duy Unit ${u.n}"></svg></div>
-  <div class="card empty" data-card="${u.n}" style="border-color:${col(p.k)}"><span class="hint">Bấm vào một từ trên sơ đồ để xem câu ví dụ và trang trong sách Boya.</span></div>
+  <div class="card empty" data-card="${u.n}" style="border-color:${col(p.k)}"><span class="hint">Bấm vào một từ trên sơ đồ để xem câu ví dụ và trang trong sách Boya.</span></div></details>
   <details class="list"><summary>Danh sách chi tiết · từ vựng & mẫu câu</summary>
   <div class="unit-body">
    <div class="vocab">${groupHtml(u,p)}</div>
@@ -624,6 +660,22 @@ PARTS.forEach((p,pi)=>{
 });
 host.innerHTML=html;
 
+/* ---------- accordion rows ---------- */
+function rowHtml(w){const s=SRC[w[0]];return `<div class="wr" data-hz="${w[0]}" data-b="${s?1:0}">
+ <div class="wr-m" role="button" tabindex="0" aria-expanded="false"><span class="wr-hz">${w[0]}</span><span class="wr-tx"><span class="py">${esc(w[1])}</span><span class="mn">${esc(w[2])}</span></span><button class="say" data-say="${w[0]}" aria-label="Nghe ${w[0]}">▶</button></div>
+ <div class="wr-x" hidden><div class="c-zh han">${w[3]}</div><div class="c-py py">${esc(w[4])}</div><div class="c-vi v">${esc(w[5])}</div>
+ <div class="acts"><button class="act" data-say="${esc(w[3])}">▶ Nghe câu</button><button class="act mk" data-mark="k" data-hz="${w[0]}">Đã thuộc</button><button class="act mk" data-mark="h" data-hz="${w[0]}">Từ khó</button></div>
+ <span class="src${s?"":" add"}">${s?`博雅 · ${BOOK[s[0]]} · tr.${s[1]}`:"Bổ sung chuyên ngành"}</span></div></div>`}
+function sentHtml(s){return `<div class="sr"><div class="c-zh han">${s[0]}</div><div class="c-py py">${esc(s[1])}</div><div class="c-vi v">${esc(s[2])}</div><button class="act" data-say="${esc(s[0])}">▶ Nghe câu</button></div>`}
+function toggleSec(sec,open){const head=sec.firstChild,body=sec.lastChild;if(open)sec._build();body.hidden=!open;head.setAttribute("aria-expanded",open);sec.classList.toggle("open",open)}
+function toggleRow(row,open){const x=row.querySelector(".wr-x");if(open===undefined)open=x.hidden;x.hidden=!open;row.classList.toggle("open",open);row.firstElementChild.setAttribute("aria-expanded",open)}
+document.addEventListener("click",e=>{
+ if(e.target.closest("[data-say]"))return;
+ const m=e.target.closest(".wr-m");if(m){toggleRow(m.parentNode);return}
+ const st=e.target.closest(".acc-study");if(st){FCSET={u:st.dataset.u,hzs:st.dataset.hzs.split(" "),lab:st.dataset.lab};goFC("set")}
+});
+document.addEventListener("keydown",e=>{const m=e.target.closest&&e.target.closest(".wr-m");if(m&&(e.key==="Enter"||e.key===" ")){e.preventDefault();toggleRow(m.parentNode)}});
+let FCSET=null;
 /* ---------- per-unit mindmaps ---------- */
 const UAPI={};
 const MAP={
@@ -725,24 +777,21 @@ const MAP={
    });
   });
   drawSide(PL,true); drawSide(PR,false);
-  // vertical tree for phones
+  // accordion: one collapsible section per topic
   const mt=document.createElement("div");mt.className="mtree";
-  branches.forEach(b=>{
-   const box=document.createElement("div");box.className="mb";
-   box.innerHTML=`<div class="mb-h" style="color:${c}">${esc(b.lab)}</div><div class="chips"></div>`;
-   const ch=box.lastChild;
-   b.items.forEach(it=>{
-    const bt=document.createElement("button");bt.className="chip"+(it.s?" sent":"");
-    bt.style.setProperty("--c",c);bt.style.setProperty("--sf",sf);
-    if(it.s){bt.innerHTML=`<span class="han">${it.s[0]}</span><span class="mn">${esc(it.s[2])}</span>`;bt.dataset.b="s";bt.dataset.k=""}
-    else{const inB=SRC[it.w[0]];bt.dataset.hz=it.w[0];bt.dataset.b=inB?"1":"0";bt.dataset.k=(it.w[0]+" "+it.w[1]+" "+it.w[2]).toLowerCase();if(!inB)bt.classList.add("add");
-     bt.innerHTML=`<span class="han">${it.w[0]}</span><span class="py">${esc(it.w[1])}</span><span class="mn">${esc(it.w[2])}</span>`}
-    bt.addEventListener("click",()=>{mt.querySelectorAll(".chip.on").forEach(n=>n.classList.remove("on"));bt.classList.add("on");show(it)});
-    ch.appendChild(bt);
-   });
-   mt.appendChild(box);
+  branches.forEach((b,bi)=>{
+   const isS=b.kind==="s", hzs=isS?[]:b.items.map(it=>it.w[0]);
+   const sec=document.createElement("section");sec.className="acc";
+   sec.style.setProperty("--c",c);sec.style.setProperty("--sf",sf);sec.dataset.hzs=hzs.join(" ");
+   sec.innerHTML=`<button class="acc-h" aria-expanded="false"><span class="acc-n">${isS?"…":bi+1}</span><span class="acc-t">${esc(b.lab)}</span><span class="acc-c">${isS?b.items.length+" câu":`<span data-secprog>${hzs.length} từ</span>`}</span><span class="acc-i" aria-hidden="true">›</span></button><div class="acc-b" hidden></div>`;
+   const head=sec.firstChild, body=sec.lastChild;
+   head.addEventListener("click",()=>toggleSec(sec,body.hidden));
+   sec._build=()=>{if(body.dataset.built)return;body.dataset.built=1;
+    body.innerHTML=isS?b.items.map(it=>sentHtml(it.s)).join(""):b.items.map(it=>rowHtml(it.w)).join("")+`<button class="acc-study" data-u="${u.n}" data-hzs="${hzs.join(" ")}" data-lab="${esc(b.lab)}">Ôn tập mục này · ${hzs.length} từ</button>`;
+    paintMarks();filter()};
+   mt.appendChild(sec);
   });
-  svg.parentNode.after(mt);
+  svg.closest(".mapd").after(mt);
   UAPI[u.n]={show,byHz,mt};
  });
 })();
@@ -756,6 +805,7 @@ function filter(){
  rows.forEach(r=>{r.hidden=only&&r.dataset.b!=="1"});
  document.querySelectorAll(".grp").forEach(g=>{let n=g.nextElementSibling,any=false;while(n&&n.classList.contains("w")){if(!n.hidden)any=true;n=n.nextElementSibling}g.hidden=!any});
  document.querySelectorAll(".leaf,.chip").forEach(a=>{a.classList.toggle("dim",only&&a.dataset.b==="0")});
+ document.querySelectorAll(".wr").forEach(r=>{r.hidden=only&&r.dataset.b==="0"});
 }
 const nB=rows.filter(r=>r.dataset.b==="1").length;
 cnt.textContent=`${total} từ · ${nB} từ trong Boya`;
@@ -777,6 +827,7 @@ function paintMarks(){
   if(n.classList.contains("mk")){n.classList.toggle("on",!!ST[n.dataset.mark][hz]);return}
   n.classList.toggle("known",!!ST.k[hz]);n.classList.toggle("hard",!!ST.h[hz]);
  });
+ document.querySelectorAll(".acc").forEach(sec=>{const hz=sec.dataset.hzs?sec.dataset.hzs.split(" "):[];const e=sec.querySelector("[data-secprog]");if(e&&hz.length){const k=hz.filter(x=>ST.k[x]).length;e.textContent=k?`${hz.length} từ · ✓${k}`:`${hz.length} từ`;sec.classList.toggle("done",k===hz.length)}});
  const tot=ALLW.length,kn=ALLW.filter(x=>ST.k[x.w[0]]).length;
  document.getElementById("prog").textContent=`Đã thuộc ${kn}/${tot}`;
  U.forEach(u=>{const ws=ALLW.filter(x=>x.u===u.n),k=ws.filter(x=>ST.k[x.w[0]]).length;
@@ -804,7 +855,8 @@ fcU.innerHTML=`<option value="all">Tất cả các bài</option>`+U.map(u=>`<opt
 let deck=[],cur=0,flipped=false;
 function buildDeck(){
  const un=fcU.value,md=fcM.value;
- deck=ALLW.filter(x=>(un==="all"||x.u===un)&&(md==="all"||(md==="hard"?ST.h[x.w[0]]:!ST.k[x.w[0]])));
+ const inSet=x=>un==="set"&&FCSET?(x.u===FCSET.u&&FCSET.hzs.includes(x.w[0])):(un==="all"||x.u===un);
+ deck=ALLW.filter(x=>inSet(x)&&(md==="all"||(md==="hard"?ST.h[x.w[0]]:!ST.k[x.w[0]])));
  for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}
  cur=0;flipped=false;drawCard();
 }
@@ -829,7 +881,7 @@ fcC.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDef
 document.getElementById("fc-flip").addEventListener("click",()=>{if(cur<deck.length){flipped=!flipped;drawCard()}});
 document.getElementById("fc-yes").addEventListener("click",()=>next(true));
 document.getElementById("fc-no").addEventListener("click",()=>next(false));
-fcU.addEventListener("change",()=>{buildDeck();save2({v:"fc",u:fcU.value})});fcM.addEventListener("change",buildDeck);
+fcU.addEventListener("change",()=>{if(fcU.value!=="set"){const o=fcU.querySelector('option[value="set"]');if(o)o.remove();FCSET=null}buildDeck();save2({v:"fc",u:fcU.value==="set"?(FCSET&&FCSET.u):fcU.value})});fcM.addEventListener("change",buildDeck);
 /* ---------- views: home · unit · flashcards ---------- */
 const mB=document.getElementById("m-book"),mF=document.getElementById("m-fc");
 const HOME=document.getElementById("home"),UV=document.getElementById("uview"),FC=document.getElementById("fc"),HDR=document.querySelector("header");
@@ -857,13 +909,17 @@ function openUnit(i,dir,hz){
  TABS[i].scrollIntoView({inline:"center",block:"nearest",behavior:dir?"smooth":"auto"});
  document.getElementById("u-prev").disabled=i===0;document.getElementById("u-next").disabled=i===U.length-1;
  const api=UAPI[U[i].n];
- if(hz&&api&&api.byHz[hz]){api.show({w:api.byHz[hz]});const c=api.mt.querySelector(`.chip[data-hz="${hz}"]`)||SECS[i].querySelector(`.leaf[data-hz="${hz}"]`);if(c){c.classList.add("on");c.scrollIntoView({block:"center"})}}
+ if(hz&&api){const sec=[...api.mt.querySelectorAll(".acc")].find(s=>s.dataset.hzs.split(" ").includes(hz));
+  if(sec){toggleSec(sec,true);const row=sec.querySelector(`.wr[data-hz="${hz}"]`);if(row){toggleRow(row,true);row.scrollIntoView({block:"center"})}}}
  else window.scrollTo(0,0);
  save2({v:"unit",u:U[i].n});
 }
 function goHome(){show("home");window.scrollTo(0,0);save2({v:"home"})}
 function goFC(un){
- if(un)fcU.value=un;show("fc");buildDeck();window.scrollTo(0,0);save2({v:"fc",u:fcU.value});
+ let o=fcU.querySelector('option[value="set"]');
+ if(un==="set"&&FCSET){if(!o){o=document.createElement("option");o.value="set";fcU.prepend(o)}o.textContent=`Unit ${FCSET.u} · Mục: ${FCSET.lab}`;fcM.value="all"}
+ else if(o&&un)o.remove();
+ if(un)fcU.value=un;show("fc");buildDeck();window.scrollTo(0,0);save2({v:"fc",u:fcU.value==="set"?(FCSET&&FCSET.u):fcU.value});
 }
 document.getElementById("ulist").addEventListener("click",e=>{const b=e.target.closest("[data-open]");if(b)openUnit(U.findIndex(u=>u.n===b.dataset.open))});
 document.getElementById("utabs").addEventListener("click",e=>{const b=e.target.closest(".utab");if(b){const i=TABS.indexOf(b);openUnit(i,i>cu?1:i<cu?-1:0)}});

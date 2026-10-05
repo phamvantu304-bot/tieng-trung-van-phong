@@ -1,5 +1,5 @@
 // Offline cache. Tăng VERSION mỗi khi cập nhật nội dung để iPhone tải bản mới.
-const VERSION = "ttvp-v3";
+const VERSION = "ttvp-v5";
 const CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
@@ -18,7 +18,7 @@ self.addEventListener("fetch", e => {
   const url = new URL(req.url);
   // Trang chính: lấy bản mới khi có mạng, mất mạng thì dùng bản đã lưu.
   if (req.mode === "navigate") {
-    e.respondWith(fetch(req).then(r => {
+    e.respondWith(fetch(req.url, { cache: "no-cache" }).then(r => {
       const copy = r.clone(); caches.open(VERSION).then(c => c.put("index.html", copy)); return r;
     }).catch(() => caches.match("index.html")));
     return;
