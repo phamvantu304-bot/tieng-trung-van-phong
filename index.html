@@ -304,6 +304,7 @@ details.list{display:none}
 .ustat .uprog{flex-basis:100%}
 .ustat .listen,.ustat .study{flex:1;margin-left:0;text-align:center;white-space:nowrap}
 .ustat .study[hidden]+*{}
+.allplay{border:0;border-radius:12px;background:var(--red);color:var(--paper);font-size:15px;font-weight:700;padding:14px;cursor:pointer;text-align:center}
 .foot{font-size:12px;color:var(--muted);border-top:1px solid var(--rule);padding-top:12px;margin:0}
 :focus-visible{outline:2px solid var(--red);outline-offset:2px}
 </style>
@@ -338,6 +339,7 @@ details.list{display:none}
    <button id="dlg-next" aria-label="Câu sau">⏭</button>
    <button id="dlg-loop" class="tog" aria-pressed="false">Lặp lại</button>
    <button id="dlg-slow" class="tog" aria-pressed="false">Chậm</button>
+   <button id="dlg-all" class="tog" aria-pressed="false">Nghe cả khoá</button>
   </div>
   <p class="dlg-scene" id="dlg-scene"></p>
   <ol class="dlg-list" id="dlg-list"></ol>
@@ -346,6 +348,7 @@ details.list{display:none}
  <div id="book">
  <section id="home">
   <div class="srch"><input type="search" id="q" placeholder="Tìm nhanh một từ: chữ Hán, pinyin hoặc tiếng Việt…" aria-label="Tìm từ vựng"><div id="results"></div></div>
+  <button class="allplay" id="allplay" hidden>▶ Nghe hội thoại cả khoá · 16 bài liên tục</button>
   <div class="home-h"><h2>Chọn bài để học</h2><span class="count" id="count" hidden></span></div>
   <div id="ulist"></div>
   <details class="ovw"><summary>Xem sơ đồ tư duy toàn khoá</summary><div class="map-wrap"><svg id="map" role="img" aria-label="Sơ đồ tư duy 4 phần và 16 bài"></svg></div></details>
@@ -946,6 +949,7 @@ let DLG={}, dU=null, dIdx=-1;
 const DA=document.getElementById("dlg-audio"), DSEC=document.getElementById("dlg");
 fetch("audio/dialogues.json").then(r=>r.ok?r.json():{}).then(j=>{DLG=j||{};
  document.querySelectorAll("[data-dlg]").forEach(b=>{b.hidden=!DLG[b.dataset.dlg]});
+ document.getElementById("allplay").hidden=Object.keys(DLG).length<2;
  restoreDlg&&restoreDlg();}).catch(()=>{});
 let restoreDlg=null;
 const ALLWORDS=ALLW.map(x=>x.w).sort((a,b)=>b[0].length-a[0].length);
@@ -984,12 +988,17 @@ function closeDlg(){DA.pause();DSEC.hidden=true;const i=U.findIndex(u=>u.n===dU)
 DA.addEventListener("timeupdate",()=>{if(!dU)return;dlgRender(lineAt(DA.currentTime));if(DA.duration)document.getElementById("dlg-fill").style.width=(100*DA.currentTime/DA.duration)+"%"});
 DA.addEventListener("play",()=>{document.getElementById("dlg-play").textContent="❚❚"});
 DA.addEventListener("pause",()=>{document.getElementById("dlg-play").textContent="▶"});
-DA.addEventListener("ended",()=>{document.getElementById("dlg-play").textContent="▶"});
+let AUTO=false;
+const setAuto=v=>{AUTO=v;document.getElementById("dlg-all").setAttribute("aria-pressed",v);if(v){DA.loop=false;document.getElementById("dlg-loop").setAttribute("aria-pressed",false)}};
+DA.addEventListener("ended",()=>{document.getElementById("dlg-play").textContent="▶";
+ if(AUTO){const ks=Object.keys(DLG).sort((a,b)=>a-b);const i=ks.indexOf(dU);if(i>=0&&i<ks.length-1)openDlg(ks[i+1],true);else setAuto(false)}});
+document.getElementById("dlg-all").addEventListener("click",()=>setAuto(!AUTO));
+document.getElementById("allplay").addEventListener("click",()=>{setAuto(true);const k=Object.keys(DLG).sort((a,b)=>a-b)[0];if(k)openDlg(k,true)});
 const seekLine=i=>{const ls=DLG[dU].lines;i=Math.max(0,Math.min(ls.length-1,i));DA.currentTime=ls[i].t;dIdx=-1;dlgRender(i)};
 document.getElementById("dlg-play").addEventListener("click",()=>{DA.paused?DA.play().catch(()=>{}):DA.pause()});
 document.getElementById("dlg-prev").addEventListener("click",()=>seekLine(dIdx-(DA.currentTime-DLG[dU].lines[dIdx].t>1.5?0:1)));
 document.getElementById("dlg-next").addEventListener("click",()=>seekLine(dIdx+1));
-document.getElementById("dlg-loop").addEventListener("click",e=>{DA.loop=!DA.loop;e.currentTarget.setAttribute("aria-pressed",DA.loop)});
+document.getElementById("dlg-loop").addEventListener("click",e=>{DA.loop=!DA.loop;e.currentTarget.setAttribute("aria-pressed",DA.loop);if(DA.loop)setAuto(false)});
 document.getElementById("dlg-slow").addEventListener("click",e=>{const s=DA.playbackRate===1;DA.playbackRate=s?0.75:1;e.currentTarget.setAttribute("aria-pressed",s)});
 document.getElementById("dlg-list").addEventListener("click",e=>{const li=e.target.closest("li");if(li){seekLine(+li.dataset.i);DA.play().catch(()=>{})}});
 document.getElementById("dlg-back").addEventListener("click",closeDlg);
