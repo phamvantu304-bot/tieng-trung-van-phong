@@ -265,6 +265,45 @@ details.list{display:none}
 .sr .c-zh{font-size:18px}
 .acc-study{margin:12px 14px 14px;border:0;border-radius:10px;background:var(--c);color:var(--paper);font-size:15px;font-weight:700;padding:13px;cursor:pointer}
 @media (max-width:700px){.mapd{display:none}}
+#dlg{display:flex;flex-direction:column;gap:12px;--pp:#F4EFE4;--pp2:#E8DDC6;--pink:#5A4632;--hl:#F7E9A8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #dlg{--pp:#2A2620;--pp2:#3A3328;--pink:#EADBC0;--hl:#5A4C1E}}
+:root[data-theme="dark"] #dlg{--pp:#2A2620;--pp2:#3A3328;--pink:#EADBC0;--hl:#5A4C1E}
+.dlg-top{display:flex;align-items:center;gap:10px}
+#dlg-back{border:0;background:none;color:var(--red);font-weight:700;font-size:14px;padding:6px 0;cursor:pointer}
+#dlg-title{font-weight:700;font-size:15px}
+.dlg-stage{background:var(--pp);border-radius:14px;padding:22px 16px 20px;min-height:340px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;box-shadow:inset 0 0 40px rgba(120,90,40,.08)}
+.dlg-who{font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.dlg-zh{font-size:clamp(26px,7.4vw,38px);line-height:1.35;color:var(--pink);text-wrap:balance;text-shadow:0 1px 0 rgba(255,255,255,.4)}
+.dlg-vi span{background:var(--hl);padding:3px 8px;border-radius:3px;font-size:15.5px;font-weight:500;line-height:1.7;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.dlg-new{margin-top:auto;align-self:stretch;display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;padding-top:14px}
+.dlg-tag{background:var(--pp2);color:#8A3A22;font-weight:800;font-size:15px;padding:3px 10px;transform:rotate(-1.5deg)}
+#dlg-words{display:flex;flex-direction:column;gap:6px;align-self:stretch}
+.dw{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;background:var(--pp2);padding:6px 10px;border-radius:4px;cursor:pointer;border:0;text-align:left;font:inherit;color:inherit}
+.dw .han{font-size:22px;color:var(--pink)}
+.dw .p{font-weight:700;font-size:14px}
+.dw .m{font-size:14px}
+.dlg-none{font-size:13px;color:var(--muted)}
+.dlg-bar{height:4px;background:var(--row);border-radius:2px;overflow:hidden}
+.dlg-bar i{display:block;height:100%;width:0;background:var(--red)}
+.dlg-ctl{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.dlg-ctl button{border:1px solid var(--rule);background:var(--paper);border-radius:50%;width:48px;height:48px;font-size:17px;cursor:pointer}
+.dlg-ctl button.big{width:64px;height:64px;font-size:24px;background:var(--red);color:var(--paper);border-color:var(--red)}
+.dlg-ctl .tog{width:auto;border-radius:20px;padding:0 14px;height:40px;font-size:13.5px;font-weight:600}
+.dlg-ctl .tog[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.dlg-scene{margin:0;font-size:13px;color:var(--muted);text-align:center}
+.dlg-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;border-top:1px solid var(--rule)}
+.dlg-list li{display:flex;gap:10px;padding:10px 4px;border-bottom:1px solid var(--rule);cursor:pointer}
+.dlg-list li .r{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--paper);background:var(--muted)}
+.dlg-list li.B .r{background:var(--p2)}
+.dlg-list li.A .r{background:var(--red)}
+.dlg-list li .t{display:flex;flex-direction:column}
+.dlg-list li .t .han{font-size:16px}
+.dlg-list li .t .v{font-size:12.5px;color:var(--muted)}
+.dlg-list li.on{background:var(--row)}
+.listen{border:1.5px solid;background:var(--paper);border-radius:18px;padding:7px 14px;font-size:14px;font-weight:700;cursor:pointer}
+.ustat .uprog{flex-basis:100%}
+.ustat .listen,.ustat .study{flex:1;margin-left:0;text-align:center;white-space:nowrap}
+.ustat .study[hidden]+*{}
 .foot{font-size:12px;color:var(--muted);border-top:1px solid var(--rule);padding-top:12px;margin:0}
 :focus-visible{outline:2px solid var(--red);outline-offset:2px}
 </style>
@@ -283,6 +322,26 @@ details.list{display:none}
   <div class="fc-card" id="fc-card" role="button" tabindex="0" aria-label="Thẻ từ, chạm để lật"></div>
   <div class="fc-acts"><button id="fc-no" class="no">Chưa nhớ</button><button id="fc-flip">Lật thẻ</button><button id="fc-yes" class="yes">Đã nhớ</button></div>
   <p class="fc-tip">Chạm vào thẻ để lật · “Chưa nhớ” đưa từ vào nhóm Từ khó · tiến độ lưu ngay trên điện thoại</p>
+ </section>
+ <section id="dlg" hidden>
+  <div class="dlg-top"><button id="dlg-back">‹ Về bài học</button><span id="dlg-title"></span></div>
+  <div class="dlg-stage">
+   <div class="dlg-who" id="dlg-who"></div>
+   <div class="dlg-zh han" id="dlg-zh"></div>
+   <div class="dlg-vi"><span id="dlg-vi"></span></div>
+   <div class="dlg-new"><span class="dlg-tag">Từ mới :</span><div id="dlg-words"></div></div>
+  </div>
+  <div class="dlg-bar"><i id="dlg-fill"></i></div>
+  <div class="dlg-ctl">
+   <button id="dlg-prev" aria-label="Câu trước">⏮</button>
+   <button id="dlg-play" class="big" aria-label="Phát">▶</button>
+   <button id="dlg-next" aria-label="Câu sau">⏭</button>
+   <button id="dlg-loop" class="tog" aria-pressed="false">Lặp lại</button>
+   <button id="dlg-slow" class="tog" aria-pressed="false">Chậm</button>
+  </div>
+  <p class="dlg-scene" id="dlg-scene"></p>
+  <ol class="dlg-list" id="dlg-list"></ol>
+  <audio id="dlg-audio" preload="metadata" playsinline></audio>
  </section>
  <div id="book">
  <section id="home">
@@ -647,7 +706,7 @@ PARTS.forEach((p,pi)=>{
  U.filter(u=>u.p===pi).forEach(u=>{
   html+=`<section class="unit" id="${uid(u)}">
   <div class="unit-title"><span class="unit-no" style="background:${col(p.k)}">Unit ${u.n}</span><span class="han">${u.han}</span><span class="vi">${esc(u.vi)}</span></div>
-  <div class="ustat"><span class="uprog" data-up="${u.n}"></span><button class="study" data-study="${u.n}" style="background:${col(p.k)}">Ôn tập bài này</button></div>
+  <div class="ustat"><span class="uprog" data-up="${u.n}"></span><button class="listen" data-dlg="${u.n}" hidden style="color:${col(p.k)};border-color:${col(p.k)}">▶ Hội thoại</button><button class="study" data-study="${u.n}" style="background:${col(p.k)}">Ôn tập bài này</button></div>
   <details class="mapd"><summary>Xem sơ đồ tư duy của bài</summary>
   <div class="umap"><svg data-u="${u.n}" role="img" aria-label="Sơ đồ tư duy Unit ${u.n}"></svg></div>
   <div class="card empty" data-card="${u.n}" style="border-color:${col(p.k)}"><span class="hint">Bấm vào một từ trên sơ đồ để xem câu ví dụ và trang trong sách Boya.</span></div></details>
@@ -882,6 +941,60 @@ document.getElementById("fc-flip").addEventListener("click",()=>{if(cur<deck.len
 document.getElementById("fc-yes").addEventListener("click",()=>next(true));
 document.getElementById("fc-no").addEventListener("click",()=>next(false));
 fcU.addEventListener("change",()=>{if(fcU.value!=="set"){const o=fcU.querySelector('option[value="set"]');if(o)o.remove();FCSET=null}buildDeck();save2({v:"fc",u:fcU.value==="set"?(FCSET&&FCSET.u):fcU.value})});fcM.addEventListener("change",buildDeck);
+/* ---------- dialogue player (audio + synced subtitles) ---------- */
+let DLG={}, dU=null, dIdx=-1;
+const DA=document.getElementById("dlg-audio"), DSEC=document.getElementById("dlg");
+fetch("audio/dialogues.json").then(r=>r.ok?r.json():{}).then(j=>{DLG=j||{};
+ document.querySelectorAll("[data-dlg]").forEach(b=>{b.hidden=!DLG[b.dataset.dlg]});
+ restoreDlg&&restoreDlg();}).catch(()=>{});
+let restoreDlg=null;
+const ALLWORDS=ALLW.map(x=>x.w).sort((a,b)=>b[0].length-a[0].length);
+function wordsIn(zh,u){
+ const own=ALLW.filter(x=>x.u===u).map(x=>x.w).sort((a,b)=>b[0].length-a[0].length);
+ const found=[];let rest=zh;
+ own.concat(ALLWORDS).forEach(w=>{if(rest.includes(w[0])&&!found.some(f=>f[0]===w[0])){found.push(w);rest=rest.split(w[0]).join("　")}});
+ return found.slice(0,4);
+}
+function dlgRender(i){
+ const d=DLG[dU];if(!d)return;i=Math.max(0,Math.min(d.lines.length-1,i));if(i===dIdx)return;dIdx=i;
+ const L=d.lines[i];
+ document.getElementById("dlg-who").textContent=(d.roles&&d.roles[L.who])||L.who;
+ document.getElementById("dlg-zh").textContent=L.zh;
+ document.getElementById("dlg-vi").textContent=L.vi;
+ const ws=wordsIn(L.zh,dU);
+ document.getElementById("dlg-words").innerHTML=ws.length?ws.map(w=>`<button class="dw" data-say="${w[0]}"><span class="han">${w[0]}</span><span class="p py">/ ${esc(w[1])} /:</span><span class="m mn">${esc(w[2])}</span></button>`).join(""):`<span class="dlg-none">Câu này không có từ mới của bài.</span>`;
+ document.querySelectorAll("#dlg-list li").forEach((li,j)=>li.classList.toggle("on",j===i));
+ const on=document.querySelector("#dlg-list li.on");if(on&&!DA.paused)on.scrollIntoView({block:"nearest"});
+}
+function lineAt(t){const ls=DLG[dU].lines;let i=0;for(let j=0;j<ls.length;j++)if(t>=ls[j].t-0.05)i=j;return i}
+function openDlg(n,autoplay){
+ const d=DLG[n];if(!d)return;
+ if(dU!==n){dU=n;dIdx=-1;DA.src=d.file;
+  document.getElementById("dlg-title").textContent=`Unit ${n} · Hội thoại`;
+  document.getElementById("dlg-scene").textContent=d.scene;
+  document.getElementById("dlg-list").innerHTML=d.lines.map((L,j)=>`<li class="${L.who}" data-i="${j}"><span class="r">${L.who}</span><span class="t"><span class="han">${L.zh}</span><span class="v">${esc(L.vi)}</span></span></li>`).join("");
+  if("mediaSession" in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:`Unit ${n} · ${d.title}`,artist:"Tiếng Trung Văn phòng",artwork:[{src:"icon-512.png",sizes:"512x512",type:"image/png"}]})}catch(e){}}
+ }
+ HOME.hidden=true;UV.hidden=true;FC.hidden=true;HDR.hidden=true;DSEC.hidden=false;
+ mB.classList.add("on");mF.classList.remove("on");
+ dlgRender(0);window.scrollTo(0,0);save2({v:"dlg",u:n});
+ if(autoplay)DA.play().catch(()=>{});
+}
+function closeDlg(){DA.pause();DSEC.hidden=true;const i=U.findIndex(u=>u.n===dU);openUnit(i>=0?i:cu)}
+DA.addEventListener("timeupdate",()=>{if(!dU)return;dlgRender(lineAt(DA.currentTime));if(DA.duration)document.getElementById("dlg-fill").style.width=(100*DA.currentTime/DA.duration)+"%"});
+DA.addEventListener("play",()=>{document.getElementById("dlg-play").textContent="❚❚"});
+DA.addEventListener("pause",()=>{document.getElementById("dlg-play").textContent="▶"});
+DA.addEventListener("ended",()=>{document.getElementById("dlg-play").textContent="▶"});
+const seekLine=i=>{const ls=DLG[dU].lines;i=Math.max(0,Math.min(ls.length-1,i));DA.currentTime=ls[i].t;dIdx=-1;dlgRender(i)};
+document.getElementById("dlg-play").addEventListener("click",()=>{DA.paused?DA.play().catch(()=>{}):DA.pause()});
+document.getElementById("dlg-prev").addEventListener("click",()=>seekLine(dIdx-(DA.currentTime-DLG[dU].lines[dIdx].t>1.5?0:1)));
+document.getElementById("dlg-next").addEventListener("click",()=>seekLine(dIdx+1));
+document.getElementById("dlg-loop").addEventListener("click",e=>{DA.loop=!DA.loop;e.currentTarget.setAttribute("aria-pressed",DA.loop)});
+document.getElementById("dlg-slow").addEventListener("click",e=>{const s=DA.playbackRate===1;DA.playbackRate=s?0.75:1;e.currentTarget.setAttribute("aria-pressed",s)});
+document.getElementById("dlg-list").addEventListener("click",e=>{const li=e.target.closest("li");if(li){seekLine(+li.dataset.i);DA.play().catch(()=>{})}});
+document.getElementById("dlg-back").addEventListener("click",closeDlg);
+document.getElementById("units").addEventListener("click",e=>{const b=e.target.closest("[data-dlg]");if(b)openDlg(b.dataset.dlg,true)});
+if("mediaSession" in navigator){try{navigator.mediaSession.setActionHandler("previoustrack",()=>seekLine(dIdx-1));navigator.mediaSession.setActionHandler("nexttrack",()=>seekLine(dIdx+1))}catch(e){}}
 /* ---------- views: home · unit · flashcards ---------- */
 const mB=document.getElementById("m-book"),mF=document.getElementById("m-fc");
 const HOME=document.getElementById("home"),UV=document.getElementById("uview"),FC=document.getElementById("fc"),HDR=document.querySelector("header");
@@ -898,6 +1011,7 @@ const TABS=[...document.querySelectorAll(".utab")];
 function save2(v){try{localStorage.setItem("ttvp-view",JSON.stringify(v))}catch(e){}}
 function topOf(el){return el.getBoundingClientRect().top+window.scrollY}
 function show(view){
+ DSEC.hidden=true;
  HOME.hidden=view!=="home";UV.hidden=view!=="unit";FC.hidden=view!=="fc";HDR.hidden=view!=="home";
  mB.classList.toggle("on",view!=="fc");mF.classList.toggle("on",view==="fc");
 }
@@ -950,7 +1064,8 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 // restore last view
 (function(){let v=null;try{v=JSON.parse(localStorage.getItem("ttvp-view")||"null")}catch(e){}
  const i=v&&v.u?U.findIndex(u=>u.n===v.u):-1;
- if(v&&v.v==="unit"&&i>=0)openUnit(i);else if(v&&v.v==="fc")goFC(v.u&&v.u!=="all"?v.u:null);else show("home");
+ if(v&&v.v==="dlg"&&i>=0){openUnit(i);restoreDlg=()=>{if(DLG[v.u])openDlg(v.u,false);restoreDlg=null}}
+ else if(v&&v.v==="unit"&&i>=0)openUnit(i);else if(v&&v.v==="fc")goFC(v.u&&v.u!=="all"?v.u:null);else show("home");
 })();
 paintMarks();
 /* offline */
