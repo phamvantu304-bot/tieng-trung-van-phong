@@ -1,5 +1,5 @@
 // Offline cache. Tăng VERSION mỗi khi cập nhật nội dung để iPhone tải bản mới.
-const VERSION = "ttvp-v8";
+const VERSION = "ttvp-v10";
 const CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
@@ -26,7 +26,7 @@ self.addEventListener("fetch", e => {
     return;
   }
   // Dữ liệu hội thoại: luôn lấy bản mới khi có mạng, mất mạng thì dùng bản đã lưu.
-  if (url.origin === location.origin && url.pathname.endsWith(".json")) {
+  if (url.origin === location.origin && (url.pathname.endsWith(".json") || url.pathname.endsWith("version.txt"))) {
     e.respondWith(fetch(req.url, { cache: "no-cache" }).then(r => {
       const copy = r.clone(); caches.open(VERSION).then(c => c.put(req, copy)); return r;
     }).catch(() => caches.match(req)));

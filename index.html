@@ -442,7 +442,7 @@ details.list{display:none}
  </section>
  </div>
 <details class="src-note"><summary>Nguồn từ vựng</summary><p>Từ vựng được lọc từ 8 cuốn giáo trình <b class="han">博雅汉语</b> (初级 → 高级) và sắp theo 16 Unit của khung HanTalk. Mỗi từ ghi <i>tên cuốn · số trang PDF</i> để tra lại sách. Những từ thương mại mà Boya không có được đánh dấu <i>Bổ sung chuyên ngành</i>. Câu ví dụ được viết mới theo ngữ cảnh văn phòng.</p></details>
- <p class="foot">Pinyin có dấu thanh; 贵公司 = quý công ty, 我方/贵方 = bên tôi/quý bên. Giá, số lượng trong ví dụ là số minh hoạ.</p>
+ <p class="foot"><span id="appver"></span> · Pinyin có dấu thanh; 贵公司 = quý công ty, 我方/贵方 = bên tôi/quý bên. Giá, số lượng trong ví dụ là số minh hoạ.</p>
 </div>
 
 <script>
@@ -1019,7 +1019,7 @@ fcC.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDef
 document.getElementById("fc-flip").addEventListener("click",()=>{if(cur<deck.length){flipped=!flipped;drawCard()}});
 document.getElementById("fc-yes").addEventListener("click",()=>next(true));
 document.getElementById("fc-no").addEventListener("click",()=>next(false));
-fcU.addEventListener("change",()=>{if(fcU.value!=="set"){const o=fcU.querySelector('option[value="set"]');if(o)o.remove();FCSET=null}buildDeck();save2({v:"fc",u:fcU.value==="set"?(FCSET&&FCSET.u):fcU.value})});fcM.addEventListener("change",buildDeck);
+fcU.addEventListener("change",()=>{if(fcU.value!=="set"){const o=fcU.querySelector('option[value="set"]');if(o){o.remove();fcM.value="new"}FCSET=null}buildDeck();save2({v:"fc",u:fcU.value==="set"?(FCSET&&FCSET.u):fcU.value})});fcM.addEventListener("change",buildDeck);
 /* ---------- dialogue player (audio + synced subtitles) ---------- */
 let DLG={}, dU=null, dIdx=-1;
 const DA=document.getElementById("dlg-audio"), DSEC=document.getElementById("dlg");
@@ -1191,7 +1191,7 @@ PB.addEventListener("click",e=>{
 });
 document.getElementById("pxhome").addEventListener("click",e=>{const t=e.target.closest("[data-px]");if(t)startPx(t.dataset.px,document.getElementById("px-scope").value)});
 document.getElementById("px-back").addEventListener("click",()=>goHome());
-mP.addEventListener("click",()=>{goHome();setTimeout(()=>document.getElementById("pxhome").scrollIntoView({block:"start"}),30)});
+mP.addEventListener("click",()=>{goHome();mB.classList.remove("on");mP.classList.add("on");setTimeout(()=>{const t=document.getElementById("pxhome");window.scrollTo(0,t.getBoundingClientRect().top+window.scrollY-70)},30)});
 /* ---------- views: home · unit · flashcards ---------- */
 const mB=document.getElementById("m-book"),mF=document.getElementById("m-fc");
 const HOME=document.getElementById("home"),UV=document.getElementById("uview"),FC=document.getElementById("fc"),HDR=document.querySelector("header");
@@ -1231,7 +1231,7 @@ function goHome(){show("home");window.scrollTo(0,0);save2({v:"home"})}
 function goFC(un){
  let o=fcU.querySelector('option[value="set"]');
  if(un==="set"&&FCSET){if(!o){o=document.createElement("option");o.value="set";fcU.prepend(o)}o.textContent=`Unit ${FCSET.u} · Mục: ${FCSET.lab}`;fcM.value="all"}
- else if(o&&un)o.remove();
+ else if(o&&un){o.remove();fcM.value="new";FCSET=null}
  if(un)fcU.value=un;show("fc");buildDeck();window.scrollTo(0,0);save2({v:"fc",u:fcU.value==="set"?(FCSET&&FCSET.u):fcU.value});
 }
 document.getElementById("ulist").addEventListener("click",e=>{const b=e.target.closest("[data-open]");if(b)openUnit(U.findIndex(u=>u.n===b.dataset.open))});
@@ -1267,6 +1267,22 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
  else if(v&&v.v==="unit"&&i>=0)openUnit(i);else if(v&&v.v==="fc")goFC(v.u&&v.u!=="all"?v.u:null);else show("home");
 })();
 paintMarks();
+/* auto-update: compare with version.txt each time the app opens or comes back */
+const APP_VERSION="10";
+function checkUpdate(){
+ if(location.protocol!=="https:")return;
+ fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
+  v=v.trim();if(!v||v===APP_VERSION)return;
+  let tried="";try{tried=sessionStorage.getItem("ttvp-upd")||""}catch(e){}
+  if(tried===v)return;
+  try{sessionStorage.setItem("ttvp-upd",v)}catch(e){}
+  const go=()=>location.reload();
+  if(navigator.serviceWorker)navigator.serviceWorker.getRegistration().then(r=>r?r.update():null).then(go,go);else go();
+ }).catch(()=>{});
+}
+checkUpdate();
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")checkUpdate()});
+document.getElementById("appver").textContent="Phiên bản "+APP_VERSION;
 /* offline */
 if("serviceWorker" in navigator&&location.protocol==="https:"){navigator.serviceWorker.register("sw.js").catch(()=>{})}
 </script>
