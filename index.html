@@ -364,6 +364,14 @@ details.list{display:none}
 .pbtns button{border:1.5px solid var(--rule);background:var(--paper);border-radius:12px;padding:13px;font-size:15px;font-weight:700;cursor:pointer}
 .pbtns button.pri{background:var(--red);border-color:var(--red);color:var(--paper)}
 .pempty{padding:30px 10px;text-align:center;color:var(--muted)}
+#home.only-px>:not(#pxhome){display:none!important}
+#home:not(.only-px) #pxhome{display:none}
+.pxscopes{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:6px}
+.pxs{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;border:1.5px solid var(--rule);background:var(--paper);border-radius:10px;padding:8px 10px;cursor:pointer}
+.pxs b{font-size:14px}
+.pxs span{font-size:11px;color:var(--muted)}
+.pxs.on{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.pxs.on span{color:var(--paper);opacity:.8}
 .foot{font-size:12px;color:var(--muted);border-top:1px solid var(--rule);padding-top:12px;margin:0}
 :focus-visible{outline:2px solid var(--red);outline-offset:2px}
 </style>
@@ -384,7 +392,7 @@ details.list{display:none}
   <p class="fc-tip">Chạm vào thẻ để lật · “Chưa nhớ” đưa từ vào nhóm Từ khó · tiến độ lưu ngay trên điện thoại</p>
  </section>
  <section id="px" hidden>
-  <div class="px-top"><button id="px-back">‹ Trang đầu</button><span id="px-title"></span><span id="px-score"></span></div>
+  <div class="px-top"><button id="px-back">‹ Luyện tập</button><span id="px-title"></span><span id="px-score"></span></div>
   <div class="px-bar"><i id="px-fill"></i></div>
   <div id="px-body"></div>
  </section>
@@ -414,7 +422,8 @@ details.list{display:none}
   <div class="srch"><input type="search" id="q" placeholder="Tìm nhanh một từ: chữ Hán, pinyin hoặc tiếng Việt…" aria-label="Tìm từ vựng"><div id="results"></div></div>
   <button class="allplay" id="allplay" hidden>▶ Nghe hội thoại cả khoá · 16 bài liên tục</button>
   <section class="pxhome" id="pxhome">
-   <div class="home-h"><h2>Luyện tập</h2><select id="px-scope" aria-label="Chọn phạm vi luyện tập"></select></div>
+   <div class="home-h"><h2>Luyện tập</h2><span class="count">Chọn phạm vi, rồi chọn dạng bài</span></div>
+   <select id="px-scope" hidden aria-hidden="true"></select><div class="pxscopes" id="px-scopes" role="radiogroup" aria-label="Phạm vi luyện tập"></div>
    <div class="pxtiles">
     <button class="pxt main" data-px="mix"><b>Luyện nhanh</b><span>Trộn tất cả dạng bài · 10 câu</span></button>
     <button class="pxt" data-px="mean"><b>汉字 → nghĩa</b><span>Nhìn chữ, chọn nghĩa</span></button>
@@ -1090,7 +1099,8 @@ function pxPool(scope){
  const seen=new Set(),p=[];
  ALLW.forEach(x=>{if(seen.has(x.w[0]))return;
   if(scope==="hard"&&!ST.h[x.w[0]])return; if(scope==="new"&&ST.k[x.w[0]])return;
-  if(!["all","hard","new"].includes(scope)&&x.u!==scope)return;
+  if(/^p\d$/.test(scope)){const u=U.find(y=>y.n===x.u);if(!u||"p"+u.p!==scope)return}
+  else if(!["all","hard","new"].includes(scope)&&x.u!==scope)return;
   seen.add(x.w[0]);p.push(x)});
  return p;
 }
@@ -1115,9 +1125,13 @@ function record(hz,ok){
 function fillScope(){
  const s=document.getElementById("px-scope"),v=s.value||"all";
  const nh=pxPool("hard").length,nn=pxPool("new").length;
- s.innerHTML=`<option value="all">Cả khoá · 16 bài</option><option value="new">Từ chưa thuộc (${nn})</option><option value="hard">Từ khó (${nh})</option>`+U.map(u=>`<option value="${u.n}">Unit ${u.n} · ${esc(u.vi)}</option>`).join("");
+ s.innerHTML=`<option value="all">Cả khoá · trộn 16 bài (${pxPool("all").length} từ)</option>`+PARTS.map((p,pi)=>{const us=U.filter(u=>u.p===pi).map(u=>u.n);return `<option value="p${pi}">${esc(p.vi.split(" · ")[0])} · Unit ${us[0]}–${us.at(-1)} (${pxPool("p"+pi).length} từ)</option>`}).join("")+`<option value="new">Từ chưa thuộc (${nn})</option><option value="hard">Từ khó (${nh})</option>`;
  s.value=[...s.options].some(o=>o.value===v)?v:"all";
+ const lab={all:"Cả khoá",p0:"Phần 1",p1:"Phần 2",p2:"Phần 3",p3:"Phần 4",new:"Chưa thuộc",hard:"Từ khó"};
+ document.getElementById("px-scopes").innerHTML=[...s.options].map(o=>{const n=(o.textContent.match(/\((\d+)/)||[])[1]||"";const sub=o.value.startsWith("p")?o.textContent.split(" · ")[1].split(" (")[0]:"";
+  return `<button class="pxs${o.value===s.value?" on":""}" role="radio" aria-checked="${o.value===s.value}" data-scope="${o.value}"><b>${lab[o.value]}</b><span>${sub?sub+" · ":""}${n} từ</span></button>`}).join("");
 }
+document.getElementById("px-scopes").addEventListener("click",e=>{const b=e.target.closest("[data-scope]");if(!b)return;document.getElementById("px-scope").value=b.dataset.scope;document.querySelectorAll(".pxs").forEach(x=>{const on=x===b;x.classList.toggle("on",on);x.setAttribute("aria-checked",on)})});
 function openPx(){show("px");window.scrollTo(0,0)}
 function startPx(type,scope,words){
  const pool=words||pxPool(scope);
@@ -1162,10 +1176,10 @@ function pxEnd(score,total,msg){
  const ws=[...new Map(PX.wrong.map(x=>[x.w[0],x])).values()];
  PB.innerHTML=`<div class="pend"><div class="sc">${score}/${total}</div><div class="msg">${msg||(pct===100?"Tuyệt vời! Bạn trả lời đúng hết.":pct>=70?"Tốt lắm! Ôn thêm vài từ sai bên dưới nhé.":"Cố lên! Luyện lại các từ sai để nhớ lâu hơn.")}</div>
   ${ws.length?`<div class="pwrong">${ws.map(x=>`<div><span class="han">${x.w[0]}</span><span class="p">${esc(x.w[1])}</span><span>${esc(x.w[2])}</span></div>`).join("")}</div>`:""}
-  <div class="pbtns">${ws.length?`<button class="pri" id="p-redo">Luyện lại ${ws.length} từ sai</button>`:""}<button class="${ws.length?"":"pri"}" id="p-again">Luyện tiếp</button><button id="p-home">Về trang đầu</button></div></div>`;
+  <div class="pbtns">${ws.length?`<button class="pri" id="p-redo">Luyện lại ${ws.length} từ sai</button>`:""}<button class="${ws.length?"":"pri"}" id="p-again">Luyện tiếp</button><button id="p-home">Chọn dạng bài khác</button></div></div>`;
  if(ws.length)document.getElementById("p-redo").onclick=()=>startPx(PX.type==="match"?"mix":PX.type,PX.scope,ws);
  document.getElementById("p-again").onclick=()=>startPx(PX.type,PX.scope);
- document.getElementById("p-home").onclick=goHome;
+ document.getElementById("p-home").onclick=()=>goHome(true);
 }
 function matchRender(){
  const ws=PX.rounds[PX.r];PX.sel=null;PX.left=ws.length;
@@ -1190,8 +1204,8 @@ PB.addEventListener("click",e=>{
  const m=e.target.closest(".pm");if(m)matchTap(m);
 });
 document.getElementById("pxhome").addEventListener("click",e=>{const t=e.target.closest("[data-px]");if(t)startPx(t.dataset.px,document.getElementById("px-scope").value)});
-document.getElementById("px-back").addEventListener("click",()=>goHome());
-mP.addEventListener("click",()=>{goHome();mB.classList.remove("on");mP.classList.add("on");setTimeout(()=>{const t=document.getElementById("pxhome");window.scrollTo(0,t.getBoundingClientRect().top+window.scrollY-70)},30)});
+document.getElementById("px-back").addEventListener("click",()=>goHome(true));
+mP.addEventListener("click",()=>goHome(true));
 /* ---------- views: home · unit · flashcards ---------- */
 const mB=document.getElementById("m-book"),mF=document.getElementById("m-fc");
 const HOME=document.getElementById("home"),UV=document.getElementById("uview"),FC=document.getElementById("fc"),HDR=document.querySelector("header");
@@ -1227,7 +1241,7 @@ function openUnit(i,dir,hz){
  else window.scrollTo(0,0);
  save2({v:"unit",u:U[i].n});
 }
-function goHome(){show("home");window.scrollTo(0,0);save2({v:"home"})}
+function goHome(px){px=px===true;show("home");HOME.classList.toggle("only-px",px);if(px){mB.classList.remove("on");mP.classList.add("on")}window.scrollTo(0,0);save2({v:px?"pxhome":"home"})}
 function goFC(un){
  let o=fcU.querySelector('option[value="set"]');
  if(un==="set"&&FCSET){if(!o){o=document.createElement("option");o.value="set";fcU.prepend(o)}o.textContent=`Unit ${FCSET.u} · Mục: ${FCSET.lab}`;fcM.value="all"}
@@ -1236,12 +1250,12 @@ function goFC(un){
 }
 document.getElementById("ulist").addEventListener("click",e=>{const b=e.target.closest("[data-open]");if(b)openUnit(U.findIndex(u=>u.n===b.dataset.open))});
 document.getElementById("utabs").addEventListener("click",e=>{const b=e.target.closest(".utab");if(b){const i=TABS.indexOf(b);openUnit(i,i>cu?1:i<cu?-1:0)}});
-document.getElementById("u-home").addEventListener("click",goHome);
+document.getElementById("u-home").addEventListener("click",()=>goHome());
 document.getElementById("u-prev").addEventListener("click",()=>openUnit(cu-1,-1));
 document.getElementById("u-next").addEventListener("click",()=>openUnit(cu+1,1));
 document.getElementById("units").addEventListener("click",e=>{const b=e.target.closest("[data-study]");if(b)goFC(b.dataset.study)});
 document.getElementById("map").addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;e.preventDefault();const id=(a.getAttribute("href")||"").slice(1);const i=U.findIndex(u=>uid(u)===id);if(i>=0)openUnit(i)});
-mB.addEventListener("click",()=>{if(!UV.hidden||FC.hidden&&HOME.hidden)goHome();else if(!FC.hidden){openUnit(cu)}else goHome()});
+mB.addEventListener("click",()=>goHome());
 mF.addEventListener("click",()=>goFC(UV.hidden?null:U[cu].n));
 // swipe between units
 (function(){
@@ -1264,11 +1278,11 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 (function(){let v=null;try{v=JSON.parse(localStorage.getItem("ttvp-view")||"null")}catch(e){}
  const i=v&&v.u?U.findIndex(u=>u.n===v.u):-1;
  if(v&&v.v==="dlg"&&i>=0){openUnit(i);restoreDlg=()=>{if(DLG[v.u])openDlg(v.u,false);restoreDlg=null}}
- else if(v&&v.v==="unit"&&i>=0)openUnit(i);else if(v&&v.v==="fc")goFC(v.u&&v.u!=="all"?v.u:null);else show("home");
+ else if(v&&v.v==="unit"&&i>=0)openUnit(i);else if(v&&v.v==="fc")goFC(v.u&&v.u!=="all"?v.u:null);else if(v&&v.v==="pxhome")goHome(true);else show("home");
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="10";
+const APP_VERSION="11";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
