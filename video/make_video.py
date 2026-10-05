@@ -1,18 +1,31 @@
 #!/usr/bin/env python3
-"""Ghép hội thoại 16 unit thành một video dọc (9:16) kiểu phụ đề song ngữ.
+"""Làm video hội thoại dọc (9:16) kiểu phụ đề song ngữ cho 16 unit.
 
 Mỗi câu hiện 3 dòng: chữ Hán · pinyin · tiếng Việt, chạy khớp theo mốc thời gian
-trong audio/dialogues.json. Trước mỗi unit có thẻ tiêu đề ngắn.
+trong audio/dialogues.json.
+
+  python3 video/make_video.py          -> video/unit1.mp4 … unit16.mp4 (dùng trong app,
+                                          thời gian khớp đúng file audio gốc)
+  python3 video/make_video.py --full   -> video/out/hoi-thoai-16-unit.mp4 (ghép cả khoá,
+                                          có thẻ tiêu đề trước mỗi unit) + .srt
+
+Ảnh nhân vật (tuỳ chọn) đặt trong video/scenes/, tỉ lệ ngang 16:9:
+  u6.jpg      ảnh cảnh chung của unit 6
+  u6_A.jpg    ảnh người A đang nói (unit 6);  u6_B.jpg  người B
+  A_Vương Lan.jpg / B_Trương.jpg   ảnh dùng chung cho mọi unit có nhân vật đó
+Có ảnh người nói thì khi người đó nói sẽ cắt sang ảnh của họ (như phim);
+không có thì dùng ảnh cảnh chung; không có nữa thì vẽ khung cảnh đơn giản.
 
 Cần: ffmpeg, pip install pillow pypinyin
-Chạy:  python3 video/make_video.py [thư_mục_ra]   (mặc định: video/out)
 """
-import json, math, os, random, re, subprocess, sys
+import json, math, os, random, re, shutil, subprocess, sys
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from pypinyin import Style, pinyin
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.path.join(ROOT, "video", "out")
+FULL = "--full" in sys.argv
+OUT = os.path.join(ROOT, "video", "out") if FULL else os.path.join(ROOT, "video")
+SCENES = os.path.join(ROOT, "video", "scenes")
 W, H = 720, 1280
 INTRO = 3.0      # giây thẻ tiêu đề mỗi unit
 TAIL = 1.0       # nghỉ sau mỗi unit
@@ -196,13 +209,43 @@ def base_frame(n, d, accent):
     return img
 
 
+def load_photo(*names):
+    for nm in names:
+        for ext in (".jpg", ".jpeg", ".png", ".webp"):
+            fp = os.path.join(SCENES, nm + ext)
+            if os.path.exists(fp):
+                im = Image.open(fp).convert("RGBA")
+                k = max(W / im.width, BAND_H / im.height)
+                im = im.resize((math.ceil(im.width * k), math.ceil(im.height * k)), Image.LANCZOS)
+                l, t = (im.width - W) // 2, (im.height - BAND_H) // 2
+                return im.crop((l, t, l + W, t + BAND_H))
+    return None
+
+
+def photo_for(n, d, who):
+    if who:
+        name = d["roles"][who].split(" · ")[0].split(" ", 1)[-1]
+        ph = load_photo(f"u{n}_{who}", f"{who}_{name}")
+        if ph:
+            return ph
+    return load_photo(f"u{n}")
+
+
 def frame(n, d, idx, accent, bg):
     img = base_frame(n, d, accent)
-    band = bg.copy()
     who = d["lines"][idx]["who"] if idx is not None else None
-    TABLE[0] = bg.crop((0, 330, W, BAND_H))
-    avatar(band, 190, 150, surname_char(d["roles"]["A"]), d["roles"]["A"], accent, who == "A")
-    avatar(band, W - 190, 150, surname_char(d["roles"]["B"]), d["roles"]["B"], accent, who == "B")
+    photo = photo_for(n, d, who)
+    if photo:
+        band = photo
+        if who:  # nhãn tên người đang nói
+            bd = ImageDraw.Draw(band)
+            bd.text((20, 20), d["roles"][who].split(" · ")[0], font=F(SANS_B, 20), fill=hexrgb(accent),
+                    anchor="lt", stroke_width=3, stroke_fill=(0, 0, 0, 255))
+    else:
+        band = bg.copy()
+        TABLE[0] = bg.crop((0, 330, W, BAND_H))
+        avatar(band, 190, 150, surname_char(d["roles"]["A"]), d["roles"]["A"], accent, who == "A")
+        avatar(band, W - 190, 150, surname_char(d["roles"]["B"]), d["roles"]["B"], accent, who == "B")
     if idx is not None:  # phụ đề nhỏ trên ảnh như bản gốc
         bd = ImageDraw.Draw(band)
         f = F(ZH, 18)
@@ -306,10 +349,12 @@ def main():
         ms = int(round(s * 1000))
         return f"{ms // 3600000:02}:{ms // 60000 % 60:02}:{ms // 1000 % 60:02},{ms % 1000:03}"
 
-    p = os.path.join(tmp, "cover.png")
-    cover().convert("RGB").save(p)
-    seg_video("u00", [(p, 3.0)], total=3.0)
-    t0 += 3.0
+    intro, tail = (INTRO, TAIL) if FULL else (0.0, 0.0)
+    if FULL:
+        p = os.path.join(tmp, "cover.png")
+        cover().convert("RGB").save(p)
+        seg_video("u00", [(p, 3.0)], total=3.0)
+        t0 += 3.0
 
     for n in sorted(data, key=int):
         d = data[n]
@@ -319,26 +364,34 @@ def main():
         audio = os.path.join(ROOT, d["file"])
         adur = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration",
                                               "-of", "csv=p=0", audio]).decode())
-        total = INTRO + adur + TAIL
+        total = intro + adur + tail
         bg = scene_bg(n, accent)
         frames = []
-        p = os.path.join(tmp, f"u{n}_title.png")
-        title_card(n, d, accent).convert("RGB").save(p)
-        frames.append((p, INTRO))
+        if FULL:
+            p = os.path.join(tmp, f"u{n}_title.png")
+            title_card(n, d, accent).convert("RGB").save(p)
+            frames.append((p, intro))
         first = d["lines"][0]["t"]
         if first > 0.05:
             p = os.path.join(tmp, f"u{n}_pre.png")
             frame(n, d, None, accent, bg).convert("RGB").save(p)
             frames.append((p, first))
         for i, ln in enumerate(d["lines"]):
-            end = d["lines"][i + 1]["t"] if i + 1 < len(d["lines"]) else adur + TAIL
+            end = d["lines"][i + 1]["t"] if i + 1 < len(d["lines"]) else adur + tail
             p = os.path.join(tmp, f"u{n}_{i:02}.png")
             frame(n, d, i, accent, bg).convert("RGB").save(p)
             frames.append((p, end - ln["t"]))
-            srt.append((t0 + INTRO + ln["t"], t0 + INTRO + min(end, adur), f"{ln['zh']}\n{ln['py']}\n{ln['vi']}"))
-        seg_video(f"u{int(n):02}", frames, audio, INTRO, total)
+            srt.append((t0 + intro + ln["t"], t0 + intro + min(end, adur), f"{ln['zh']}\n{ln['py']}\n{ln['vi']}"))
+        seg_video(f"u{int(n):02}", frames, audio, intro, total)
         t0 += total
+        if not FULL:
+            dst = os.path.join(OUT, f"unit{n}.mp4")
+            run(["ffmpeg", "-y", "-i", parts[-1], "-c", "copy", "-movflags", "+faststart", dst])
         print(f"Unit {n} xong ({total:.1f}s)", flush=True)
+
+    if not FULL:
+        shutil.rmtree(tmp)
+        return
 
     lst = os.path.join(tmp, "all.txt")
     with open(lst, "w") as f:

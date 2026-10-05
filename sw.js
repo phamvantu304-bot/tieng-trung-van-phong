@@ -1,5 +1,5 @@
 // Offline cache. Tăng VERSION mỗi khi cập nhật nội dung để iPhone tải bản mới.
-const VERSION = "ttvp-v13";
+const VERSION = "ttvp-v14";
 const CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
@@ -16,8 +16,8 @@ self.addEventListener("fetch", e => {
   const req = e.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
-  // Âm thanh: để trình duyệt tự tải (hỗ trợ tua, phát nền khi khoá máy).
-  if (url.pathname.includes("/audio/") && url.pathname.endsWith(".m4a")) return;
+  // Âm thanh/video: để trình duyệt tự tải (hỗ trợ tua, phát nền khi khoá máy).
+  if (/\/(audio|video)\//.test(url.pathname) && /\.(m4a|mp4)$/.test(url.pathname)) return;
   // Trang chính: lấy bản mới khi có mạng, mất mạng thì dùng bản đã lưu.
   if (req.mode === "navigate") {
     e.respondWith(fetch(req.url, { cache: "no-cache" }).then(r => {

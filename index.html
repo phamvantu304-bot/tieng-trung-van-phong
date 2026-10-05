@@ -272,6 +272,10 @@ details.list{display:none}
 #dlg-back{border:0;background:none;color:var(--red);font-weight:700;font-size:14px;padding:6px 0;cursor:pointer}
 #dlg-title{font-weight:700;font-size:15px}
 .dlg-stage{background:var(--pp);border-radius:14px;padding:22px 16px 20px;min-height:340px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;box-shadow:inset 0 0 40px rgba(120,90,40,.08)}
+.dlg-video{display:block;width:100%;max-width:calc(60vh*9/16);aspect-ratio:9/16;background:#000;border-radius:10px;cursor:pointer}
+#dlg:not(.vid) .dlg-video{display:none}
+#dlg.vid #dlg-who,#dlg.vid .dlg-zh,#dlg.vid .dlg-vi{display:none}
+#dlg.vid .dlg-stage{padding-top:14px}
 .dlg-who{font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .dlg-zh{font-size:clamp(26px,7.4vw,38px);line-height:1.35;color:var(--pink);text-wrap:balance;text-shadow:0 1px 0 rgba(255,255,255,.4)}
 .dlg-vi span{background:var(--hl);padding:3px 8px;border-radius:3px;font-size:15.5px;font-weight:500;line-height:1.7;-webkit-box-decoration-break:clone;box-decoration-break:clone}
@@ -416,6 +420,7 @@ details.list{display:none}
  <section id="dlg" hidden>
   <div class="dlg-top"><button id="dlg-back">‹ Về bài học</button><span id="dlg-title"></span></div>
   <div class="dlg-stage">
+   <video id="dlg-audio" class="dlg-video" preload="metadata" playsinline></video>
    <div class="dlg-who" id="dlg-who"></div>
    <div class="dlg-zh han" id="dlg-zh"></div>
    <div class="dlg-vi"><span id="dlg-vi"></span></div>
@@ -432,7 +437,6 @@ details.list{display:none}
   </div>
   <p class="dlg-scene" id="dlg-scene"></p>
   <ol class="dlg-list" id="dlg-list"></ol>
-  <audio id="dlg-audio" preload="metadata" playsinline></audio>
  </section>
  <div id="book">
  <section id="home">
@@ -1056,7 +1060,7 @@ document.getElementById("fc-flip").addEventListener("click",()=>{if(cur<deck.len
 document.getElementById("fc-yes").addEventListener("click",()=>next(true));
 document.getElementById("fc-no").addEventListener("click",()=>next(false));
 fcU.addEventListener("change",()=>{if(fcU.value!=="set"){const o=fcU.querySelector('option[value="set"]');if(o){o.remove();fcM.value="new"}FCSET=null}buildDeck();save2({v:"fc",u:fcU.value==="set"?(FCSET&&FCSET.u):fcU.value})});fcM.addEventListener("change",buildDeck);
-/* ---------- dialogue player (audio + synced subtitles) ---------- */
+/* ---------- dialogue player (video/audio + synced subtitles) ---------- */
 let DLG={}, dU=null, dIdx=-1;
 const DA=document.getElementById("dlg-audio"), DSEC=document.getElementById("dlg");
 fetch("audio/dialogues.json",{cache:"no-cache"}).then(r=>r.ok?r.json():{}).then(j=>{DLG=j||{};
@@ -1085,7 +1089,7 @@ function dlgRender(i){
 function lineAt(t){const ls=DLG[dU].lines;let i=0;for(let j=0;j<ls.length;j++)if(t>=ls[j].t-0.05)i=j;return i}
 function openDlg(n,autoplay){
  const d=DLG[n];if(!d)return;
- if(dU!==n){dU=n;dIdx=-1;DA.src=d.file;
+ if(dU!==n){dU=n;dIdx=-1;DA.src=d.video||d.file;DSEC.classList.toggle("vid",!!d.video);
   document.getElementById("dlg-title").textContent=`Unit ${n} · Hội thoại`;
   document.getElementById("dlg-scene").textContent=d.scene;
   document.getElementById("dlg-list").innerHTML=d.lines.map((L,j)=>`<li class="${L.who}" data-i="${j}"><span class="r">${L.who}</span><span class="t"><span class="han">${L.zh}</span><span class="v">${esc(L.vi)}</span></span></li>`).join("");
@@ -1107,7 +1111,9 @@ DA.addEventListener("ended",()=>{document.getElementById("dlg-play").textContent
 document.getElementById("dlg-all").addEventListener("click",()=>setAuto(!AUTO));
 document.getElementById("allplay").addEventListener("click",()=>{setAuto(true);const k=Object.keys(DLG).sort((a,b)=>a-b)[0];if(k)openDlg(k,true)});
 const seekLine=i=>{const ls=DLG[dU].lines;i=Math.max(0,Math.min(ls.length-1,i));DA.currentTime=ls[i].t;dIdx=-1;dlgRender(i)};
-document.getElementById("dlg-play").addEventListener("click",()=>{DA.paused?DA.play().catch(()=>{}):DA.pause()});
+const dlgToggle=()=>{DA.paused?DA.play().catch(()=>{}):DA.pause()};
+document.getElementById("dlg-play").addEventListener("click",dlgToggle);
+DA.addEventListener("click",dlgToggle);
 document.getElementById("dlg-prev").addEventListener("click",()=>seekLine(dIdx-(DA.currentTime-DLG[dU].lines[dIdx].t>1.5?0:1)));
 document.getElementById("dlg-next").addEventListener("click",()=>seekLine(dIdx+1));
 document.getElementById("dlg-loop").addEventListener("click",e=>{DA.loop=!DA.loop;e.currentTarget.setAttribute("aria-pressed",DA.loop);if(DA.loop)setAuto(false)});
@@ -1314,7 +1320,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="13";
+const APP_VERSION="14";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
