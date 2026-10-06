@@ -377,6 +377,9 @@ details.list{display:none}
 .popts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .popt{border:1.5px solid var(--rule);background:var(--paper);border-radius:12px;padding:14px 10px;min-height:60px;font-size:15px;font-weight:600;cursor:pointer;line-height:1.3}
 .popt.han{font-family:var(--han);font-size:24px;font-weight:700}
+.opy{display:block;font-family:var(--body);font-size:13px;font-weight:500;color:var(--muted);margin-top:3px;line-height:1.35}
+.popt.ok .opy,.popt.bad .opy{color:inherit}
+.opy .han{font-family:var(--han);font-size:16px;font-weight:700}
 .popt.ok{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
 .popt.bad{background:var(--red-soft);border-color:var(--red);color:var(--red)}
 .popt:disabled{cursor:default}
@@ -1363,14 +1366,17 @@ function qRender(){
  if(q.type==="han")top=`<span class="ask">Chọn chữ Hán đúng</span><div class="bigvi">${esc(w[2])}</div>`;
  if(q.type==="listen")top=`<span class="ask">Nghe và chọn từ đúng</span><button class="ear" data-say="${w[0]}" aria-label="Nghe lại">▶</button><span class="sub">Chạm để nghe lại</span>`;
  if(q.type==="fill")top=`<span class="ask">Chọn từ điền vào chỗ trống</span><div class="sent">${w[3].replace(w[0],"<u>？</u>")}</div><span class="sub">${esc(w[5])}</span>`;
- const lab=o=>q.type==="mean"?esc(o.w[2]):q.type==="py"?esc(o.w[1]):o.w[0];
+ const lab=o=>q.type==="mean"?esc(o.w[2]):q.type==="py"?esc(o.w[1]):`${o.w[0]}<span class="opy">${esc(o.w[1])}</span>`;
  const hanCls=["han","listen","fill"].includes(q.type)?" han":"";
  PB.innerHTML=`<div class="pq">${top}</div><div class="popts">${q.opts.map((o,j)=>`<button class="popt${hanCls}" data-o="${j}">${lab(o)}</button>`).join("")}</div><div id="pfb"></div>`;
  if(q.type==="listen")setTimeout(()=>speak(w[0]),250);
 }
 function qAnswer(j){
  const q=PX.qs[PX.i],w=q.x.w,ok=q.opts[j]===q.x;
- PB.querySelectorAll(".popt").forEach((b,k)=>{b.disabled=true;if(q.opts[k]===q.x)b.classList.add("ok");else if(k===j)b.classList.add("bad")});
+ PB.querySelectorAll(".popt").forEach((b,k)=>{b.disabled=true;if(q.opts[k]===q.x)b.classList.add("ok");else if(k===j)b.classList.add("bad");
+  const o=q.opts[k].w;// đáp án là nghĩa/pinyin: hiện thêm chữ Hán + pinyin sau khi chọn
+  if(q.type==="mean")b.insertAdjacentHTML("beforeend",`<span class="opy"><span class="han">${o[0]}</span> ${esc(o[1])}</span>`);
+  if(q.type==="py")b.insertAdjacentHTML("beforeend",`<span class="opy"><span class="han">${o[0]}</span> ${esc(o[2])}</span>`)});
  record(w[0],ok);if(ok)PX.ok++;else PX.wrong.push(q.x);
  speak(w[0]);
  const last=PX.i===PX.qs.length-1;
@@ -1395,7 +1401,7 @@ function matchRender(){
  const ws=PX.rounds[PX.r];PX.sel=null;PX.left=ws.length;
  pxBar(PX.r,PX.rounds.length);document.getElementById("px-score").textContent=`Lượt ${PX.r+1}/${PX.rounds.length} · sai ${PX.miss}`;
  PB.innerHTML=`<div class="pq" style="min-height:0;padding:12px"><span class="ask">Chạm một chữ Hán rồi chạm nghĩa của nó</span></div>
- <div class="pmatch"><div class="col">${shuf(ws).map(x=>`<button class="pm han" data-l="${x.w[0]}">${x.w[0]}</button>`).join("")}</div>
+ <div class="pmatch"><div class="col">${shuf(ws).map(x=>`<button class="pm han" data-l="${x.w[0]}">${x.w[0]}<span class="opy">${esc(x.w[1])}</span></button>`).join("")}</div>
  <div class="col">${shuf(ws).map(x=>`<button class="pm" data-r="${x.w[0]}">${esc(x.w[2])}</button>`).join("")}</div></div>`;
 }
 function matchTap(b){
@@ -1495,7 +1501,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="18";
+const APP_VERSION="19";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
