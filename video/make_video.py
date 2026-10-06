@@ -24,6 +24,11 @@ from pypinyin import Style, pinyin
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FULL = "--full" in sys.argv
+# từ mới của từng câu, lấy từ app (video/words.json, tạo bằng: node video/dump_words.js)
+try:
+    WORDS = json.load(open(os.path.join(ROOT, "video", "words.json"), encoding="utf-8"))
+except FileNotFoundError:
+    WORDS = {}
 OUT = os.path.join(ROOT, "video", "out") if FULL else os.path.join(ROOT, "video")
 SCENES = os.path.join(ROOT, "video", "scenes")
 W, H = 720, 1280
@@ -114,7 +119,7 @@ def wrap(draw, text, font, maxw, cjk=False):
 
 
 # ---------- khung cảnh (dải ảnh phía trên) ----------
-BAND_Y, BAND_H = 230, 405
+BAND_Y, BAND_H = 205, 405
 
 
 def scene_bg(unit, accent):
@@ -200,10 +205,10 @@ TABLE = [None]
 def base_frame(n, d, accent):
     img = Image.new("RGBA", (W, H), (0, 0, 0, 255))
     dr = ImageDraw.Draw(img)
-    dr.text((W / 2, 92), f"UNIT {n}", font=F(SANS_B, 22), fill=hexrgb(accent), anchor="mm")
-    dr.text((W / 2, 140), UNITS[n][0], font=F(ZH, 40), fill=(255, 255, 255, 255), anchor="mm",
+    dr.text((W / 2, 72), f"UNIT {n}", font=F(SANS_B, 22), fill=hexrgb(accent), anchor="mm")
+    dr.text((W / 2, 118), UNITS[n][0], font=F(ZH, 40), fill=(255, 255, 255, 255), anchor="mm",
             stroke_width=1, stroke_fill=(255, 255, 255, 255))
-    dr.text((W / 2, 188), d["title"], font=F(SERIF, 24), fill=(200, 200, 200, 255), anchor="mm")
+    dr.text((W / 2, 164), d["title"], font=F(SERIF, 24), fill=(200, 200, 200, 255), anchor="mm")
     dr.text((24, H - 40), "Tiếng Trung Văn phòng · Hội thoại 16 Unit", font=F(SANS, 16),
             fill=(110, 110, 110, 255), anchor="lm")
     return img
@@ -261,7 +266,7 @@ def frame(n, d, idx, accent, bg):
     if idx is None:
         return img
     ln = d["lines"][idx]
-    x, y, mw = 48, BAND_Y + BAND_H + 70, W - 96
+    x, y, mw = 48, BAND_Y + BAND_H + 60, W - 96
     who_name = d["roles"][ln["who"]].split(" · ")[0]
     dr.text((x, y), f"{who_name}:", font=F(SANS_B, 20), fill=hexrgb(accent), anchor="ls")
     y += 22
@@ -278,10 +283,79 @@ def frame(n, d, idx, accent, bg):
     for l in wrap(dr, ln["vi"], fv, mw):
         y += 38
         dr.text((x, y), l, font=fv, fill=(200, 200, 200, 255), anchor="ls")
+    words_box(dr, WORDS.get(n, [[]] * (idx + 1))[idx], y, accent)
     # tiến độ
     total = len(d["lines"])
     dr.text((W - 24, H - 40), f"{idx + 1}/{total}", font=F(SANS, 16), fill=(110, 110, 110, 255), anchor="rm")
     return img
+
+
+def words_box(dr, words, y_text, accent, small=False):
+    """Khung "Từ mới" ở cuối khung hình: chữ Hán · pinyin · nghĩa (giống mục Từ mới trong app).
+    Trả về số từ phải bỏ vì không đủ chỗ (thử lại cỡ chữ nhỏ trước khi bỏ)."""
+    if not words:
+        return 0
+    RH, LH = (34, 26) if small else (44, 32)
+    fh, fp, fm = (F(ZH, 25), F(SERIF, 20), F(SERIF, 20)) if small else (F(ZH, 30), F(SERIF, 24), F(SERIF, 24))
+    x0, x1 = 48, W - 48
+    rows = []
+    for hz, py, mn in words:
+        wh = dr.textlength(hz, font=fh)
+        head = f"/ {py} /:"
+        wp = dr.textlength(head, font=fp)
+        mx = x0 + 20 + wh + 14 + wp + 10
+        lines = wrap(dr, mn, fm, x1 - 20 - mx)
+        rows.append((hz, head, lines, wh, wp))
+    rh = [RH + LH * (len(r[2]) - 1) for r in rows]
+    pad = 54
+    box_h = pad + sum(rh) - 10
+    bottom = H - 66
+    top = max(y_text + 34, bottom - box_h)
+    if not small and top + pad + sum(rh) - 10 > bottom:
+        return words_box(dr, words, y_text, accent, small=True)
+    if small and len(words) > 1 and top + pad + sum(rh) - 10 > bottom:
+        return words_grid(dr, words, y_text, accent)
+    while rows and top + pad + sum(rh) - 10 > bottom:  # vẫn quá dài thì bỏ bớt từ cuối
+        rows.pop(); rh.pop()
+    box_h = pad + sum(rh) - 10
+    if not rows:
+        return len(words)
+    dr.rounded_rectangle([x0, top, x1, top + box_h], 14, fill=(28, 28, 30, 255), outline=hexrgb(accent, 120), width=2)
+    dr.rounded_rectangle([x0 + 16, top - 16, x0 + 150, top + 20], 8, fill=hexrgb(accent))
+    dr.text((x0 + 83, top + 2), "Từ mới", font=F(SANS_B, 20), fill=(20, 20, 20, 255), anchor="mm")
+    y = top + pad
+    for (hz, head, lines, wh, wp), h in zip(rows, rh):
+        dr.text((x0 + 20, y), hz, font=fh, fill=(255, 255, 255, 255), anchor="ls", stroke_width=1, stroke_fill=(255, 255, 255, 255))
+        dr.text((x0 + 20 + wh + 14, y), head, font=fp, fill=hexrgb(accent), anchor="ls")
+        mx = x0 + 20 + wh + 14 + wp + 10
+        for k, l in enumerate(lines):
+            dr.text((mx, y + LH * k), l, font=fm, fill=(215, 215, 215, 255), anchor="ls")
+        y += h
+    return len(words) - len(rows)
+
+
+def words_grid(dr, words, y_text, accent):
+    """Câu quá dài: xếp từ mới thành 2 cột (chữ Hán + pinyin, nghĩa ở dòng dưới)."""
+    fh, fp, fm = F(ZH, 25), F(SERIF, 19), F(SERIF, 19)
+    x0, x1 = 48, W - 48
+    cw = (x1 - x0 - 40) / 2
+    nrow = (len(words) + 1) // 2
+    pad, RH = 54, 50
+    box_h = pad + nrow * RH - 18
+    top = H - 66 - box_h
+    dr.rounded_rectangle([x0, top, x1, top + box_h], 14, fill=(28, 28, 30, 255), outline=hexrgb(accent, 120), width=2)
+    dr.rounded_rectangle([x0 + 16, top - 16, x0 + 150, top + 20], 8, fill=hexrgb(accent))
+    dr.text((x0 + 83, top + 2), "Từ mới", font=F(SANS_B, 20), fill=(20, 20, 20, 255), anchor="mm")
+    for k, (hz, py, mn) in enumerate(words):
+        x = x0 + 20 + (k % 2) * (cw + 10)
+        y = top + pad - 8 + (k // 2) * RH
+        dr.text((x, y), hz, font=fh, fill=(255, 255, 255, 255), anchor="ls", stroke_width=1, stroke_fill=(255, 255, 255, 255))
+        dr.text((x + dr.textlength(hz, font=fh) + 10, y), f"/ {py} /", font=fp, fill=hexrgb(accent), anchor="ls")
+        t = mn
+        while dr.textlength(t, font=fm) > cw - 10 and len(t) > 3:
+            t = t[:-2].rstrip() + "…"
+        dr.text((x, y + 24), t, font=fm, fill=(215, 215, 215, 255), anchor="ls")
+    return 0
 
 
 def title_card(n, d, accent):

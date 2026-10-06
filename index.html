@@ -272,8 +272,14 @@ details.list{display:none}
 #dlg-back{border:0;background:none;color:var(--red);font-weight:700;font-size:14px;padding:6px 0;cursor:pointer}
 #dlg-title{font-weight:700;font-size:15px}
 .dlg-stage{background:var(--pp);border-radius:14px;padding:22px 16px 20px;min-height:340px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;box-shadow:inset 0 0 40px rgba(120,90,40,.08)}
-.dlg-video{display:block;width:100%;max-width:calc(60vh*9/16);aspect-ratio:9/16;background:#000;border-radius:10px;cursor:pointer}
-#dlg:not(.vid) .dlg-video{display:none}
+.dlg-vwrap{position:relative;width:100%;max-width:calc(60vh*9/16)}
+.dlg-video{display:block;width:100%;aspect-ratio:9/16;background:#000;border-radius:10px;cursor:pointer}
+#dlg:not(.vid) .dlg-vwrap{display:none}
+.dlg-fs{position:absolute;right:8px;bottom:8px;width:42px;height:42px;display:grid;place-items:center;border:0;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;cursor:pointer}
+.dlg-fs .fs-out,.dlg-vwrap.fs .dlg-fs .fs-in{display:none}
+.dlg-vwrap.fs .dlg-fs .fs-out{display:inline}
+.dlg-vwrap.fs{max-width:none;background:#000;display:flex;align-items:center;justify-content:center}
+.dlg-vwrap.fs .dlg-video{width:auto;height:100%;max-width:100%;border-radius:0}
 #dlg.vid #dlg-who,#dlg.vid .dlg-zh,#dlg.vid .dlg-vi{display:none}
 #dlg.vid .dlg-stage{padding-top:14px}
 .dlg-who{font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
@@ -286,6 +292,37 @@ details.list{display:none}
 .dw .han{font-size:22px;color:var(--pink)}
 .dw .p{font-weight:700;font-size:14px}
 .dw .m{font-size:14px}
+.dwi{display:flex;flex-direction:column;gap:6px}
+.dwr{display:flex;gap:6px;align-items:stretch}
+.dwr .dw{flex:1}
+.dw-x{flex:none;border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:4px;padding:0 10px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+.dwi.open .dw-x{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.dmap{background:var(--paper);border:1px solid var(--rule);border-radius:8px;padding:12px 10px;display:flex;flex-direction:column;gap:10px;text-align:left}
+.mm{display:flex;align-items:center;overflow-x:auto;padding-bottom:2px}
+.mm-node{flex:none;border:2px solid var(--red);border-radius:10px;padding:6px 9px;background:var(--pp);display:flex;flex-direction:column;align-items:center;line-height:1.25}
+.mm-node .han{font-size:24px;color:var(--pink)}
+.mm-node .py{font-size:12px;color:var(--muted)}
+.mm-node .hv{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em}
+.mm-node .mn{font-size:12px;max-width:110px;text-align:center}
+.mm-root{border-color:var(--ink)}
+.mm-root .han{font-size:28px}
+.mm-kids{display:flex;flex-direction:column;position:relative;padding-left:24px}
+.mm-kids::before{content:"";position:absolute;left:0;top:50%;width:12px;border-top:2px solid var(--rule)}
+.mm-kid{display:flex;align-items:center;position:relative;padding:4px 0}
+.mm-kid::before{content:"";position:absolute;left:-12px;top:50%;width:12px;border-top:2px solid var(--rule)}
+.mm-kid::after{content:"";position:absolute;left:-12px;top:0;bottom:0;border-left:2px solid var(--rule)}
+.mm-kid:first-child::after{top:50%}
+.mm-kid:last-child::after{bottom:50%}
+.mm-kid:only-child::after{display:none}
+.mm-part{flex:0 1 auto;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 5px;border:2px solid transparent;border-radius:14px;padding:2px 9px 2px 6px;background:var(--pp2);font-size:12.5px;line-height:1.35;max-width:150px}
+.mm-part .han{font-size:18px;color:var(--pink)}
+.mm-part.s{border-color:var(--p2);border-width:2px}
+.mm-part.p{border:2px dashed var(--muted)}
+.mm-part b{font-weight:800}
+.mm-notes{display:flex;flex-direction:column;gap:6px;font-size:13.5px;line-height:1.5}
+.mm-notes .han{color:var(--pink);font-size:16px}
+.mm-word{background:var(--hl);border-radius:4px;padding:4px 8px}
+.mm-key{font-size:11.5px;color:var(--muted)}
 .dlg-none{font-size:13px;color:var(--muted)}
 .dlg-bar{height:4px;background:var(--row);border-radius:2px;overflow:hidden}
 .dlg-bar i{display:block;height:100%;width:0;background:var(--red)}
@@ -420,7 +457,7 @@ details.list{display:none}
  <section id="dlg" hidden>
   <div class="dlg-top"><button id="dlg-back">‹ Về bài học</button><span id="dlg-title"></span></div>
   <div class="dlg-stage">
-   <video id="dlg-audio" class="dlg-video" preload="metadata" playsinline></video>
+   <div class="dlg-vwrap" id="dlg-vwrap"><video id="dlg-audio" class="dlg-video" preload="metadata" playsinline></video><button id="dlg-fs" class="dlg-fs" aria-label="Xem toàn màn hình" title="Toàn màn hình"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path class="fs-in" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/><path class="fs-out" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button></div>
    <div class="dlg-who" id="dlg-who"></div>
    <div class="dlg-zh han" id="dlg-zh"></div>
    <div class="dlg-vi"><span id="dlg-vi"></span></div>
@@ -1082,10 +1119,28 @@ function dlgRender(i){
  document.getElementById("dlg-zh").textContent=L.zh;
  document.getElementById("dlg-vi").textContent=L.vi;
  const ws=wordsIn(L.zh,dU);
- document.getElementById("dlg-words").innerHTML=ws.length?ws.map(w=>`<button class="dw" data-say="${w[0]}"><span class="han">${w[0]}</span><span class="p py">/ ${esc(w[1])} /:</span><span class="m mn">${esc(w[2])}</span></button>`).join(""):`<span class="dlg-none">Câu này không có từ mới của bài.</span>`;
+ document.getElementById("dlg-words").innerHTML=ws.length?ws.map(w=>{const o=MOPEN.has(w[0]);return `<div class="dwi${o?" open":""}"><div class="dwr"><button class="dw" data-say="${w[0]}"><span class="han">${w[0]}</span><span class="p py">/ ${esc(w[1])} /:</span><span class="m mn">${esc(w[2])}</span></button><button class="dw-x" data-map="${w[0]}" aria-expanded="${o}" title="Sơ đồ bộ thủ và mẹo nhớ">Bộ thủ ${o?"▴":"▾"}</button></div>${o?mapHtml(w):""}</div>`}).join(""):`<span class="dlg-none">Câu này không có từ mới của bài.</span>`;
  document.querySelectorAll("#dlg-list li").forEach((li,j)=>li.classList.toggle("on",j===i));
- const on=document.querySelector("#dlg-list li.on");if(on&&!DA.paused)on.scrollIntoView({block:"nearest"});
+ const on=document.querySelector("#dlg-list li.on");if(on&&!DA.paused&&!DSEC.classList.contains("vid"))on.scrollIntoView({block:"nearest"});
 }
+/* sơ đồ bộ thủ + mẹo nhớ cho từ mới (dữ liệu: hanzi.json) */
+let HZ=null,HZP=null;const MOPEN=new Set();
+const loadHZ=()=>HZP||(HZP=fetch("hanzi.json").then(r=>r.ok?r.json():null).then(j=>(HZ=j)).catch(()=>{HZP=null;return null}));
+function mapHtml(w){
+ if(!HZ)return `<div class="dmap"><span class="mm-key">Đang tải…</span></div>`;
+ const cs=[...w[0]].filter(c=>HZ[c]);if(!cs.length)return "";
+ const kid=c=>{const h=HZ[c];const parts=h.parts.length?`<div class="mm-kids">${h.parts.map(p=>`<div class="mm-kid"><span class="mm-part${p[0]===h.s?" s":p[0]===h.p?" p":""}"><span class="han">${p[0]}</span>${p[1]?`<b>${esc(p[1])}</b>`:""}${p[2]?` ${esc(p[2])}`:""}</span></div>`).join("")}</div>`:"";
+  return `<div class="mm-kid"><div class="mm-node"><span class="han">${c}</span><span class="py">${esc(h.py)}</span><span class="hv">${esc(h.hv)}</span>${h.m!==h.hv?`<span class="mn">${esc(h.m)}</span>`:""}</div>${parts}</div>`};
+ const hv=cs.map(c=>HZ[c].hv).join(" ");
+ const anyS=cs.some(c=>HZ[c].s);
+ return `<div class="dmap"><div class="mm"><div class="mm-node mm-root"><span class="han">${w[0]}</span><span class="py">${esc(w[1])}</span><span class="hv">${esc(hv)}</span></div><div class="mm-kids">${cs.map(kid).join("")}</div></div>
+ ${anyS?`<span class="mm-key">Viền đậm: bộ cho nghĩa · viền đứt: phần cho âm</span>`:""}
+ <div class="mm-notes">${cs.map(c=>`<div><span class="han">${c}</span> <b>${esc(HZ[c].hv)}</b>: ${esc(HZ[c].note)}</div>`).join("")}
+ <div class="mm-word">Mẹo nhớ cả từ: <span class="han">${w[0]}</span> = ${cs.map(c=>`${c} <b>${esc(HZ[c].hv)}</b>${HZ[c].m!==HZ[c].hv?` (${esc(HZ[c].m)})`:""}`).join(" + ")} → Hán Việt «${esc(hv)}» → ${esc(w[2])}</div></div></div>`;
+}
+document.getElementById("dlg-words").addEventListener("click",e=>{const b=e.target.closest("[data-map]");if(!b)return;
+ const k=b.dataset.map;MOPEN.has(k)?MOPEN.delete(k):MOPEN.add(k);
+ const redraw=()=>{const i=dIdx;dIdx=-1;dlgRender(i)};redraw();if(!HZ)loadHZ().then(redraw)});
 function lineAt(t){const ls=DLG[dU].lines;let i=0;for(let j=0;j<ls.length;j++)if(t>=ls[j].t-0.05)i=j;return i}
 function openDlg(n,autoplay){
  const d=DLG[n];if(!d)return;
@@ -1100,7 +1155,7 @@ function openDlg(n,autoplay){
  dlgRender(0);window.scrollTo(0,0);save2({v:"dlg",u:n});
  if(autoplay)DA.play().catch(()=>{});
 }
-function closeDlg(){DA.pause();DSEC.hidden=true;const i=U.findIndex(u=>u.n===dU);openUnit(i>=0?i:cu)}
+function closeDlg(){if(fsEl&&fsEl())(document.exitFullscreen||document.webkitExitFullscreen).call(document);DA.pause();DSEC.hidden=true;const i=U.findIndex(u=>u.n===dU);openUnit(i>=0?i:cu)}
 DA.addEventListener("timeupdate",()=>{if(!dU)return;dlgRender(lineAt(DA.currentTime));if(DA.duration)document.getElementById("dlg-fill").style.width=(100*DA.currentTime/DA.duration)+"%"});
 DA.addEventListener("play",()=>{document.getElementById("dlg-play").textContent="❚❚"});
 DA.addEventListener("pause",()=>{document.getElementById("dlg-play").textContent="▶"});
@@ -1114,6 +1169,16 @@ const seekLine=i=>{const ls=DLG[dU].lines;i=Math.max(0,Math.min(ls.length-1,i));
 const dlgToggle=()=>{DA.paused?DA.play().catch(()=>{}):DA.pause()};
 document.getElementById("dlg-play").addEventListener("click",dlgToggle);
 DA.addEventListener("click",dlgToggle);
+// toàn màn hình: bật cho khung video (giữ nút thoát); iPhone chỉ cho phép trình phát video gốc
+const VW=document.getElementById("dlg-vwrap");
+const fsEl=()=>document.fullscreenElement||document.webkitFullscreenElement;
+document.getElementById("dlg-fs").addEventListener("click",()=>{
+ if(fsEl()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return}
+ const req=VW.requestFullscreen||VW.webkitRequestFullscreen;
+ if(req&&(document.fullscreenEnabled||document.webkitFullscreenEnabled))Promise.resolve(req.call(VW)).catch(()=>{});
+ else if(DA.webkitEnterFullscreen)DA.webkitEnterFullscreen();
+});
+["fullscreenchange","webkitfullscreenchange"].forEach(ev=>document.addEventListener(ev,()=>VW.classList.toggle("fs",fsEl()===VW)));
 document.getElementById("dlg-prev").addEventListener("click",()=>seekLine(dIdx-(DA.currentTime-DLG[dU].lines[dIdx].t>1.5?0:1)));
 document.getElementById("dlg-next").addEventListener("click",()=>seekLine(dIdx+1));
 document.getElementById("dlg-loop").addEventListener("click",e=>{DA.loop=!DA.loop;e.currentTarget.setAttribute("aria-pressed",DA.loop);if(DA.loop)setAuto(false)});
@@ -1320,7 +1385,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="14";
+const APP_VERSION="16";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
