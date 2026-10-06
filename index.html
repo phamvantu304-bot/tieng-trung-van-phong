@@ -373,6 +373,8 @@ details.list{display:none}
 .pq .sent{font-family:var(--han);font-size:22px;line-height:1.5}
 .pq .sent u{text-decoration:none;border-bottom:2px solid var(--red);padding:0 10px;color:var(--red)}
 .pq .sub{font-size:14px;color:var(--muted)}
+.pq .spy{font-size:14.5px;color:var(--ink);opacity:.8;line-height:1.5}
+.pq .spy u{text-decoration:none;border-bottom:2px solid var(--red);padding:0 10px}
 .pq .ear{width:84px;height:84px;border-radius:50%;border:0;background:var(--red);color:var(--paper);font-size:30px;cursor:pointer}
 .popts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .popt{border:1.5px solid var(--rule);background:var(--paper);border-radius:12px;padding:14px 10px;min-height:60px;font-size:15px;font-weight:600;cursor:pointer;line-height:1.3}
@@ -390,6 +392,7 @@ details.list{display:none}
 .pfb .w .han{font-size:24px;font-weight:700}
 .pfb .ex{font-family:var(--han);font-size:16px}
 .pfb .exv{font-size:13px;color:var(--muted)}
+.pfb .expy{font-size:13.5px}
 #px-body{display:flex;flex-direction:column;gap:12px}
 .pnext{width:100%;border:0;border-radius:12px;background:var(--ink);color:var(--paper);font-size:16px;font-weight:700;padding:15px;cursor:pointer}
 .pmatch{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -1365,11 +1368,20 @@ function qRender(){
  if(q.type==="py")top=`<span class="ask">Chọn pinyin đúng</span><div class="big">${w[0]}</div>`;
  if(q.type==="han")top=`<span class="ask">Chọn chữ Hán đúng</span><div class="bigvi">${esc(w[2])}</div>`;
  if(q.type==="listen")top=`<span class="ask">Nghe và chọn từ đúng</span><button class="ear" data-say="${w[0]}" aria-label="Nghe lại">▶</button><span class="sub">Chạm để nghe lại</span>`;
- if(q.type==="fill")top=`<span class="ask">Chọn từ điền vào chỗ trống</span><div class="sent">${w[3].replace(w[0],"<u>？</u>")}</div><span class="sub">${esc(w[5])}</span>`;
+ if(q.type==="fill")top=`<span class="ask">Chọn từ điền vào chỗ trống</span><div class="sent">${w[3].replace(w[0],"<u>？</u>")}</div><span class="spy">${pyBlank(w[4],w[1])}</span><span class="sub">${esc(w[5])}</span>`;
  const lab=o=>q.type==="mean"?esc(o.w[2]):q.type==="py"?esc(o.w[1]):`${o.w[0]}<span class="opy">${esc(o.w[1])}</span>`;
  const hanCls=["han","listen","fill"].includes(q.type)?" han":"";
  PB.innerHTML=`<div class="pq">${top}</div><div class="popts">${q.opts.map((o,j)=>`<button class="popt${hanCls}" data-o="${j}">${lab(o)}</button>`).join("")}</div><div id="pfb"></div>`;
  if(q.type==="listen")setTimeout(()=>speak(w[0]),250);
+}
+// pinyin câu ví dụ, che phần pinyin của từ cần điền (không phân biệt hoa thường, khoảng trắng, dấu nháy)
+function pyBlank(sent,py){
+ const norm=c=>c.toLowerCase().replace(/[\s'’]/g,"");
+ const target=norm(py);if(!target)return esc(sent);
+ for(let i=0;i<sent.length;i++){if(/[\s'’]/.test(sent[i]))continue;let k=i,acc="";
+  while(k<sent.length&&acc.length<target.length){acc+=norm(sent[k]);k++}
+  if(acc===target&&(i===0||/[^a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü]/i.test(sent[i-1])))return esc(sent.slice(0,i))+"<u>？</u>"+esc(sent.slice(k))}
+ return esc(sent);
 }
 function qAnswer(j){
  const q=PX.qs[PX.i],w=q.x.w,ok=q.opts[j]===q.x;
@@ -1382,7 +1394,7 @@ function qAnswer(j){
  const last=PX.i===PX.qs.length-1;
  document.getElementById("pfb").outerHTML=`<div class="pfb${ok?"":" bad"}"><span class="r">${ok?"Đúng rồi!":"Chưa đúng"}</span>
   <div class="w"><span class="han">${w[0]}</span><b class="py">${esc(w[1])}</b><span class="mn">${esc(w[2])}</span><button class="act" data-say="${w[0]}">▶</button></div>
-  <div class="ex">${w[3]}</div><div class="exv">${esc(w[5])}</div></div><button class="pnext" id="pnext">${last?"Xem kết quả":"Tiếp tục"}</button>`;
+  <div class="ex">${w[3]}</div><div class="expy">${esc(w[4])}</div><div class="exv">${esc(w[5])}</div></div><button class="pnext" id="pnext">${last?"Xem kết quả":"Tiếp tục"}</button>`;
  document.getElementById("px-score").textContent=`Câu ${PX.i+1}/${PX.qs.length} · ✓${PX.ok}`;
  document.getElementById("pnext").scrollIntoView({block:"nearest",behavior:"smooth"});
 }
@@ -1501,7 +1513,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="19";
+const APP_VERSION="20";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
