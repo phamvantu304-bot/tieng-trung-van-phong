@@ -22,6 +22,7 @@
  --p2:#3A5391; --p2-soft:#E6EBF6;
  --p3:#A8661A; --p3-soft:#F7ECDD;
  --p4:#9A3D6B; --p4-soft:#F5E3EC;
+ --p5:#1F6F8B; --p5-soft:#DFEEF3;
  --shadow:0 18px 40px -18px rgba(30,40,40,.35);
  --ok:#2E7A55; --ok-soft:#DDEFE3;
  --han:"Noto Serif SC","Songti SC","SimSun",serif;
@@ -30,11 +31,11 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
  color-scheme:dark;--ground:#141918;--paper:#1D2322;--ink:#E8ECEA;--muted:#9AA7A3;--rule:#3A4442;--row:#232A29;
  --red:#E4685A;--red-soft:#3A2522;--p1:#5FB89E;--p1-soft:#1E332D;--p2:#8BA2E0;--p2-soft:#232B40;
- --p3:#DDA05A;--p3-soft:#3A2E1E;--p4:#D883AE;--p4-soft:#3A2330;--shadow:0 18px 40px -18px rgba(0,0,0,.7);--ok:#6CC596;--ok-soft:#1D3327;}}
+ --p3:#DDA05A;--p3-soft:#3A2E1E;--p4:#D883AE;--p4-soft:#3A2330;--p5:#6FB7CF;--p5-soft:#1C3038;--shadow:0 18px 40px -18px rgba(0,0,0,.7);--ok:#6CC596;--ok-soft:#1D3327;}}
 :root[data-theme="dark"]{
  color-scheme:dark;--ground:#141918;--paper:#1D2322;--ink:#E8ECEA;--muted:#9AA7A3;--rule:#3A4442;--row:#232A29;
  --red:#E4685A;--red-soft:#3A2522;--p1:#5FB89E;--p1-soft:#1E332D;--p2:#8BA2E0;--p2-soft:#232B40;
- --p3:#DDA05A;--p3-soft:#3A2E1E;--p4:#D883AE;--p4-soft:#3A2330;--shadow:0 18px 40px -18px rgba(0,0,0,.7);--ok:#6CC596;--ok-soft:#1D3327;}
+ --p3:#DDA05A;--p3-soft:#3A2E1E;--p4:#D883AE;--p4-soft:#3A2330;--p5:#6FB7CF;--p5-soft:#1C3038;--shadow:0 18px 40px -18px rgba(0,0,0,.7);--ok:#6CC596;--ok-soft:#1D3327;}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
@@ -481,7 +482,7 @@ details.list{display:none}
  <div id="book">
  <section id="home">
   <div class="srch"><input type="search" id="q" placeholder="Tìm nhanh một từ: chữ Hán, pinyin hoặc tiếng Việt…" aria-label="Tìm từ vựng"><div id="results"></div></div>
-  <button class="allplay" id="allplay" hidden>▶ Nghe hội thoại cả khoá · 16 bài liên tục</button>
+  <button class="allplay" id="allplay" hidden>▶ Nghe hội thoại cả khoá · 20 bài liên tục</button>
   <section class="pxhome" id="pxhome">
    <div class="home-h"><h2>Luyện tập</h2><span class="count">Chọn phạm vi, rồi chọn dạng bài</span></div>
    <select id="px-scope" hidden aria-hidden="true"></select><div class="pxscopes" id="px-scopes" role="radiogroup" aria-label="Phạm vi luyện tập"></div>
@@ -498,7 +499,7 @@ details.list{display:none}
   </section>
   <div class="home-h"><h2>Chọn bài để học</h2><span class="count" id="count" hidden></span></div>
   <div id="ulist"></div>
-  <details class="ovw"><summary>Xem sơ đồ tư duy toàn khoá</summary><div class="map-wrap"><svg id="map" role="img" aria-label="Sơ đồ tư duy 4 phần và 16 bài"></svg></div></details>
+  <details class="ovw"><summary>Xem sơ đồ tư duy toàn khoá</summary><div class="map-wrap"><svg id="map" role="img" aria-label="Sơ đồ tư duy 5 phần và 20 bài"></svg></div></details>
  </section>
  <section id="uview" hidden>
   <div class="ubar"><button id="u-home" aria-label="Về trang đầu">‹ Các bài</button><div class="utabs" id="utabs" role="tablist"></div></div>
@@ -512,7 +513,7 @@ details.list{display:none}
   <div class="pager"><button id="u-prev">‹ Bài trước</button><button id="u-next">Bài sau ›</button></div>
  </section>
  </div>
-<details class="src-note"><summary>Nguồn từ vựng</summary><p>Từ vựng được lọc từ 8 cuốn giáo trình <b class="han">博雅汉语</b> (初级 → 高级) và sắp theo 16 Unit của khung HanTalk. Mỗi từ ghi <i>tên cuốn · số trang PDF</i> để tra lại sách. Những từ thương mại mà Boya không có được đánh dấu <i>Bổ sung chuyên ngành</i>. Câu ví dụ được viết mới theo ngữ cảnh văn phòng.</p></details>
+<details class="src-note"><summary>Nguồn từ vựng</summary><p>Từ vựng được lọc từ 8 cuốn giáo trình <b class="han">博雅汉语</b> (初级 → 高级) và sắp theo 16 Unit của khung HanTalk. Phần 5 (Bất động sản, Unit 17–20) là phần bổ sung: từ vựng, mẫu câu và hội thoại được soạn riêng theo ngữ cảnh môi giới – mua bán – cho thuê nhà ở Việt Nam. Mỗi từ ghi <i>tên cuốn · số trang PDF</i> để tra lại sách. Những từ thương mại mà Boya không có được đánh dấu <i>Bổ sung chuyên ngành</i>. Câu ví dụ được viết mới theo ngữ cảnh văn phòng.</p></details>
  <p class="foot"><span id="appver"></span> · Pinyin có dấu thanh; 贵公司 = quý công ty, 我方/贵方 = bên tôi/quý bên. Giá, số lượng trong ví dụ là số minh hoạ.</p>
 </div>
 
@@ -521,7 +522,8 @@ const PARTS=[
  {k:"p1",han:"职场入门",py:"zhíchǎng rùmén",vi:"Phần 1 · Môi trường công sở"},
  {k:"p2",han:"国际商务谈判",py:"guójì shāngwù tánpàn",vi:"Phần 2 · Đàm phán thương mại"},
  {k:"p3",han:"制造与工厂",py:"zhìzào yǔ gōngchǎng",vi:"Phần 3 · Chế tạo & Nhà máy"},
- {k:"p4",han:"合同·物流·售后",py:"hétong · wùliú · shòuhòu",vi:"Phần 4 · Hợp đồng – Logistics – Hậu mãi"}
+ {k:"p4",han:"合同·物流·售后",py:"hétong · wùliú · shòuhòu",vi:"Phần 4 · Hợp đồng – Logistics – Hậu mãi"},
+ {k:"p5",han:"房地产",py:"fángdìchǎn",vi:"Phần 5 · Bất động sản"}
 ];
 // [hanzi, pinyin, nghĩa, ví dụ, pinyin ví dụ, dịch]
 const U=[
@@ -763,7 +765,97 @@ const U=[
  ["长期","chángqī","lâu dài","我们希望和贵公司建立长期的合作关系。","Wǒmen xīwàng hé guì gōngsī jiànlì chángqī de hézuò guānxi.","Chúng tôi mong xây dựng quan hệ hợp tác lâu dài với quý công ty."]],
  s:[["使用过程中有任何问题，请随时联系我们。","Shǐyòng guòchéng zhōng yǒu rènhé wèntí, qǐng suíshí liánxì wǒmen.","Trong quá trình sử dụng có vấn đề gì, xin cứ liên hệ chúng tôi."],
  ["感谢您一直以来的支持。","Gǎnxiè nín yìzhí yǐlái de zhīchí.","Cảm ơn sự ủng hộ của anh/chị trong suốt thời gian qua."],
- ["期待明年继续合作。","Qīdài míngnián jìxù hézuò.","Mong năm sau tiếp tục hợp tác."]]}
+ ["期待明年继续合作。","Qīdài míngnián jìxù hézuò.","Mong năm sau tiếp tục hợp tác."]]},
+{n:"17",p:4,han:"房地产市场与项目介绍",vi:"Thị trường BĐS & Giới thiệu dự án",
+ t:["Thị trường bất động sản", "Giới thiệu dự án: vị trí, tiện ích", "Loại hình: căn hộ, văn phòng, biệt thự"],
+ w:[
+ ["房地产", "fángdìchǎn", "bất động sản", "越南的房地产市场发展很快。", "Yuènán de fángdìchǎn shìchǎng fāzhǎn hěn kuài.", "Thị trường bất động sản Việt Nam phát triển rất nhanh."],
+ ["开发商", "kāifāshāng", "chủ đầu tư (nhà phát triển dự án)", "这个项目的开发商很有实力。", "Zhège xiàngmù de kāifāshāng hěn yǒu shílì.", "Chủ đầu tư dự án này rất có tiềm lực."],
+ ["项目", "xiàngmù", "dự án", "这个项目一共有三栋楼。", "Zhège xiàngmù yígòng yǒu sān dòng lóu.", "Dự án này có tổng cộng ba tòa nhà."],
+ ["楼盘", "lóupán", "dự án nhà ở đang mở bán", "这个楼盘离地铁站很近。", "Zhège lóupán lí dìtiězhàn hěn jìn.", "Dự án này rất gần ga tàu điện."],
+ ["地段", "dìduàn", "vị trí, khu vực", "这里地段很好，交通方便。", "Zhèlǐ dìduàn hěn hǎo, jiāotōng fāngbiàn.", "Vị trí ở đây rất đẹp, giao thông thuận tiện."],
+ ["公寓", "gōngyù", "căn hộ chung cư", "我想买一套两室一厅的公寓。", "Wǒ xiǎng mǎi yí tào liǎng shì yì tīng de gōngyù.", "Tôi muốn mua một căn hộ hai phòng ngủ, một phòng khách."],
+ ["写字楼", "xiězìlóu", "tòa nhà văn phòng", "我们公司在市中心租了一层写字楼。", "Wǒmen gōngsī zài shì zhōngxīn zū le yì céng xiězìlóu.", "Công ty chúng tôi thuê một tầng văn phòng ở trung tâm thành phố."],
+ ["别墅", "biéshù", "biệt thự", "这个小区还有几套别墅。", "Zhège xiǎoqū hái yǒu jǐ tào biéshù.", "Khu này còn vài căn biệt thự."],
+ ["小区", "xiǎoqū", "khu dân cư, khu đô thị", "小区里有游泳池和健身房。", "Xiǎoqū lǐ yǒu yóuyǒngchí hé jiànshēnfáng.", "Trong khu có bể bơi và phòng gym."],
+ ["配套设施", "pèitào shèshī", "tiện ích đi kèm", "周边的配套设施很齐全。", "Zhōubiān de pèitào shèshī hěn qíquán.", "Tiện ích xung quanh rất đầy đủ."],
+ ["面积", "miànjī", "diện tích", "这套房子的面积是八十平方米。", "Zhè tào fángzi de miànjī shì bāshí píngfāngmǐ.", "Diện tích căn nhà này là 80 mét vuông."],
+ ["户型", "hùxíng", "kiểu căn, thiết kế căn", "这个户型南北通透，采光很好。", "Zhège hùxíng nánběi tōngtòu, cǎiguāng hěn hǎo.", "Căn này thông thoáng hai hướng, lấy sáng rất tốt."],
+ ["现房", "xiànfáng", "nhà có sẵn (đã xây xong)", "这是现房，下个月就可以入住。", "Zhè shì xiànfáng, xià ge yuè jiù kěyǐ rùzhù.", "Đây là nhà có sẵn, tháng sau có thể dọn vào ở."],
+ ["期房", "qīfáng", "nhà hình thành trong tương lai", "期房的价格比现房便宜一些。", "Qīfáng de jiàgé bǐ xiànfáng piányi yìxiē.", "Nhà hình thành trong tương lai rẻ hơn nhà có sẵn một chút."],
+ ["房价", "fángjià", "giá nhà", "最近这个区的房价涨了不少。", "Zuìjìn zhège qū de fángjià zhǎng le bù shǎo.", "Gần đây giá nhà ở quận này tăng khá nhiều."],
+ ["投资", "tóuzī", "đầu tư", "很多外国人来越南投资房地产。", "Hěn duō wàiguórén lái Yuènán tóuzī fángdìchǎn.", "Nhiều người nước ngoài đến Việt Nam đầu tư bất động sản."]],
+ s:[["这个项目位于市中心，交通非常便利。", "Zhège xiàngmù wèiyú shì zhōngxīn, jiāotōng fēicháng biànlì.", "Dự án này nằm ở trung tâm thành phố, giao thông rất thuận tiện."],
+ ["周边有学校、医院和大型超市。", "Zhōubiān yǒu xuéxiào, yīyuàn hé dàxíng chāoshì.", "Xung quanh có trường học, bệnh viện và siêu thị lớn."],
+ ["预计明年年底交房。", "Yùjì míngnián niándǐ jiāofáng.", "Dự kiến cuối năm sau bàn giao nhà."],
+ ["这套房子很适合投资，也适合自住。", "Zhè tào fángzi hěn shìhé tóuzī, yě shìhé zìzhù.", "Căn này rất hợp để đầu tư, cũng hợp để ở."]]},
+{n:"18",p:4,han:"看房与租赁",vi:"Xem nhà & Thuê nhà",
+ t:["Hẹn đi xem nhà", "Hỏi giá thuê, tiền cọc, chi phí", "Điều kiện và hợp đồng thuê"],
+ w:[
+ ["看房", "kànfáng", "xem nhà", "我想约个时间看房。", "Wǒ xiǎng yuē ge shíjiān kànfáng.", "Tôi muốn hẹn thời gian đi xem nhà."],
+ ["中介", "zhōngjiè", "môi giới", "这套房子是通过中介找到的。", "Zhè tào fángzi shì tōngguò zhōngjiè zhǎodào de.", "Căn nhà này tìm được qua môi giới."],
+ ["房东", "fángdōng", "chủ nhà (cho thuê)", "房东同意每个月一号交房租。", "Fángdōng tóngyì měi ge yuè yī hào jiāo fángzū.", "Chủ nhà đồng ý ngày mùng 1 hằng tháng đóng tiền nhà."],
+ ["租客", "zūkè", "người thuê nhà", "租客要按时交房租。", "Zūkè yào ànshí jiāo fángzū.", "Người thuê phải đóng tiền nhà đúng hạn."],
+ ["出租", "chūzū", "cho thuê", "这套公寓正在出租。", "Zhè tào gōngyù zhèngzài chūzū.", "Căn hộ này đang cho thuê."],
+ ["租金", "zūjīn", "tiền thuê", "每月租金是一千五百万越南盾。", "Měi yuè zūjīn shì yìqiān wǔbǎi wàn Yuènándùn.", "Tiền thuê mỗi tháng là 15 triệu đồng."],
+ ["押金", "yājīn", "tiền cọc (thuê nhà)", "押金是两个月的租金。", "Yājīn shì liǎng ge yuè de zūjīn.", "Tiền cọc bằng hai tháng tiền thuê."],
+ ["租期", "zūqī", "thời hạn thuê", "租期最少一年。", "Zūqī zuì shǎo yì nián.", "Thời hạn thuê tối thiểu một năm."],
+ ["装修", "zhuāngxiū", "sửa sang, hoàn thiện nội thất", "房子刚装修好，很干净。", "Fángzi gāng zhuāngxiū hǎo, hěn gānjìng.", "Nhà vừa sửa sang xong, rất sạch sẽ."],
+ ["家具", "jiājù", "đồ nội thất", "房子里的家具都可以用。", "Fángzi lǐ de jiājù dōu kěyǐ yòng.", "Đồ nội thất trong nhà đều dùng được."],
+ ["家电", "jiādiàn", "đồ điện gia dụng", "空调、冰箱等家电都齐全。", "Kōngtiáo, bīngxiāng děng jiādiàn dōu qíquán.", "Điều hòa, tủ lạnh và các đồ điện đều đầy đủ."],
+ ["朝向", "cháoxiàng", "hướng nhà", "这套房子的朝向是坐北朝南。", "Zhè tào fángzi de cháoxiàng shì zuò běi cháo nán.", "Căn này hướng nam (lưng tựa hướng bắc)."],
+ ["楼层", "lóucéng", "tầng (của tòa nhà)", "您喜欢高楼层还是低楼层？", "Nín xǐhuan gāo lóucéng háishi dī lóucéng?", "Anh/chị thích tầng cao hay tầng thấp?"],
+ ["水电费", "shuǐdiànfèi", "tiền điện nước", "水电费由租客自己支付。", "Shuǐdiànfèi yóu zūkè zìjǐ zhīfù.", "Tiền điện nước do người thuê tự trả."],
+ ["物业费", "wùyèfèi", "phí quản lý tòa nhà", "物业费每平方米一万越南盾。", "Wùyèfèi měi píngfāngmǐ yíwàn Yuènándùn.", "Phí quản lý là 10 nghìn đồng mỗi mét vuông."],
+ ["退租", "tuìzū", "trả nhà, chấm dứt thuê", "如果提前退租，押金不退。", "Rúguǒ tíqián tuìzū, yājīn bú tuì.", "Nếu trả nhà trước hạn thì không hoàn tiền cọc."]],
+ s:[["请问这套房子还在出租吗？", "Qǐngwèn zhè tào fángzi hái zài chūzū ma?", "Xin hỏi căn nhà này còn cho thuê không?"],
+ ["租金包括物业费吗？", "Zūjīn bāokuò wùyèfèi ma?", "Tiền thuê đã bao gồm phí quản lý chưa?"],
+ ["押一付三。", "Yā yī fù sān.", "Cọc một tháng, trả trước ba tháng."],
+ ["我们什么时候可以签租房合同？", "Wǒmen shénme shíhou kěyǐ qiān zūfáng hétong?", "Khi nào chúng ta có thể ký hợp đồng thuê nhà?"]]},
+{n:"19",p:4,han:"买房与贷款",vi:"Mua nhà & Vay ngân hàng",
+ t:["Hỏi giá, mặc cả", "Đặt cọc, thanh toán theo đợt", "Vay ngân hàng, lãi suất, lợi nhuận"],
+ w:[
+ ["购房", "gòufáng", "mua nhà", "购房前要了解清楚相关政策。", "Gòufáng qián yào liǎojiě qīngchu xiāngguān zhèngcè.", "Trước khi mua nhà phải tìm hiểu rõ chính sách liên quan."],
+ ["单价", "dānjià", "đơn giá", "这个楼盘的单价是每平方米五千万越南盾。", "Zhège lóupán de dānjià shì měi píngfāngmǐ wǔqiān wàn Yuènándùn.", "Đơn giá dự án này là 50 triệu đồng mỗi mét vuông."],
+ ["总价", "zǒngjià", "tổng giá", "这套房子总价四十亿越南盾。", "Zhè tào fángzi zǒngjià sìshí yì Yuènándùn.", "Tổng giá căn này là 4 tỷ đồng."],
+ ["首付", "shǒufù", "tiền trả trước lần đầu", "首付至少要百分之三十。", "Shǒufù zhìshǎo yào bǎi fēn zhī sānshí.", "Trả trước tối thiểu 30%."],
+ ["定金", "dìngjīn", "tiền đặt cọc (giữ căn)", "您先交五千万定金就可以锁定这套房。", "Nín xiān jiāo wǔqiān wàn dìngjīn jiù kěyǐ suǒdìng zhè tào fáng.", "Anh/chị đặt cọc trước 50 triệu là giữ được căn này."],
+ ["分期付款", "fēnqī fùkuǎn", "thanh toán theo đợt, trả góp", "我们可以按工程进度分期付款。", "Wǒmen kěyǐ àn gōngchéng jìndù fēnqī fùkuǎn.", "Có thể thanh toán theo đợt theo tiến độ xây dựng."],
+ ["贷款", "dàikuǎn", "vay vốn, khoản vay", "我打算向银行贷款买房。", "Wǒ dǎsuan xiàng yínháng dàikuǎn mǎi fáng.", "Tôi định vay ngân hàng để mua nhà."],
+ ["利率", "lìlǜ", "lãi suất", "现在的贷款利率是多少？", "Xiànzài de dàikuǎn lìlǜ shì duōshao?", "Lãi suất vay hiện nay là bao nhiêu?"],
+ ["银行", "yínháng", "ngân hàng", "开发商和几家银行有合作。", "Kāifāshāng hé jǐ jiā yínháng yǒu hézuò.", "Chủ đầu tư có hợp tác với vài ngân hàng."],
+ ["一次性付款", "yícìxìng fùkuǎn", "thanh toán một lần", "一次性付款可以享受百分之五的优惠。", "Yícìxìng fùkuǎn kěyǐ xiǎngshòu bǎi fēn zhī wǔ de yōuhuì.", "Thanh toán một lần được ưu đãi 5%."],
+ ["砍价", "kǎnjià", "mặc cả, trả giá", "买房的时候可以跟业主砍价。", "Mǎi fáng de shíhou kěyǐ gēn yèzhǔ kǎnjià.", "Khi mua nhà có thể mặc cả với chủ nhà."],
+ ["业主", "yèzhǔ", "chủ sở hữu nhà", "业主急着卖房，价格可以再谈。", "Yèzhǔ jízhe mài fáng, jiàgé kěyǐ zài tán.", "Chủ nhà đang cần bán gấp, giá có thể bàn thêm."],
+ ["二手房", "èrshǒufáng", "nhà đã qua sử dụng", "二手房可以马上入住。", "Èrshǒufáng kěyǐ mǎshàng rùzhù.", "Nhà cũ có thể vào ở ngay."],
+ ["升值", "shēngzhí", "tăng giá trị", "这个地段以后还会升值。", "Zhège dìduàn yǐhòu hái huì shēngzhí.", "Khu vực này sau này còn tăng giá."],
+ ["回报率", "huíbàolǜ", "tỷ suất lợi nhuận", "出租的年回报率大约是百分之六。", "Chūzū de nián huíbàolǜ dàyuē shì bǎi fēn zhī liù.", "Tỷ suất lợi nhuận cho thuê mỗi năm khoảng 6%."]],
+ s:[["价格还能再便宜一点吗？", "Jiàgé hái néng zài piányi yìdiǎn ma?", "Giá còn bớt thêm chút nữa được không?"],
+ ["如果一次性付款，有什么优惠？", "Rúguǒ yícìxìng fùkuǎn, yǒu shénme yōuhuì?", "Nếu thanh toán một lần thì có ưu đãi gì?"],
+ ["贷款最长可以贷多少年？", "Dàikuǎn zuì cháng kěyǐ dài duōshao nián?", "Vay tối đa được bao nhiêu năm?"],
+ ["我需要考虑一下，再给您答复。", "Wǒ xūyào kǎolǜ yíxià, zài gěi nín dáfù.", "Tôi cần suy nghĩ thêm rồi trả lời anh/chị."]]},
+{n:"20",p:4,han:"交易手续与物业管理",vi:"Thủ tục pháp lý & Quản lý tòa nhà",
+ t:["Giấy tờ: sổ hồng, công chứng, sang tên", "Thuế phí và trách nhiệm các bên", "Bàn giao nhà, ban quản lý"],
+ w:[
+ ["产权", "chǎnquán", "quyền sở hữu", "外国人在越南购房有产权年限。", "Wàiguórén zài Yuènán gòufáng yǒu chǎnquán niánxiàn.", "Người nước ngoài mua nhà ở Việt Nam có thời hạn sở hữu."],
+ ["房产证", "fángchǎnzhèng", "giấy chứng nhận sở hữu nhà (sổ hồng)", "交房后半年内可以办好房产证。", "Jiāofáng hòu bàn nián nèi kěyǐ bànhǎo fángchǎnzhèng.", "Trong nửa năm sau bàn giao có thể làm xong sổ hồng."],
+ ["过户", "guòhù", "sang tên", "我们下周去办过户手续。", "Wǒmen xià zhōu qù bàn guòhù shǒuxù.", "Tuần sau chúng ta đi làm thủ tục sang tên."],
+ ["公证", "gōngzhèng", "công chứng", "买卖合同需要公证。", "Mǎimài hétong xūyào gōngzhèng.", "Hợp đồng mua bán cần công chứng."],
+ ["契税", "qìshuì", "thuế trước bạ", "契税由买方支付。", "Qìshuì yóu mǎifāng zhīfù.", "Thuế trước bạ do bên mua trả."],
+ ["律师", "lǜshī", "luật sư", "签合同前最好请律师看一下。", "Qiān hétong qián zuìhǎo qǐng lǜshī kàn yíxià.", "Trước khi ký hợp đồng tốt nhất nhờ luật sư xem qua."],
+ ["违约金", "wéiyuējīn", "tiền phạt vi phạm hợp đồng", "逾期交房，开发商要支付违约金。", "Yúqī jiāofáng, kāifāshāng yào zhīfù wéiyuējīn.", "Bàn giao trễ hạn thì chủ đầu tư phải trả tiền phạt."],
+ ["交房", "jiāofáng", "bàn giao nhà", "开发商承诺按时交房。", "Kāifāshāng chéngnuò ànshí jiāofáng.", "Chủ đầu tư cam kết bàn giao nhà đúng hạn."],
+ ["验房", "yànfáng", "kiểm tra nhà khi nhận", "交房时一定要仔细验房。", "Jiāofáng shí yídìng yào zǐxì yànfáng.", "Khi nhận nhà nhất định phải kiểm tra kỹ."],
+ ["物业", "wùyè", "ban quản lý tòa nhà", "有问题可以找物业解决。", "Yǒu wèntí kěyǐ zhǎo wùyè jiějué.", "Có vấn đề có thể tìm ban quản lý giải quyết."],
+ ["维修", "wéixiū", "sửa chữa", "卫生间漏水，请物业来维修。", "Wèishēngjiān lòushuǐ, qǐng wùyè lái wéixiū.", "Nhà vệ sinh bị rỉ nước, mời ban quản lý đến sửa."],
+ ["保安", "bǎo'ān", "bảo vệ", "小区二十四小时有保安。", "Xiǎoqū èrshísì xiǎoshí yǒu bǎo'ān.", "Khu có bảo vệ 24 giờ."],
+ ["停车位", "tíngchēwèi", "chỗ đỗ xe", "每套房配一个停车位。", "Měi tào fáng pèi yí ge tíngchēwèi.", "Mỗi căn kèm một chỗ đỗ xe."],
+ ["钥匙", "yàoshi", "chìa khóa", "这是大门的钥匙和门禁卡。", "Zhè shì dàmén de yàoshi hé ménjìnkǎ.", "Đây là chìa khóa cửa chính và thẻ ra vào."],
+ ["门禁卡", "ménjìnkǎ", "thẻ ra vào", "进出小区都要刷门禁卡。", "Jìnchū xiǎoqū dōu yào shuā ménjìnkǎ.", "Ra vào khu đều phải quẹt thẻ."]],
+ s:[["办理过户需要准备哪些材料？", "Bànlǐ guòhù xūyào zhǔnbèi nǎxiē cáiliào?", "Làm thủ tục sang tên cần chuẩn bị giấy tờ gì?"],
+ ["房产证什么时候能拿到？", "Fángchǎnzhèng shénme shíhou néng nádào?", "Khi nào nhận được sổ hồng?"],
+ ["请您签字确认交房。", "Qǐng nín qiānzì quèrèn jiāofáng.", "Mời anh/chị ký xác nhận nhận nhà."],
+ ["有任何问题请联系物业服务中心。", "Yǒu rènhé wèntí qǐng liánxì wùyè fúwù zhōngxīn.", "Có vấn đề gì xin liên hệ trung tâm dịch vụ của ban quản lý."]]}
 ];
 
 const EXTRA={"1": [["招聘", "zhāopìn", "tuyển dụng", "我们公司正在招聘销售人员。", "Wǒmen gōngsī zhèngzài zhāopìn xiāoshòu rényuán.", "Công ty chúng tôi đang tuyển nhân viên kinh doanh."], ["求职信", "qiúzhíxìn", "thư xin việc", "我在求职信里写了自己的工作经验。", "Wǒ zài qiúzhíxìn li xiě le zìjǐ de gōngzuò jīngyàn.", "Tôi đã viết kinh nghiệm làm việc của mình trong thư xin việc."], ["申请", "shēnqǐng", "nộp đơn, xin", "我想申请这个职位。", "Wǒ xiǎng shēnqǐng zhège zhíwèi.", "Tôi muốn nộp đơn cho vị trí này."], ["专业", "zhuānyè", "chuyên ngành", "你大学学的是什么专业？", "Nǐ dàxué xué de shì shénme zhuānyè?", "Đại học bạn học chuyên ngành gì?"], ["能力", "nénglì", "năng lực, khả năng", "这份工作需要很强的沟通能力。", "Zhè fèn gōngzuò xūyào hěn qiáng de gōutōng nénglì.", "Công việc này cần khả năng giao tiếp tốt."], ["性格", "xìnggé", "tính cách", "我性格开朗，喜欢和人打交道。", "Wǒ xìnggé kāilǎng, xǐhuan hé rén dǎ jiāodao.", "Tôi tính cách cởi mở, thích giao tiếp với mọi người."], ["责任心", "zérènxīn", "tinh thần trách nhiệm", "做这份工作一定要有责任心。", "Zuò zhè fèn gōngzuò yídìng yào yǒu zérènxīn.", "Làm công việc này nhất định phải có trách nhiệm."], ["待遇", "dàiyù", "đãi ngộ", "这家公司的待遇很好。", "Zhè jiā gōngsī de dàiyù hěn hǎo.", "Đãi ngộ của công ty này rất tốt."], ["前途", "qiántú", "tiền đồ, triển vọng", "这个行业很有前途。", "Zhège hángyè hěn yǒu qiántú.", "Ngành này rất có triển vọng."], ["录用", "lùyòng", "tuyển dụng, nhận vào làm", "恭喜您，您被我们公司录用了。", "Gōngxǐ nín, nín bèi wǒmen gōngsī lùyòng le.", "Chúc mừng, bạn đã được công ty chúng tôi nhận."]], "2–3": [["员工", "yuángōng", "nhân viên", "我们公司有三百多名员工。", "Wǒmen gōngsī yǒu sānbǎi duō míng yuángōng.", "Công ty chúng tôi có hơn 300 nhân viên."], ["秘书", "mìshū", "thư ký", "有事可以先找总经理的秘书。", "Yǒu shì kěyǐ xiān zhǎo zǒngjīnglǐ de mìshū.", "Có việc có thể tìm thư ký của tổng giám đốc trước."], ["总部", "zǒngbù", "trụ sở chính", "公司总部设在上海。", "Gōngsī zǒngbù shè zài Shànghǎi.", "Trụ sở chính của công ty đặt tại Thượng Hải."], ["规模", "guīmó", "quy mô", "我们公司规模不大，但发展很快。", "Wǒmen gōngsī guīmó bú dà, dàn fāzhǎn hěn kuài.", "Công ty quy mô không lớn nhưng phát triển nhanh."], ["上班", "shàngbān", "đi làm, vào ca", "我们早上八点上班，下午五点下班。", "Wǒmen zǎoshang bā diǎn shàngbān, xiàwǔ wǔ diǎn xiàbān.", "Chúng tôi vào làm 8 giờ sáng, tan làm 5 giờ chiều."], ["加班", "jiābān", "tăng ca", "这周订单多，大家都要加班。", "Zhè zhōu dìngdān duō, dàjiā dōu yào jiābān.", "Tuần này nhiều đơn, mọi người đều phải tăng ca."], ["请假", "qǐngjià", "xin nghỉ phép", "我明天想请一天假。", "Wǒ míngtiān xiǎng qǐng yì tiān jià.", "Ngày mai tôi muốn xin nghỉ một ngày."], ["规定", "guīdìng", "quy định", "公司规定上班不能迟到。", "Gōngsī guīdìng shàngbān bù néng chídào.", "Công ty quy định đi làm không được đến muộn."], ["制度", "zhìdù", "chế độ, nội quy", "新员工要先学习公司的规章制度。", "Xīn yuángōng yào xiān xuéxí gōngsī de guīzhāng zhìdù.", "Nhân viên mới phải học nội quy công ty trước."], ["培训", "péixùn", "đào tạo", "入职第一周有新员工培训。", "Rùzhí dì yī zhōu yǒu xīn yuángōng péixùn.", "Tuần đầu đi làm có đào tạo nhân viên mới."], ["适应", "shìyìng", "thích nghi", "我很快就适应了新环境。", "Wǒ hěn kuài jiù shìyìng le xīn huánjìng.", "Tôi nhanh chóng thích nghi với môi trường mới."], ["岗位", "gǎngwèi", "vị trí công tác", "每个人都要做好自己岗位上的工作。", "Měi ge rén dōu yào zuò hǎo zìjǐ gǎngwèi shang de gōngzuò.", "Mỗi người phải làm tốt công việc ở vị trí của mình."]], "4–5": [["开会", "kāihuì", "họp", "下午两点在三楼开会。", "Xiàwǔ liǎng diǎn zài sān lóu kāihuì.", "2 giờ chiều họp ở tầng 3."], ["通知", "tōngzhī", "thông báo", "请通知各部门经理参加会议。", "Qǐng tōngzhī gè bùmén jīnglǐ cānjiā huìyì.", "Vui lòng thông báo các trưởng phòng dự họp."], ["准时", "zhǔnshí", "đúng giờ", "请大家明天准时参加会议。", "Qǐng dàjiā míngtiān zhǔnshí cānjiā huìyì.", "Mai mọi người dự họp đúng giờ nhé."], ["提前", "tíqián", "dời sớm, trước thời hạn", "会议提前到上午十点。", "Huìyì tíqián dào shàngwǔ shí diǎn.", "Cuộc họp dời sớm lên 10 giờ sáng."], ["取消", "qǔxiāo", "huỷ bỏ", "因为客户有事，今天的会议取消了。", "Yīnwèi kèhù yǒu shì, jīntiān de huìyì qǔxiāo le.", "Vì khách bận, cuộc họp hôm nay bị huỷ."], ["讨论", "tǎolùn", "thảo luận", "这个问题我们下次开会再讨论。", "Zhège wèntí wǒmen xià cì kāihuì zài tǎolùn.", "Vấn đề này lần họp sau chúng ta bàn tiếp."], ["发言", "fāyán", "phát biểu", "下面请李经理发言。", "Xiàmiàn qǐng Lǐ jīnglǐ fāyán.", "Tiếp theo xin mời giám đốc Lý phát biểu."], ["建议", "jiànyì", "đề xuất, kiến nghị", "我建议先做一个市场调查。", "Wǒ jiànyì xiān zuò yí ge shìchǎng diàochá.", "Tôi đề xuất làm khảo sát thị trường trước."], ["决定", "juédìng", "quyết định", "最后大家决定下个月开始生产。", "Zuìhòu dàjiā juédìng xià ge yuè kāishǐ shēngchǎn.", "Cuối cùng mọi người quyết định tháng sau bắt đầu sản xuất."], ["任务", "rènwu", "nhiệm vụ", "这个任务必须在周五前完成。", "Zhège rènwu bìxū zài zhōuwǔ qián wánchéng.", "Nhiệm vụ này phải hoàn thành trước thứ Sáu."], ["报告", "bàogào", "báo cáo", "请把销售报告发给我。", "Qǐng bǎ xiāoshòu bàogào fā gěi wǒ.", "Vui lòng gửi tôi báo cáo bán hàng."]], "6": [["企业", "qǐyè", "doanh nghiệp", "我们是一家中型民营企业。", "Wǒmen shì yì jiā zhōngxíng mínyíng qǐyè.", "Chúng tôi là doanh nghiệp tư nhân quy mô vừa."], ["经营", "jīngyíng", "kinh doanh", "我们公司主要经营电子产品。", "Wǒmen gōngsī zhǔyào jīngyíng diànzǐ chǎnpǐn.", "Công ty chúng tôi chủ yếu kinh doanh hàng điện tử."], ["品牌", "pǐnpái", "thương hiệu", "这个品牌在越南很有名。", "Zhège pǐnpái zài Yuènán hěn yǒumíng.", "Thương hiệu này rất nổi tiếng ở Việt Nam."], ["特点", "tèdiǎn", "đặc điểm", "这款产品的特点是轻便、耐用。", "Zhè kuǎn chǎnpǐn de tèdiǎn shì qīngbiàn, nàiyòng.", "Đặc điểm của sản phẩm này là nhẹ và bền."], ["功能", "gōngnéng", "chức năng", "这台机器有很多功能。", "Zhè tái jīqì yǒu hěn duō gōngnéng.", "Máy này có nhiều chức năng."], ["市场", "shìchǎng", "thị trường", "我们想开拓越南市场。", "Wǒmen xiǎng kāituò Yuènán shìchǎng.", "Chúng tôi muốn mở rộng thị trường Việt Nam."], ["广告", "guǎnggào", "quảng cáo", "我们在网上做了很多广告。", "Wǒmen zài wǎngshang zuò le hěn duō guǎnggào.", "Chúng tôi đã quảng cáo nhiều trên mạng."], ["信任", "xìnrèn", "tin tưởng", "合作的基础是互相信任。", "Hézuò de jīchǔ shì hùxiāng xìnrèn.", "Nền tảng của hợp tác là tin tưởng lẫn nhau."], ["联系", "liánxì", "liên lạc", "回国后我们保持联系。", "Huí guó hòu wǒmen bǎochí liánxì.", "Sau khi về nước chúng ta giữ liên lạc nhé."], ["订购", "dìnggòu", "đặt mua", "贵公司打算订购多少？", "Guì gōngsī dǎsuàn dìnggòu duōshao?", "Quý công ty định đặt mua bao nhiêu?"]], "7": [["价格", "jiàgé", "giá cả", "价格会随着原材料的变化调整。", "Jiàgé huì suízhe yuáncáiliào de biànhuà tiáozhěng.", "Giá sẽ điều chỉnh theo biến động nguyên liệu."], ["询问", "xúnwèn", "hỏi, dò hỏi", "有客户打电话询问价格。", "Yǒu kèhù dǎ diànhuà xúnwèn jiàgé.", "Có khách gọi điện hỏi giá."], ["订货", "dìnghuò", "đặt hàng", "您打算什么时候订货？", "Nín dǎsuàn shénme shíhou dìnghuò?", "Khi nào anh/chị định đặt hàng?"], ["包括", "bāokuò", "bao gồm", "这个价格包括包装和运费吗？", "Zhège jiàgé bāokuò bāozhuāng hé yùnfèi ma?", "Giá này có bao gồm đóng gói và cước vận chuyển không?"], ["费用", "fèiyong", "chi phí", "样品费用由我们承担。", "Yàngpǐn fèiyong yóu wǒmen chéngdān.", "Phí làm mẫu do chúng tôi chịu."], ["货款", "huòkuǎn", "tiền hàng", "货款请在发货前付清。", "Huòkuǎn qǐng zài fāhuò qián fùqīng.", "Vui lòng thanh toán đủ tiền hàng trước khi giao."], ["人民币", "rénmínbì", "nhân dân tệ (CNY)", "可以用人民币报价吗？", "Kěyǐ yòng rénmínbì bàojià ma?", "Có thể báo giá bằng nhân dân tệ không?"], ["出口", "chūkǒu", "xuất khẩu", "我们的产品主要出口到美国和日本。", "Wǒmen de chǎnpǐn zhǔyào chūkǒu dào Měiguó hé Rìběn.", "Sản phẩm của chúng tôi chủ yếu xuất sang Mỹ và Nhật."], ["进口", "jìnkǒu", "nhập khẩu", "这些原料是从中国进口的。", "Zhèxiē yuánliào shì cóng Zhōngguó jìnkǒu de.", "Những nguyên liệu này nhập khẩu từ Trung Quốc."]], "8": [["竞争", "jìngzhēng", "cạnh tranh", "现在市场竞争越来越激烈。", "Xiànzài shìchǎng jìngzhēng yuè lái yuè jīliè.", "Hiện nay cạnh tranh thị trường ngày càng gay gắt."], ["讨价还价", "tǎojià-huánjià", "mặc cả", "做生意难免要讨价还价。", "Zuò shēngyi nánmiǎn yào tǎojià-huánjià.", "Làm ăn khó tránh khỏi mặc cả."], ["货比三家", "huò bǐ sān jiā", "so sánh nhiều nơi", "客户说要货比三家再决定。", "Kèhù shuō yào huò bǐ sān jiā zài juédìng.", "Khách nói sẽ so sánh vài nơi rồi mới quyết định."], ["协商", "xiéshāng", "thương lượng", "价格问题双方可以再协商。", "Jiàgé wèntí shuāngfāng kěyǐ zài xiéshāng.", "Vấn đề giá hai bên có thể thương lượng thêm."], ["降价", "jiàngjià", "giảm giá", "竞争对手降价了百分之五。", "Jìngzhēng duìshǒu jiàngjià le bǎi fēn zhī wǔ.", "Đối thủ đã giảm giá 5%."], ["涨价", "zhǎngjià", "tăng giá", "明年原材料可能还会涨价。", "Míngnián yuáncáiliào kěnéng hái huì zhǎngjià.", "Sang năm nguyên liệu có thể còn tăng giá."], ["赔本", "péiběn", "lỗ vốn", "这个价格我们是赔本的。", "Zhège jiàgé wǒmen shì péiběn de.", "Với giá này chúng tôi bị lỗ vốn."], ["考虑", "kǎolǜ", "cân nhắc", "我们考虑一下，明天给您答复。", "Wǒmen kǎolǜ yíxià, míngtiān gěi nín dáfù.", "Chúng tôi cân nhắc, mai sẽ trả lời anh/chị."], ["接受", "jiēshòu", "chấp nhận", "这个价格我们可以接受。", "Zhège jiàgé wǒmen kěyǐ jiēshòu.", "Giá này chúng tôi có thể chấp nhận."], ["拒绝", "jùjué", "từ chối", "对方拒绝了我们的报价。", "Duìfāng jùjué le wǒmen de bàojià.", "Phía đối tác đã từ chối báo giá của chúng tôi."]], "9": [["工厂", "gōngchǎng", "nhà máy", "我们的工厂在北宁工业区。", "Wǒmen de gōngchǎng zài Běiníng gōngyèqū.", "Nhà máy chúng tôi ở khu công nghiệp Bắc Ninh."], ["现代化", "xiàndàihuà", "hiện đại hoá", "这是一家现代化的工厂。", "Zhè shì yì jiā xiàndàihuà de gōngchǎng.", "Đây là một nhà máy hiện đại."], ["面积", "miànjī", "diện tích", "这个车间面积有三千平方米。", "Zhège chējiān miànjī yǒu sānqiān píngfāngmǐ.", "Xưởng này rộng 3.000 m²."], ["工人", "gōngrén", "công nhân", "工厂一共有四百多名工人。", "Gōngchǎng yígòng yǒu sìbǎi duō míng gōngrén.", "Nhà máy có tổng cộng hơn 400 công nhân."], ["机器", "jīqì", "máy móc", "这台机器每小时能生产五百件。", "Zhè tái jīqì měi xiǎoshí néng shēngchǎn wǔbǎi jiàn.", "Máy này mỗi giờ sản xuất được 500 chiếc."], ["技术", "jìshù", "kỹ thuật, công nghệ", "我们的技术人员都受过专业培训。", "Wǒmen de jìshù rényuán dōu shòu guo zhuānyè péixùn.", "Nhân viên kỹ thuật của chúng tôi đều được đào tạo bài bản."], ["原料", "yuánliào", "nguyên liệu", "原料仓库在工厂的东边。", "Yuánliào cāngkù zài gōngchǎng de dōngbian.", "Kho nguyên liệu ở phía đông nhà máy."], ["安全", "ānquán", "an toàn", "安全第一，请在黄线内行走。", "Ānquán dì yī, qǐng zài huángxiàn nèi xíngzǒu.", "An toàn là trên hết, vui lòng đi trong vạch vàng."], ["管理", "guǎnlǐ", "quản lý", "我们采用科学的管理方法。", "Wǒmen cǎiyòng kēxué de guǎnlǐ fāngfǎ.", "Chúng tôi áp dụng phương pháp quản lý khoa học."], ["效率", "xiàolǜ", "hiệu suất", "新设备大大提高了工作效率。", "Xīn shèbèi dàdà tígāo le gōngzuò xiàolǜ.", "Thiết bị mới nâng cao đáng kể hiệu suất làm việc."]], "10": [["检查", "jiǎnchá", "kiểm tra", "出货前要再检查一遍。", "Chū huò qián yào zài jiǎnchá yí biàn.", "Trước khi xuất hàng phải kiểm tra lại một lượt."], ["合格", "hégé", "đạt chuẩn", "这批产品全部合格。", "Zhè pī chǎnpǐn quánbù hégé.", "Lô sản phẩm này đạt chuẩn toàn bộ."], ["控制", "kòngzhì", "kiểm soát", "我们要严格控制产品质量。", "Wǒmen yào yángé kòngzhì chǎnpǐn zhìliàng.", "Chúng ta phải kiểm soát chặt chẽ chất lượng sản phẩm."], ["统计", "tǒngjì", "thống kê", "请统计一下这个月的产量。", "Qǐng tǒngjì yíxià zhège yuè de chǎnliàng.", "Vui lòng thống kê sản lượng tháng này."], ["完成", "wánchéng", "hoàn thành", "订单已经完成了百分之八十。", "Dìngdān yǐjīng wánchéng le bǎi fēn zhī bāshí.", "Đơn hàng đã hoàn thành 80%."], ["提高", "tígāo", "nâng cao", "今年的目标是提高产量。", "Jīnnián de mùbiāo shì tígāo chǎnliàng.", "Mục tiêu năm nay là nâng cao sản lượng."], ["降低", "jiàngdī", "giảm, hạ thấp", "怎样才能降低生产成本？", "Zěnyàng cái néng jiàngdī shēngchǎn chéngběn?", "Làm sao để giảm chi phí sản xuất?"], ["改进", "gǎijìn", "cải tiến", "我们改进了生产工艺。", "Wǒmen gǎijìn le shēngchǎn gōngyì.", "Chúng tôi đã cải tiến quy trình sản xuất."], ["失误", "shīwù", "sai sót", "这是操作失误造成的。", "Zhè shì cāozuò shīwù zàochéng de.", "Việc này do sai sót thao tác gây ra."], ["原因", "yuányīn", "nguyên nhân", "我们正在查找质量问题的原因。", "Wǒmen zhèngzài cházhǎo zhìliàng wèntí de yuányīn.", "Chúng tôi đang tìm nguyên nhân lỗi chất lượng."]], "11": [["设计", "shèjì", "thiết kế", "包装设计请贵方提供。", "Bāozhuāng shèjì qǐng guì fāng tígōng.", "Thiết kế bao bì xin quý bên cung cấp."], ["尺寸", "chǐcun", "kích thước", "请告诉我们纸箱的尺寸。", "Qǐng gàosu wǒmen zhǐxiāng de chǐcun.", "Vui lòng cho chúng tôi biết kích thước thùng carton."], ["颜色", "yánsè", "màu sắc", "颜色可以按客户要求定制。", "Yánsè kěyǐ àn kèhù yāoqiú dìngzhì.", "Màu sắc có thể làm theo yêu cầu khách hàng."], ["包装盒", "bāozhuānghé", "hộp đóng gói", "每件产品单独装一个包装盒。", "Měi jiàn chǎnpǐn dāndú zhuāng yí ge bāozhuānghé.", "Mỗi sản phẩm đóng riêng một hộp."], ["箱子", "xiāngzi", "thùng, hòm", "箱子上要写清楚件数和重量。", "Xiāngzi shang yào xiě qīngchu jiànshù hé zhòngliàng.", "Trên thùng phải ghi rõ số kiện và trọng lượng."], ["生产日期", "shēngchǎn rìqī", "ngày sản xuất", "生产日期印在盒子底部。", "Shēngchǎn rìqī yìn zài hézi dǐbù.", "Ngày sản xuất in ở đáy hộp."], ["定做", "dìngzuò", "đặt làm", "这批杯子是为客户专门定做的。", "Zhè pī bēizi shì wèi kèhù zhuānmén dìngzuò de.", "Lô cốc này được làm riêng cho khách hàng."], ["礼品", "lǐpǐn", "quà tặng", "节日礼品需要精美的包装。", "Jiérì lǐpǐn xūyào jīngměi de bāozhuāng.", "Quà tặng dịp lễ cần bao bì đẹp."], ["名牌", "míngpái", "hàng hiệu", "我们给很多名牌做代工。", "Wǒmen gěi hěn duō míngpái zuò dàigōng.", "Chúng tôi gia công cho nhiều thương hiệu lớn."]], "12": [["签约", "qiānyuē", "ký kết", "双方下周一正式签约。", "Shuāngfāng xià zhōuyī zhèngshì qiānyuē.", "Hai bên chính thức ký kết vào thứ Hai tuần sau."], ["协议", "xiéyì", "thoả thuận", "我们先签一个合作协议。", "Wǒmen xiān qiān yí ge hézuò xiéyì.", "Chúng ta ký một thoả thuận hợp tác trước."], ["双方", "shuāngfāng", "hai bên", "双方都应遵守合同条款。", "Shuāngfāng dōu yīng zūnshǒu hétong tiáokuǎn.", "Hai bên đều phải tuân thủ điều khoản hợp đồng."], ["遵守", "zūnshǒu", "tuân thủ", "请遵守付款期限。", "Qǐng zūnshǒu fùkuǎn qīxiàn.", "Vui lòng tuân thủ thời hạn thanh toán."], ["违反", "wéifǎn", "vi phạm", "违反合同要支付违约金。", "Wéifǎn hétong yào zhīfù wéiyuējīn.", "Vi phạm hợp đồng phải nộp tiền phạt."], ["期限", "qīxiàn", "thời hạn", "付款期限是三十天。", "Fùkuǎn qīxiàn shì sānshí tiān.", "Thời hạn thanh toán là 30 ngày."], ["保证", "bǎozhèng", "bảo đảm", "我们保证按时交货。", "Wǒmen bǎozhèng ànshí jiāohuò.", "Chúng tôi bảo đảm giao hàng đúng hạn."], ["责任", "zérèn", "trách nhiệm", "运输中的损失由谁承担责任？", "Yùnshū zhōng de sǔnshī yóu shéi chéngdān zérèn?", "Tổn thất trong vận chuyển do ai chịu trách nhiệm?"], ["利益", "lìyì", "lợi ích", "我们要照顾双方的利益。", "Wǒmen yào zhàogù shuāngfāng de lìyì.", "Chúng ta phải cân nhắc lợi ích của cả hai bên."], ["法律", "fǎlǜ", "pháp luật", "本合同受越南法律保护。", "Běn hétong shòu Yuènán fǎlǜ bǎohù.", "Hợp đồng này được pháp luật Việt Nam bảo vệ."], ["合同纠纷", "hétong jiūfēn", "tranh chấp hợp đồng", "出现合同纠纷时，双方先友好协商。", "Chūxiàn hétong jiūfēn shí, shuāngfāng xiān yǒuhǎo xiéshāng.", "Khi có tranh chấp hợp đồng, hai bên thương lượng thiện chí trước."]], "13": [["港口", "gǎngkǒu", "cảng", "海防是越南北部最大的港口。", "Hǎifáng shì Yuènán běibù zuì dà de gǎngkǒu.", "Hải Phòng là cảng lớn nhất miền Bắc Việt Nam."], ["轮船", "lúnchuán", "tàu thuỷ", "这批货用轮船运到新加坡。", "Zhè pī huò yòng lúnchuán yùn dào Xīnjiāpō.", "Lô hàng này đi tàu thuỷ đến Singapore."], ["航空公司", "hángkōng gōngsī", "hãng hàng không", "我们和几家航空公司有合作。", "Wǒmen hé jǐ jiā hángkōng gōngsī yǒu hézuò.", "Chúng tôi hợp tác với vài hãng hàng không."], ["货车", "huòchē", "xe tải", "货车明天早上来工厂装货。", "Huòchē míngtiān zǎoshang lái gōngchǎng zhuāng huò.", "Sáng mai xe tải đến nhà máy đóng hàng."], ["火车", "huǒchē", "tàu hoả", "中越之间也可以用火车运货。", "Zhōng-Yuè zhījiān yě kěyǐ yòng huǒchē yùn huò.", "Giữa Trung Quốc và Việt Nam cũng có thể chở hàng bằng tàu hoả."], ["快递", "kuàidì", "chuyển phát nhanh", "样品已经用快递寄出了。", "Yàngpǐn yǐjīng yòng kuàidì jì chū le.", "Hàng mẫu đã gửi chuyển phát nhanh."], ["包裹", "bāoguǒ", "bưu kiện", "包裹的单号我发给您了。", "Bāoguǒ de dānhào wǒ fā gěi nín le.", "Tôi đã gửi anh/chị mã vận đơn của bưu kiện."], ["货物", "huòwù", "hàng hoá", "货物已经全部装车。", "Huòwù yǐjīng quánbù zhuāng chē.", "Hàng hoá đã lên xe toàn bộ."], ["到达", "dàodá", "đến nơi", "货物预计下周三到达。", "Huòwù yùjì xià zhōusān dàodá.", "Hàng dự kiến đến vào thứ Tư tuần sau."], ["耽误", "dānwu", "làm lỡ, làm chậm", "天气不好，耽误了两天。", "Tiānqì bù hǎo, dānwu le liǎng tiān.", "Thời tiết xấu nên chậm mất hai ngày."], ["路线", "lùxiàn", "tuyến đường", "走这条路线比较快。", "Zǒu zhè tiáo lùxiàn bǐjiào kuài.", "Đi tuyến này nhanh hơn."]], "14": [["进出口", "jìnchūkǒu", "xuất nhập khẩu", "我们公司有进出口经营权。", "Wǒmen gōngsī yǒu jìnchūkǒu jīngyíngquán.", "Công ty chúng tôi có quyền kinh doanh xuất nhập khẩu."], ["手续", "shǒuxù", "thủ tục", "进口手续比较复杂。", "Jìnkǒu shǒuxù bǐjiào fùzá.", "Thủ tục nhập khẩu khá phức tạp."], ["文件", "wénjiàn", "văn bản, giấy tờ", "报关文件已经准备好了。", "Bàoguān wénjiàn yǐjīng zhǔnbèi hǎo le.", "Hồ sơ khai báo hải quan đã chuẩn bị xong."], ["填写", "tiánxiě", "điền (biểu mẫu)", "请认真填写报关单。", "Qǐng rènzhēn tiánxiě bàoguāndān.", "Vui lòng điền tờ khai hải quan cẩn thận."], ["表格", "biǎogé", "biểu mẫu", "这张表格需要盖公司的章。", "Zhè zhāng biǎogé xūyào gài gōngsī de zhāng.", "Biểu mẫu này cần đóng dấu công ty."], ["证明", "zhèngmíng", "giấy chứng nhận", "海关要求提供质量证明。", "Hǎiguān yāoqiú tígōng zhìliàng zhèngmíng.", "Hải quan yêu cầu cung cấp chứng nhận chất lượng."], ["证件", "zhèngjiàn", "giấy tờ tuỳ thân", "进港时请带好证件。", "Jìn gǎng shí qǐng dài hǎo zhèngjiàn.", "Khi vào cảng nhớ mang theo giấy tờ."], ["护照", "hùzhào", "hộ chiếu", "出差前请检查护照的有效期。", "Chūchāi qián qǐng jiǎnchá hùzhào de yǒuxiàoqī.", "Trước khi đi công tác hãy kiểm tra hạn hộ chiếu."], ["签证", "qiānzhèng", "thị thực, visa", "去中国出差需要办商务签证。", "Qù Zhōngguó chūchāi xūyào bàn shāngwù qiānzhèng.", "Đi công tác Trung Quốc cần làm visa thương mại."], ["保险", "bǎoxiǎn", "bảo hiểm", "这批货买了全程保险。", "Zhè pī huò mǎi le quánchéng bǎoxiǎn.", "Lô hàng này đã mua bảo hiểm toàn hành trình."]], "15": [["意见", "yìjiàn", "ý kiến", "我们很重视您的意见。", "Wǒmen hěn zhòngshì nín de yìjiàn.", "Chúng tôi rất coi trọng ý kiến của anh/chị."], ["不满", "bùmǎn", "bất mãn", "客户对交货时间很不满。", "Kèhù duì jiāohuò shíjiān hěn bùmǎn.", "Khách hàng rất không hài lòng về thời gian giao hàng."], ["抱怨", "bàoyuàn", "phàn nàn", "有客户抱怨包装太简单。", "Yǒu kèhù bàoyuàn bāozhuāng tài jiǎndān.", "Có khách phàn nàn bao bì quá sơ sài."], ["损失", "sǔnshī", "tổn thất", "这次延误给客户造成了损失。", "Zhè cì yánwù gěi kèhù zàochéng le sǔnshī.", "Lần chậm trễ này gây thiệt hại cho khách hàng."], ["调查", "diàochá", "điều tra", "我们会马上调查清楚。", "Wǒmen huì mǎshàng diàochá qīngchu.", "Chúng tôi sẽ điều tra rõ ngay."], ["误会", "wùhuì", "hiểu lầm", "这可能是个误会，我解释一下。", "Zhè kěnéng shì ge wùhuì, wǒ jiěshì yíxià.", "Có lẽ là hiểu lầm, để tôi giải thích."], ["处理", "chǔlǐ", "xử lý", "这件事我会亲自处理。", "Zhè jiàn shì wǒ huì qīnzì chǔlǐ.", "Việc này tôi sẽ đích thân xử lý."], ["解决", "jiějué", "giải quyết", "问题已经解决了。", "Wèntí yǐjīng jiějué le.", "Vấn đề đã được giải quyết."], ["原谅", "yuánliàng", "tha thứ, thông cảm", "希望您能原谅我们的失误。", "Xīwàng nín néng yuánliàng wǒmen de shīwù.", "Mong anh/chị thông cảm cho sai sót của chúng tôi."], ["满意", "mǎnyì", "hài lòng", "您对这个解决方案满意吗？", "Nín duì zhège jiějué fāng'àn mǎnyì ma?", "Anh/chị có hài lòng với phương án này không?"]], "16": [["服务态度", "fúwù tàidu", "thái độ phục vụ", "客户称赞我们的服务态度好。", "Kèhù chēngzàn wǒmen de fúwù tàidu hǎo.", "Khách hàng khen thái độ phục vụ của chúng tôi."], ["维修站", "wéixiūzhàn", "trạm bảo hành, sửa chữa", "我们在河内和胡志明市都有维修站。", "Wǒmen zài Hénèi hé Húzhìmíng shì dōu yǒu wéixiūzhàn.", "Chúng tôi có trạm bảo hành ở Hà Nội và TP.HCM."], ["顾客", "gùkè", "khách hàng", "顾客满意是我们最大的目标。", "Gùkè mǎnyì shì wǒmen zuì dà de mùbiāo.", "Khách hàng hài lòng là mục tiêu lớn nhất của chúng tôi."], ["信赖", "xìnlài", "tin cậy", "谢谢您对我们的信赖。", "Xièxie nín duì wǒmen de xìnlài.", "Cảm ơn anh/chị đã tin cậy chúng tôi."], ["经验", "jīngyàn", "kinh nghiệm", "这次合作让我们积累了很多经验。", "Zhè cì hézuò ràng wǒmen jīlěi le hěn duō jīngyàn.", "Lần hợp tác này giúp chúng tôi tích luỹ nhiều kinh nghiệm."], ["教训", "jiàoxun", "bài học", "我们要从这次事故中吸取教训。", "Wǒmen yào cóng zhè cì shìgù zhōng xīqǔ jiàoxun.", "Chúng ta phải rút ra bài học từ sự cố lần này."], ["建议", "jiànyì", "góp ý", "欢迎您提出宝贵的建议。", "Huānyíng nín tíchū bǎoguì de jiànyì.", "Rất hoan nghênh anh/chị góp ý."], ["联系", "liánxì", "liên hệ", "我们会定期和您联系。", "Wǒmen huì dìngqī hé nín liánxì.", "Chúng tôi sẽ liên hệ với anh/chị định kỳ."], ["发展", "fāzhǎn", "phát triển", "希望我们共同发展。", "Xīwàng wǒmen gòngtóng fāzhǎn.", "Mong chúng ta cùng phát triển."], ["机会", "jīhuì", "cơ hội", "期待下次还有合作的机会。", "Qīdài xià cì hái yǒu hézuò de jīhuì.", "Mong lần sau lại có cơ hội hợp tác."]]};
@@ -804,7 +896,7 @@ const uid=u=>"u"+u.n.split("–")[0];
  const W=1120, LH=56, GAP=26, TOP=20, X={root:110,part:370,leaf:560,leafW:530};
  let y=TOP+LH/2; const groups=[];
  PARTS.forEach((p,pi)=>{const us=U.filter(u=>u.p===pi);const ys=us.map((_,i)=>y+i*LH);y=ys[ys.length-1]+LH+GAP;groups.push({p,us,ys,cy:(ys[0]+ys[ys.length-1])/2})});
- const H=y-GAP-LH/2+TOP, rootY=(groups[0].cy+groups[3].cy)/2;
+ const H=y-GAP-LH/2+TOP, rootY=(groups[0].cy+groups[groups.length-1].cy)/2;
  // root
  const g=el("g",{},nodes);
  el("rect",{x:X.root-95,y:rootY-58,width:190,height:116,rx:16,fill:soft("red"),stroke:col("red"),"stroke-width":3},g);
@@ -905,7 +997,11 @@ const MAP={
 "13":[["Hình thức vận chuyển","海运 空运 陆运 轮船 航空公司 货车 火车 快递"],["Booking – lịch tàu – container","货代 订舱 船期 集装箱 港口 路线"],["Tracking – chứng từ","提单 跟踪 包裹 货物 到达"],["Sự cố vận chuyển","延迟 耽误 短少 丢失"]],
 "14":[["Khai báo hải quan","海关 报关 清关 关税 进出口 手续"],["Các loại chứng từ","商业发票 装箱单 原产地证 保险单 文件 证明"],["Kiểm hoá – bảo hiểm","查验 投保 保险"],["Giấy tờ – vướng mắc","填写 表格 证件 护照 签证"]],
 "15":[["Tiếp nhận khiếu nại","投诉 意见 不满 抱怨 证据"],["Phân loại vấn đề","质量问题 损坏 损失 索赔"],["Xin lỗi – giải thích – giải pháp","道歉 原谅 误会 调查 处理 解决 解决方案 赔偿 退货 换货 满意"]],
-"16":[["Bảo hành – hỗ trợ kỹ thuật","售后服务 保修 技术支持 维修站"],["Chăm sóc định kỳ","回访 反馈 满意度 服务态度 顾客 信赖 联系"],["Tổng kết – rủi ro – cải tiến","总结 风险 改进 经验 教训 建议 长期 发展 机会"]]
+"16":[["Bảo hành – hỗ trợ kỹ thuật","售后服务 保修 技术支持 维修站"],["Chăm sóc định kỳ","回访 反馈 满意度 服务态度 顾客 信赖 联系"],["Tổng kết – rủi ro – cải tiến","总结 风险 改进 经验 教训 建议 长期 发展 机会"]],
+"17":[["Thị trường", "房地产 房价 投资 开发商"], ["Dự án – vị trí – tiện ích", "项目 楼盘 地段 小区 配套设施"], ["Loại hình – diện tích", "公寓 写字楼 别墅 面积 户型 现房 期房"]],
+"18":[["Xem nhà", "看房 中介 房东 租客"], ["Căn nhà", "装修 家具 家电 朝向 楼层"], ["Tiền thuê – điều kiện", "出租 租金 押金 租期 水电费 物业费 退租"]],
+"19":[["Giá – mặc cả", "购房 单价 总价 砍价 业主 二手房"], ["Thanh toán", "定金 首付 分期付款 一次性付款"], ["Vay vốn – đầu tư", "贷款 利率 银行 升值 回报率"]],
+"20":[["Giấy tờ pháp lý", "产权 房产证 过户 公证 律师"], ["Thuế phí – trách nhiệm", "契税 违约金"], ["Bàn giao – quản lý", "交房 验房 物业 维修 保安 停车位 钥匙 门禁卡"]]
 };
 (function(){
  const NS="http://www.w3.org/2000/svg";
@@ -1051,7 +1147,16 @@ function paintMarks(){
 let zhVoice=null;
 function pickVoice(){try{const vs=speechSynthesis.getVoices();zhVoice=vs.find(v=>/zh[-_]CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||null}catch(e){}}
 if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+// giọng đọc thu sẵn (audio/tts/<mã>.m4a, tạo bằng tools/make_audio.py); không có thì dùng giọng của máy
+let TTSI=null;const TA=new Audio();TA.preload="auto";
+fetch("audio/tts/index.json").then(r=>r.ok?r.json():[]).then(j=>{TTSI=new Set(j)}).catch(()=>{});
+function ttsKey(t){let h=0x811c9dc5;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0}return h.toString(16).padStart(8,"0")}
 function speak(t){
+ const k=ttsKey(t);
+ if(TTSI&&TTSI.has(k)){try{speechSynthesis.cancel()}catch(e){}TA.pause();TA.src="audio/tts/"+k+".m4a";TA.play().catch(()=>speakDevice(t));return}
+ speakDevice(t);
+}
+function speakDevice(t){
  if(!("speechSynthesis" in window))return;
  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="zh-CN";u.rate=.8;if(zhVoice)u.voice=zhVoice;speechSynthesis.speak(u)}catch(e){}
 }
@@ -1228,7 +1333,7 @@ function record(hz,ok){
 function fillScope(){
  const s=document.getElementById("px-scope"),v=s.value||"all";
  const nh=pxPool("hard").length,nn=pxPool("new").length;
- s.innerHTML=`<option value="all">Cả khoá · trộn 16 bài (${pxPool("all").length} từ)</option>`+PARTS.map((p,pi)=>{const us=U.filter(u=>u.p===pi).map(u=>u.n);return `<option value="p${pi}">${esc(p.vi.split(" · ")[0])} · Unit ${us[0]}–${us.at(-1)} (${pxPool("p"+pi).length} từ)</option>`}).join("")+`<option value="new">Từ chưa thuộc (${nn})</option><option value="hard">Từ khó (${nh})</option>`;
+ s.innerHTML=`<option value="all">Cả khoá · trộn ${U.length} bài (${pxPool("all").length} từ)</option>`+PARTS.map((p,pi)=>{const us=U.filter(u=>u.p===pi).map(u=>u.n);return `<option value="p${pi}">${esc(p.vi.split(" · ")[0])} · Unit ${us[0]}–${us.at(-1)} (${pxPool("p"+pi).length} từ)</option>`}).join("")+`<option value="new">Từ chưa thuộc (${nn})</option><option value="hard">Từ khó (${nh})</option>`;
  s.value=[...s.options].some(o=>o.value===v)?v:"all";
  const lab={all:"Cả khoá",p0:"Phần 1",p1:"Phần 2",p2:"Phần 3",p3:"Phần 4",new:"Chưa thuộc",hard:"Từ khó"};
  document.getElementById("px-scopes").innerHTML=[...s.options].map(o=>{const n=(o.textContent.match(/\((\d+)/)||[])[1]||"";const sub=o.value.startsWith("p")?o.textContent.split(" · ")[1].split(" (")[0]:"";
@@ -1390,7 +1495,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="17";
+const APP_VERSION="18";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{

@@ -50,11 +50,14 @@ UNITS = {
     "9": ("参观工厂", 2), "10": ("生产与质量控制", 2), "11": ("包装与定制", 2),
     "12": ("签订合同", 3), "13": ("国际运输与物流", 3), "14": ("海关与保险", 3),
     "15": ("索赔与投诉处理", 3), "16": ("售后服务与长期合作", 3),
+    "17": ("房地产市场与项目介绍", 4), "18": ("看房与租赁", 4), "19": ("买房与贷款", 4),
+    "20": ("交易手续与物业管理", 4),
 }
 PARTS = [("职场入门", "Phần 1 · Môi trường công sở", "#5FB89E"),
          ("国际商务谈判", "Phần 2 · Đàm phán thương mại", "#8BA2E0"),
          ("制造与工厂", "Phần 3 · Chế tạo & Nhà máy", "#DDA05A"),
-         ("合同·物流·售后", "Phần 4 · Hợp đồng – Logistics – Hậu mãi", "#D883AE")]
+         ("合同·物流·售后", "Phần 4 · Hợp đồng – Logistics – Hậu mãi", "#D883AE"),
+         ("房地产", "Phần 5 · Bất động sản", "#6FB7CF")]
 SURNAME = {"Vương Lan": "兰", "Vương": "王", "Minh": "明", "Lý": "李", "Lâm": "林",
            "Trần": "陈", "Trương": "张"}
 
@@ -209,7 +212,7 @@ def base_frame(n, d, accent):
     dr.text((W / 2, 118), UNITS[n][0], font=F(ZH, 40), fill=(255, 255, 255, 255), anchor="mm",
             stroke_width=1, stroke_fill=(255, 255, 255, 255))
     dr.text((W / 2, 164), d["title"], font=F(SERIF, 24), fill=(200, 200, 200, 255), anchor="mm")
-    dr.text((24, H - 40), "Tiếng Trung Văn phòng · Hội thoại 16 Unit", font=F(SANS, 16),
+    dr.text((24, H - 40), "Tiếng Trung Văn phòng · Hội thoại", font=F(SANS, 16),
             fill=(110, 110, 110, 255), anchor="lm")
     return img
 
@@ -383,7 +386,7 @@ def cover():
             stroke_width=1, stroke_fill=(255, 255, 255, 255))
     dr.text((W / 2, 520), "bàngōngshì Zhōngwén", font=F(SERIF, 32), fill=(220, 220, 220, 255), anchor="mm")
     dr.text((W / 2, 580), "Tiếng Trung Văn phòng", font=F(SERIF_B, 40), fill=(255, 255, 255, 255), anchor="mm")
-    dr.text((W / 2, 650), "16 bài hội thoại · Hán – Pinyin – Việt", font=F(SERIF, 26), fill=(180, 180, 180, 255), anchor="mm")
+    dr.text((W / 2, 650), f"{len(UNITS)} bài hội thoại · Hán – Pinyin – Việt", font=F(SERIF, 26), fill=(180, 180, 180, 255), anchor="mm")
     for i, p in enumerate(PARTS):
         dr.text((W / 2, 760 + i * 40), p[1], font=F(SANS, 20), fill=hexrgb(p[2]), anchor="mm")
     return img

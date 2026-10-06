@@ -20,9 +20,11 @@ const PEOPLE = {
   "Anh Lý":       { f: 0, hair: "short", hc: "#151515", skin: SKIN.b, coat: "#22262E", shirt: "#FFFFFF", tie: "#3A5A9A" },
   "Chị Vương Lan":{ f: 1, hair: "long", hc: "#4A2E1F", skin: SKIN.a, coat: "#8C2F3C", shirt: "#F7EFE6" },
   "Anh Trương":   { f: 0, hair: "side", hc: "#1E1E1E", skin: SKIN.b, coat: "#283A57", shirt: "#E9EEF5", tie: "#7A7F88" },
+  "Chị Thu":      { f: 1, hair: "bob", hc: "#3B2A20", skin: SKIN.a, coat: "#1F6F8B", shirt: "#FFFFFF" },
+  "Anh Lưu":      { f: 0, hair: "short", hc: "#222222", skin: SKIN.b, coat: "#4A4F57", shirt: "#F2F2F2", open: 1 },
 };
 // bối cảnh theo unit
-const PLACE = { 4: "meeting", 5: "meeting", 9: "factory", 10: "factory", 11: "factory", 13: "port", 14: "port" };
+const PLACE = { 4: "meeting", 5: "meeting", 9: "factory", 10: "factory", 11: "factory", 13: "port", 14: "port", 18: "home", 20: "home" };
 
 function background(kind) {
   const blur = `filter="url(#bl)"`;
@@ -40,6 +42,16 @@ function background(kind) {
     ${[["#C8553D", 40, 250], ["#2F6690", 250, 250], ["#E0A030", 40, 140], ["#3A7D44", 900, 250], ["#C8553D", 1110, 250], ["#2F6690", 1000, 140]]
       .map(([c, x, y]) => `<rect x="${x}" y="${y}" width="200" height="105" fill="${c}"/>${[1, 2, 3, 4, 5, 6, 7].map(k => `<rect x="${x + k * 25}" y="${y + 10}" width="6" height="85" fill="#000" opacity=".15"/>`).join("")}`).join("")}
     <path d="M520 380 L540 60 L560 60 L580 380 Z M540 80 L900 80 L900 95 L540 95 Z" fill="#E3B23C"/></g>`;
+  if (kind === "home") return `<g ${blur}>
+    <rect width="${W}" height="${H}" fill="#E9DCC8"/>
+    <rect x="70" y="60" width="420" height="380" rx="6" fill="url(#gSky)"/>
+    <path d="M70 440 L70 330 L150 330 L150 260 L230 260 L230 300 L320 300 L320 220 L400 220 L400 290 L490 290 L490 440 Z" fill="#9DB4C8" opacity=".75"/>
+    <rect x="70" y="60" width="420" height="380" rx="6" fill="none" stroke="#FFFFFF" stroke-width="14"/>
+    <path d="M40 50 Q90 250 60 470 L20 470 L20 50 Z M520 50 Q470 250 500 470 L540 470 L540 50 Z" fill="#C98E6B" opacity=".85"/>
+    <rect x="860" y="380" width="380" height="120" rx="30" fill="#7D9A8C"/><rect x="880" y="330" width="340" height="80" rx="24" fill="#8FAE9F"/>
+    <circle cx="1090" cy="150" r="70" fill="none" stroke="#B89B6E" stroke-width="10"/><circle cx="1090" cy="150" r="52" fill="#F4EDE0"/>
+    <line x1="1090" y1="150" x2="1090" y2="112" stroke="#555" stroke-width="6"/><line x1="1090" y1="150" x2="1118" y2="160" stroke="#555" stroke-width="6"/>
+    <rect x="800" y="210" width="10" height="190" fill="#8A6A4A"/><path d="M760 210 L850 210 L830 160 L780 160 Z" fill="#F7E3B5"/></g>`;
   const meeting = kind === "meeting";
   return `<g ${blur}>
     <rect width="${W}" height="${H}" fill="url(#gWall)"/>
@@ -134,7 +146,7 @@ function svg(p, place, side, unitCol) {
 
 (async () => {
   const data = JSON.parse(fs.readFileSync(path.join(ROOT, "audio", "dialogues.json"), "utf8"));
-  const COL = ["#5FB89E", "#8BA2E0", "#DDA05A", "#D883AE"], PART = n => (n <= 5 ? 0 : n <= 8 ? 1 : n <= 11 ? 2 : 3);
+  const COL = ["#5FB89E", "#8BA2E0", "#DDA05A", "#D883AE", "#6FB7CF"], PART = n => (n <= 5 ? 0 : n <= 8 ? 1 : n <= 11 ? 2 : n <= 16 ? 3 : 4);
   fs.mkdirSync(OUT, { recursive: true });
   const exe = fs.existsSync("/opt/pw-browsers/chromium") ? { executablePath: "/opt/pw-browsers/chromium" } : {};
   const b = await pw.chromium.launch(exe).catch(() => pw.chromium.launch());
