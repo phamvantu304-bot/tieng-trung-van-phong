@@ -265,9 +265,10 @@ details.list{display:none}
 .sr .c-zh{font-size:18px}
 .acc-study{margin:12px 14px 14px;border:0;border-radius:10px;background:var(--c);color:var(--paper);font-size:15px;font-weight:700;padding:13px;cursor:pointer}
 @media (max-width:700px){.mapd{display:none}}
-#dlg{display:flex;flex-direction:column;gap:12px;--pp:#F4EFE4;--pp2:#E8DDC6;--pink:#5A4632;--hl:#F7E9A8}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #dlg{--pp:#2A2620;--pp2:#3A3328;--pink:#EADBC0;--hl:#5A4C1E}}
-:root[data-theme="dark"] #dlg{--pp:#2A2620;--pp2:#3A3328;--pink:#EADBC0;--hl:#5A4C1E}
+#dlg{display:flex;flex-direction:column;gap:12px}
+#dlg,.wr-map{--pp:#F4EFE4;--pp2:#E8DDC6;--pink:#5A4632;--hl:#F7E9A8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #dlg,:root:not([data-theme="light"]) .wr-map{--pp:#2A2620;--pp2:#3A3328;--pink:#EADBC0;--hl:#5A4C1E}}
+:root[data-theme="dark"] #dlg,:root[data-theme="dark"] .wr-map{--pp:#2A2620;--pp2:#3A3328;--pink:#EADBC0;--hl:#5A4C1E}
 .dlg-top{display:flex;align-items:center;gap:10px}
 #dlg-back{border:0;background:none;color:var(--red);font-weight:700;font-size:14px;padding:6px 0;cursor:pointer}
 #dlg-title{font-weight:700;font-size:15px}
@@ -323,6 +324,8 @@ details.list{display:none}
 .mm-notes .han{color:var(--pink);font-size:16px}
 .mm-word{background:var(--hl);border-radius:4px;padding:4px 8px}
 .mm-key{font-size:11.5px;color:var(--muted)}
+.wr-map{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.wr-map>.mm-h{font-size:12.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .dlg-none{font-size:13px;color:var(--muted)}
 .dlg-bar{height:4px;background:var(--row);border-radius:2px;overflow:hidden}
 .dlg-bar i{display:block;height:100%;width:0;background:var(--red)}
@@ -871,10 +874,12 @@ function rowHtml(w){const s=SRC[w[0]];return `<div class="wr" data-hz="${w[0]}" 
  <div class="wr-m" role="button" tabindex="0" aria-expanded="false"><span class="wr-hz">${w[0]}</span><span class="wr-tx"><span class="py">${esc(w[1])}</span><span class="mn">${esc(w[2])}</span></span><button class="say" data-say="${w[0]}" aria-label="Nghe ${w[0]}">▶</button></div>
  <div class="wr-x" hidden><div class="c-zh han">${w[3]}</div><div class="c-py py">${esc(w[4])}</div><div class="c-vi v">${esc(w[5])}</div>
  <div class="acts"><button class="act" data-say="${esc(w[3])}">▶ Nghe câu</button><button class="act mk" data-mark="k" data-hz="${w[0]}">Đã thuộc</button><button class="act mk" data-mark="h" data-hz="${w[0]}">Từ khó</button></div>
+ <div class="wr-map" data-map-hz="${w[0]}"></div>
  <span class="src${s?"":" add"}">${s?`博雅 · ${BOOK[s[0]]} · tr.${s[1]}`:"Bổ sung chuyên ngành"}</span></div></div>`}
 function sentHtml(s){return `<div class="sr"><div class="c-zh han">${s[0]}</div><div class="c-py py">${esc(s[1])}</div><div class="c-vi v">${esc(s[2])}</div><button class="act" data-say="${esc(s[0])}">▶ Nghe câu</button></div>`}
 function toggleSec(sec,open){const head=sec.firstChild,body=sec.lastChild;if(open)sec._build();body.hidden=!open;head.setAttribute("aria-expanded",open);sec.classList.toggle("open",open)}
-function toggleRow(row,open){const x=row.querySelector(".wr-x");if(open===undefined)open=x.hidden;x.hidden=!open;row.classList.toggle("open",open);row.firstElementChild.setAttribute("aria-expanded",open)}
+function toggleRow(row,open){const x=row.querySelector(".wr-x");if(open===undefined)open=x.hidden;x.hidden=!open;row.classList.toggle("open",open);row.firstElementChild.setAttribute("aria-expanded",open);
+ const mp=x.querySelector(".wr-map");if(open&&mp&&!mp.childElementCount){const it=ALLW.find(a=>a.w[0]===mp.dataset.mapHz);if(it)loadHZ().then(()=>{if(HZ)mp.innerHTML=`<span class="mm-h">Bộ thủ & mẹo nhớ</span>`+mapHtml(it.w)})}}
 document.addEventListener("click",e=>{
  if(e.target.closest("[data-say]"))return;
  const m=e.target.closest(".wr-m");if(m){toggleRow(m.parentNode);return}
@@ -1385,7 +1390,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="16";
+const APP_VERSION="17";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
