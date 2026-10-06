@@ -609,6 +609,62 @@ HV = """
 般|ban|loại, kiểu
 章|chương|chương
 叀|chuyên|(gợi âm)
+东|đông|phía đông
+中|trung|giữa
+值|trị|giá trị
+停|đình|dừng
+具|cụ|đồ dùng
+别|biệt|khác, riêng
+匙|thi|cái thìa
+区|khu|khu vực
+升|thăng|lên cao
+卡|tạp|thẻ
+向|hướng|hướng
+型|hình|khuôn, kiểu
+墅|thự|nhà ở ngoại ô
+契|khế|khế ước
+套|sáo|bộ, căn
+寓|ngụ|nơi ở
+层|tầng|tầng
+师|sư|thầy
+房|phòng|nhà, phòng
+押|áp|cầm cố, đặt cọc
+施|thi|thi hành
+朝|triều|hướng về
+权|quyền|quyền
+楼|lâu|tòa nhà, lầu
+段|đoạn|đoạn
+电|điện|điện
+看|khán|xem
+砍|khảm|chặt
+禁|cấm|cấm
+租|tô|thuê
+行|hành|đi; hàng (ngân hàng)
+贷|thải|cho vay
+过|quá|qua
+配|phối|phối, kèm
+钥|thược|chìa khóa
+银|ngân|bạc
+项|hạng|hạng mục
+㐌|dã|(biến thể của 也)
+且|thả|vả lại, đều đặn
+丰|phong|vạch khắc
+亍|xúc|bước chân phải
+亭|đình|cái đình
+刑|hình|hình phạt
+匸|hễ|che chắn
+另|lánh|khác
+帀|táp|vòng quanh
+曰|viết|nói
+林|lâm|rừng
+甲|giáp|áo giáp
+直|trực|thẳng
+酉|dậu|bình rượu
+野|dã|đồng nội
+镸|trường|dài
+龺|triêu|mặt trời mọc giữa cỏ
+雚|quán|(gợi âm)
+咼|oa|(gợi âm)
 """
 
 # Mẹo nhớ cho chữ hội ý / tượng hình (chữ hình thanh có mẹo tự sinh: bộ chỉ nghĩa + phần gợi âm)
@@ -806,6 +862,31 @@ STORY = """
 标|Cây 木 cắm làm mốc chỉ cho thấy 示 → mốc, tiêu chuẩn.
 满|Nước 氵 dâng ngập cả hai 两 bờ cỏ 艹 → đầy.
 盘|Cái mâm 皿 to như con thuyền 舟 → mâm; kiểm kê hàng.
+东|Mặt trời 日 mọc sau gốc cây 木 (chữ phồn thể 東) → phía đông.
+中|Một nét 丨 xuyên qua giữa khung 口 → ở giữa.
+具|Hai tay 八 nâng cái mâm 目 → đồ dùng, dụng cụ.
+别|Dao 刂 tách cái khác 另 ra → phân biệt, khác.
+区|Vùng che chắn 匸 có dấu chéo 乂 đánh dấu → khu vực.
+升|Cái đấu đong 十 nhấc lên → lên cao, tăng (thăng chức).
+卡|Vật kẹt giữa trên 上 và dưới 卜 → thẻ, mắc kẹt.
+向|Cửa sổ 口 dưới mái nhà mở về một phía → hướng.
+契|Dao 刀 khắc vạch 丰 lên gỗ 大 để làm tin → khế ước, hợp đồng.
+套|Người 大 quấn tấm vải dài 镸 → bọc, bộ; lượng từ "căn" (一套房).
+层|Thân nhà 尸 xếp chồng như mây 云 → tầng.
+师|Người cầm dao 刂 lành nghề đi khắp nơi 帀 → thầy, chuyên gia (律师 luật sư).
+施|Lá cờ 方 phấp phới 㐌 → thi hành, thiết lập (设施 cơ sở vật chất).
+段|Tay cầm đục 殳 chia đá thành từng khúc → đoạn, khúc (地段 khu vực).
+电|Tia chớp 曰 giật xuống 乚 → điện.
+看|Bàn tay 手 che trên mắt 目 nhìn xa → xem, nhìn.
+租|Lúa 禾 nộp đều đặn 且 → tiền thuê.
+行|Bước chân trái 彳 + chân phải 亍 → đi; hàng lối (银行 ngân hàng).
+权|Cầm cán cân gỗ 木 trong tay 又 → quyền.
+过|Bước đi 辶 qua từng tấc 寸 đường → qua.
+二|Hai nét ngang = số hai.
+介|Người 人 đứng chen vào giữa 八 hai bên → ở giữa, giới thiệu (中介 môi giới).
+小|Một nét ở giữa tách hai chấm nhỏ ra → nhỏ.
+水|Hình dòng nước chảy ở giữa, bọt nước hai bên → nước.
+首|Hình cái đầu có tóc ở trên → đầu, đầu tiên (首付 trả trước lần đầu).
 """
 
 # Tên khi chữ đứng làm bộ thủ bên trong chữ khác (khác với khi đứng riêng)

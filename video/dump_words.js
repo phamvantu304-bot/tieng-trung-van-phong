@@ -11,7 +11,7 @@ const { chromium } = pw;
   const p = await b.newPage();
   const errs=[]; p.on('pageerror', e => errs.push(e.message));
   await p.goto('http://localhost:8765/index.html');
-  await p.waitForFunction(() => Object.keys(DLG).length === 16);
+  await p.waitForFunction(() => Object.keys(DLG).length > 0);
   const out = await p.evaluate(() => { const o = {}; for (const n in DLG) o[n] = DLG[n].lines.map(L => wordsIn(L.zh, n).map(w => [w[0], w[1], w[2]])); return o; });
   require('fs').writeFileSync(path.join(__dirname, 'words.json'), JSON.stringify(out, null, 0));
   await b.close();
