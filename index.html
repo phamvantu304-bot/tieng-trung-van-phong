@@ -202,6 +202,20 @@ body.hide-py .py, body.hide-py .p{visibility:hidden}
 .ucard .ok{position:absolute;top:6px;right:8px;color:var(--ok);font-weight:700;font-size:14px;visibility:hidden}
 .ucard .ok.on{visibility:visible}
 .ovw summary{cursor:pointer;font-size:13.5px;font-weight:600;color:var(--muted);padding:6px 0}
+.mapbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:1.5px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;font-size:15px;font-weight:700;padding:13px;cursor:pointer}
+.mapbtn.u{font-size:14px;padding:11px;margin-top:2px;border-color:var(--c,var(--rule));color:var(--c,var(--ink))}
+#mapv{position:fixed;inset:0;z-index:60;background:var(--ground);display:flex;flex-direction:column}
+.mv-top{display:flex;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top,0px) + 10px) 12px 10px;background:var(--paper);border-bottom:1px solid var(--rule)}
+.mv-top b{flex:1;font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mv-top button{border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:8px;min-width:40px;height:38px;font:inherit;font-size:15px;font-weight:700;cursor:pointer;padding:0 10px}
+.mv-top #mv-close{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.mv-body{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:12px}
+.mv-body svg{display:block;height:auto;max-width:none;min-width:0!important;width:var(--mw,1100px);background:var(--paper);border:1px solid var(--rule);border-radius:8px}
+.mv-info{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px calc(env(safe-area-inset-bottom,0px) + 10px);background:var(--paper);border-top:1px solid var(--rule)}
+.mv-info .han{font-size:26px}
+.mv-info .py{font-weight:700}
+.mv-info .mn{flex:1;min-width:120px;color:var(--muted)}
+.mv-hint{font-size:12px;color:var(--muted);padding:0 14px 8px}
 .ovw .map-wrap{margin-top:8px}
 .ubar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);z-index:5;background:var(--paper);display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--rule)}
 #u-home{flex:none;border:0;background:none;color:var(--red);font-weight:700;font-size:14px;padding:6px 4px;cursor:pointer}
@@ -488,6 +502,7 @@ details.list{display:none}
  <div id="book">
  <section id="home">
   <div class="srch"><input type="search" id="q" placeholder="Tìm nhanh một từ: chữ Hán, pinyin hoặc tiếng Việt…" aria-label="Tìm từ vựng"><div id="results"></div></div>
+  <button class="mapbtn" data-mapall>🗺 Sơ đồ tư duy toàn khoá</button>
   <button class="allplay" id="allplay" hidden>▶ Nghe hội thoại cả khoá · 20 bài liên tục</button>
   <section class="pxhome" id="pxhome">
    <div class="home-h"><h2>Luyện tập</h2><span class="count">Chọn phạm vi, rồi chọn dạng bài</span></div>
@@ -523,6 +538,12 @@ details.list{display:none}
  <p class="foot"><span id="appver"></span> · Pinyin có dấu thanh; 贵公司 = quý công ty, 我方/贵方 = bên tôi/quý bên. Giá, số lượng trong ví dụ là số minh hoạ.</p>
 </div>
 
+<div id="mapv" hidden role="dialog" aria-modal="true" aria-labelledby="mv-title">
+ <div class="mv-top"><b id="mv-title"></b><button data-z="-1" aria-label="Thu nhỏ">−</button><button data-z="1" aria-label="Phóng to">＋</button><button data-z="0" title="Vừa màn hình">⤢</button><button id="mv-close">Đóng ✕</button></div>
+ <div class="mv-body" id="mv-body"></div>
+ <div class="mv-hint" id="mv-hint"></div>
+ <div class="mv-info" id="mv-info" hidden></div>
+</div>
 <script>
 const PARTS=[
  {k:"p1",han:"职场入门",py:"zhíchǎng rùmén",vi:"Phần 1 · Môi trường công sở"},
@@ -955,6 +976,7 @@ PARTS.forEach((p,pi)=>{
   html+=`<section class="unit" id="${uid(u)}">
   <div class="unit-title"><span class="unit-no" style="background:${col(p.k)}">Unit ${u.n}</span><span class="han">${u.han}</span><span class="vi">${esc(u.vi)}</span></div>
   <div class="ustat"><span class="uprog" data-up="${u.n}"></span><button class="listen" data-dlg="${u.n}" hidden style="color:${col(p.k)};border-color:${col(p.k)}">▶ Hội thoại</button><button class="study" data-study="${u.n}" style="background:${col(p.k)}">Luyện tập bài này</button></div>
+  <button class="mapbtn u" data-umap="${u.n}" style="--c:${col(p.k)}">🗺 Xem sơ đồ tư duy của bài (toàn màn hình)</button>
   <details class="mapd"><summary>Xem sơ đồ tư duy của bài</summary>
   <div class="umap"><svg data-u="${u.n}" role="img" aria-label="Sơ đồ tư duy Unit ${u.n}"></svg></div>
   <div class="card empty" data-card="${u.n}" style="border-color:${col(p.k)}"><span class="hint">Bấm vào một từ trên sơ đồ để xem câu ví dụ và trang trong sách Boya.</span></div></details>
@@ -1485,7 +1507,38 @@ document.getElementById("u-prev").addEventListener("click",()=>openUnit(cu-1,-1)
 document.getElementById("u-next").addEventListener("click",()=>openUnit(cu+1,1));
 document.getElementById("units").addEventListener("click",e=>{const b=e.target.closest("[data-study]");if(b)startPx("mix",b.dataset.study)});
 document.getElementById("fc-back").addEventListener("click",()=>goHome(true));
-document.getElementById("map").addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;e.preventDefault();const id=(a.getAttribute("href")||"").slice(1);const i=U.findIndex(u=>uid(u)===id);if(i>=0)openUnit(i)});
+/* trình xem sơ đồ tư duy toàn màn hình (toàn khoá hoặc 1 bài): mượn đúng SVG đang có, đóng thì trả về chỗ cũ */
+const MV=document.getElementById("mapv"),MVB=document.getElementById("mv-body"),MVI=document.getElementById("mv-info");
+let mvSvg=null,mvHome=null,mvZ=1,mvW=1100;
+function mvFit(){return Math.min(1,(MVB.clientWidth-26)/mvW)}
+function mvZoom(z){mvZ=Math.max(.3,Math.min(2.5,z));MVB.style.setProperty("--mw",Math.round(mvW*mvZ)+"px")}
+function openMapView(svg,title,hint){
+ if(!svg)return;closeMapView();
+ mvSvg=svg;mvHome=[svg.parentNode,svg.nextSibling];
+ mvW=(svg.viewBox&&svg.viewBox.baseVal&&svg.viewBox.baseVal.width)||1100;
+ document.getElementById("mv-title").textContent=title;
+ document.getElementById("mv-hint").textContent=hint||"";
+ MVI.hidden=true;MVB.appendChild(svg);MV.hidden=false;document.body.style.overflow="hidden";
+ // điện thoại: mặc định đủ to để đọc chữ (cuộn ngang/dọc để xem); máy tính: vừa màn hình
+ mvZoom(Math.max(mvFit(),window.innerWidth<700?.75:0));MVB.scrollTo(0,0);
+}
+function closeMapView(){
+ if(!mvSvg)return;const [par,nx]=mvHome;par.insertBefore(mvSvg,nx);mvSvg=null;MV.hidden=true;document.body.style.overflow="";
+}
+document.getElementById("mv-close").addEventListener("click",closeMapView);
+MV.querySelectorAll("[data-z]").forEach(b=>b.addEventListener("click",()=>{const d=+b.dataset.z;mvZoom(d?mvZ*(d>0?1.25:.8):mvFit())}));
+document.addEventListener("keydown",e=>{if(!MV.hidden&&e.key==="Escape")closeMapView()});
+document.addEventListener("click",e=>{
+ if(e.target.closest("[data-mapall]")){openMapView(document.getElementById("map"),"Sơ đồ tư duy toàn khoá","Chạm vào một bài để mở bài đó.");return}
+ const b=e.target.closest("[data-umap]");if(b){const u=U.find(x=>x.n===b.dataset.umap);openMapView(document.querySelector(`svg[data-u="${b.dataset.umap}"]`),`Unit ${u.n} · ${u.han} · ${u.vi}`,"Chạm vào một từ để xem pinyin, nghĩa và nghe phát âm.");return}
+});
+MVB.addEventListener("click",e=>{
+ const a=e.target.closest("a.leaf");if(!a||!mvSvg||mvSvg.id==="map")return;
+ const hz=a.dataset.hz;if(!hz){MVI.hidden=true;return}
+ const it=ALLW.find(x=>x.w[0]===hz);if(!it)return;const w=it.w;
+ MVI.innerHTML=`<span class="han">${w[0]}</span><span class="py">${esc(w[1])}</span><span class="mn">${esc(w[2])}</span><button class="act" data-say="${w[0]}">▶ Nghe</button>`;MVI.hidden=false;speak(w[0]);
+});
+document.getElementById("map").addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;closeMapView();e.preventDefault();const id=(a.getAttribute("href")||"").slice(1);const i=U.findIndex(u=>uid(u)===id);if(i>=0)openUnit(i)});
 mB.addEventListener("click",()=>goHome());
 mF.addEventListener("click",()=>goFC(UV.hidden?null:U[cu].n));
 // swipe between units
@@ -1513,7 +1566,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="20";
+const APP_VERSION="21";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
