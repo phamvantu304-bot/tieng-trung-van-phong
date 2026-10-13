@@ -294,6 +294,7 @@ header.top .seal{white-space:nowrap;flex:none}
 .ad-u .acts button{border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:8px;padding:7px 14px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
 .ad-u .acts .ok{background:var(--ok);border-color:var(--ok);color:#fff}
 .ad-u .acts .no{color:var(--red);border-color:var(--red)}
+.ad-u .acts .del{margin-left:auto;border-color:transparent;color:var(--muted);font-weight:600}
 .ad-empty{text-align:center;color:var(--muted);padding:30px 0}
 .au-try{border:1.5px dashed var(--ink);border-radius:10px;background:transparent;color:var(--ink);font:inherit;font-size:15px;font-weight:700;padding:11px;cursor:pointer}
 .au-or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px}.au-or::before,.au-or::after{content:"";flex:1;border-top:1px solid var(--rule)}
@@ -1687,7 +1688,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="26";
+const APP_VERSION="27";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
@@ -1812,11 +1813,14 @@ const ADMIN_EMAILS=["phamvantu304@gmail.com"];
    return `<div class="ad-u"><div class="h"><b>${esc(u.name||"(chưa có tên)")}</b><span class="pill ${s}">${LAB[s]}</span></div>
     <div class="em">${esc(u.email||"")}</div>
     <div class="mt">Đăng ký: ${fmt(u.createdAt)} · Học gần nhất: ${fmt(u.lastSeen)} · Đã thuộc ${known(u)} từ</div>
-    ${acts?`<div class="acts">${acts}</div>`:""}</div>`}).join(""):`<div class="ad-empty">Không có người dùng nào ở mục này.</div>`;
+    ${s==="admin"?"":`<div class="acts">${acts}<button class="del" data-del="${u.id}" title="Xoá khỏi danh sách">Xoá</button></div>`}</div>`}).join(""):`<div class="ad-empty">Không có người dùng nào ở mục này.</div>`;
  }
  $("ad-stats").addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(b){adFilter=b.dataset.f;renderAdmin()}});
  const setStatus=(id,st)=>db.collection("users").doc(id).update({status:st,statusAt:TS(),statusBy:user.email}).catch(x=>alert("Không cập nhật được: "+(x.code||x.message)));
- $("ad-list").addEventListener("click",e=>{const b=e.target.closest("[data-set]");if(!b)return;
+ $("ad-list").addEventListener("click",e=>{const d=e.target.closest("[data-del]");
+  if(d){const u=(ALLU||[]).find(x=>x.id===d.dataset.del);if(confirm(`Xoá ${u&&u.email||"người dùng này"} khỏi danh sách?\n\nTiến độ học của họ sẽ bị xoá. Nếu họ đăng nhập lại, tài khoản sẽ quay về "Chờ duyệt". Muốn chặn hẳn thì dùng "Khoá".`))
+   db.collection("users").doc(d.dataset.del).delete().catch(x=>alert("Không xoá được: "+(x.code||x.message)));return}
+  const b=e.target.closest("[data-set]");if(!b)return;
   if(b.dataset.set==="blocked"&&!confirm("Khoá tài khoản này? Người dùng sẽ không vào học được."))return;setStatus(b.dataset.id,b.dataset.set)});
  $("ad-all").addEventListener("click",()=>{const ps=(ALLU||[]).filter(u=>stOf(u)==="pending");if(!confirm(`Duyệt tất cả ${ps.length} người đang chờ?`))return;ps.forEach(u=>setStatus(u.id,"approved"))});
  // nạp Firebase (bản compat, từ CDN chính thức của Google)
