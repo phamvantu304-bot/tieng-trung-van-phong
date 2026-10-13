@@ -1607,7 +1607,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="23";
+const APP_VERSION="24";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
@@ -1621,7 +1621,8 @@ function checkUpdate(){
 }
 /* ---------- tài khoản: đăng nhập email (Firebase Auth) + lưu tiến độ (Firestore) ----------
    Điền cấu hình dự án Firebase vào FB_CONFIG. Để null thì app chạy như cũ, không cần đăng nhập. */
-const FB_CONFIG=null;
+const FB_CONFIG={apiKey:"AIzaSyCmWSa0VhknJdO4axkF6HJRsIPcXBQfjWo",authDomain:"tieng-trung-van-phong.firebaseapp.com",projectId:"tieng-trung-van-phong",
+ storageBucket:"tieng-trung-van-phong.firebasestorage.app",messagingSenderId:"503549271954",appId:"1:503549271954:web:def5dd42fad62d66d6eb4b"};
 (function(){
  if(!FB_CONFIG)return;
  const AU=document.getElementById("auth"),F=document.getElementById("au-form"),MSG=document.getElementById("au-msg"),GO=document.getElementById("au-go"),ACCT=document.getElementById("acct");
@@ -1644,7 +1645,7 @@ const FB_CONFIG=null;
   try{
    if(mode==="reset"){await auth.sendPasswordResetEmail(email);msg("Đã gửi email đặt lại mật khẩu. Kiểm tra hộp thư (cả mục Spam).",true);setTimeout(()=>setMode("in"),2500)}
    else if(mode==="up"){const c=await auth.createUserWithEmailAndPassword(email,pass);const name=$("au-name").value.trim();if(name)await c.user.updateProfile({displayName:name});
-    await db.collection("users").doc(c.user.uid).set({email,name,createdAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true})}
+    db.collection("users").doc(c.user.uid).set({email,name,createdAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}).catch(()=>{})}
    else await auth.signInWithEmailAndPassword(email,pass);
   }catch(x){err(x)}finally{GO.disabled=false}
  });
