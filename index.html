@@ -244,9 +244,12 @@ body.hide-py .py, body.hide-py .p{visibility:hidden}
 .src-note p{font-size:13px;color:var(--muted);margin:6px 0 0;max-width:70ch}
 header.top{display:flex;flex-direction:row;justify-content:flex-start;align-items:center;gap:10px;padding:0 0 4px;border:0;text-align:left}
 header.top .seal{font-size:16px;padding:3px 9px}
-header.top h1{font-size:17px;margin:0}
-#acct{margin-left:auto;border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:20px;padding:5px 12px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;max-width:46vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#auth{position:fixed;inset:0;z-index:80;background:var(--ground);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
+header.top h1{font-size:17px;margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header.top .seal{white-space:nowrap;flex:none}
+#admbtn,#acct{flex:none}
+@media (max-width:480px){header.top:has(#admbtn:not([hidden])) h1{display:none}header.top:has(#admbtn:not([hidden])) #acct{margin-left:0}header.top:has(#admbtn:not([hidden])) #admbtn{margin-left:auto}}
+#acct{margin-left:auto;max-width:38vw;border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:20px;padding:5px 12px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;max-width:46vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#auth,#gate{position:fixed;inset:0;z-index:80;background:var(--ground);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
 .au-box{width:100%;max-width:380px;background:var(--paper);border:1px solid var(--rule);border-radius:16px;padding:26px 22px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
 .au-box .seal{align-self:center;font-size:22px}
 .au-box h2{text-align:center;font-size:20px;margin:0}
@@ -261,6 +264,38 @@ header.top h1{font-size:17px;margin:0}
 .au-link{border:0;background:none;color:var(--red);font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;align-self:center}
 .au-msg{font-size:13.5px;text-align:center;min-height:1em}
 .au-msg.err{color:var(--red)}.au-msg.ok{color:var(--ok)}
+#admbtn{border:1px solid var(--red);background:var(--paper);color:var(--red);border-radius:20px;padding:5px 11px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+#admbtn b{background:var(--red);color:#fff;border-radius:10px;padding:0 6px;margin-left:4px;font-size:11.5px}
+#gate .au-box{gap:14px;text-align:center}
+#gate .g-ic{font-size:44px;line-height:1}
+#gate .au-go.alt{background:var(--paper);color:var(--ink);border:1px solid var(--rule)}
+#adm{position:fixed;inset:0;z-index:70;background:var(--ground);display:flex;flex-direction:column}
+.ad-top{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 10px) 14px 10px;background:var(--paper);border-bottom:1px solid var(--rule)}
+.ad-top b{flex:1;font-size:16px}
+.ad-top button{border:0;background:var(--ink);color:var(--paper);border-radius:8px;height:36px;padding:0 12px;font:inherit;font-weight:700;cursor:pointer}
+.ad-body{flex:1;overflow:auto;padding:12px 14px calc(env(safe-area-inset-bottom,0px) + 20px);display:flex;flex-direction:column;gap:10px;max-width:760px;width:100%;margin:0 auto}
+.ad-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ad-stats button{border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:10px;padding:8px 4px;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+.ad-stats button b{font-size:20px}
+.ad-stats button span{font-size:11.5px;color:var(--muted)}
+.ad-stats button.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.ad-stats button.pend b{color:#C27A00}
+.ad-tools{display:flex;gap:8px}
+.ad-tools input{flex:1;min-width:0;font:inherit;font-size:15px;padding:10px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--paper);color:var(--ink)}
+.ad-tools button{border:0;border-radius:10px;background:var(--ok);color:#fff;font:inherit;font-weight:700;padding:0 12px;cursor:pointer;white-space:nowrap}
+.ad-u{background:var(--paper);border:1px solid var(--rule);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.ad-u .h{display:flex;align-items:center;gap:8px}
+.ad-u .h b{flex:1;min-width:0;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ad-u .em{font-size:13.5px;color:var(--muted);word-break:break-all}
+.ad-u .mt{font-size:12.5px;color:var(--muted)}
+.pill{font-size:11.5px;font-weight:700;border-radius:10px;padding:2px 9px;white-space:nowrap}
+.pill.pending{background:#FFF1D6;color:#9A6200}.pill.approved{background:var(--ok-soft);color:var(--ok)}.pill.blocked{background:var(--red-soft);color:var(--red)}.pill.admin{background:var(--ink);color:var(--paper)}
+.ad-u .acts{display:flex;gap:8px;flex-wrap:wrap}
+.ad-u .acts button{border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:8px;padding:7px 14px;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
+.ad-u .acts .ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.ad-u .acts .no{color:var(--red);border-color:var(--red)}
+.ad-empty{text-align:center;color:var(--muted);padding:30px 0}
+.ad-err{background:var(--red-soft);color:var(--red);border-radius:10px;padding:10px 12px;font-size:13.5px}
 .sheet{gap:14px}
 @media (max-width:700px){body{padding-inline:0;padding-block:calc(env(safe-area-inset-top,0px) + 6px) calc(env(safe-area-inset-bottom,0px) + 16px)}.sheet{border-radius:0;box-shadow:none;padding:10px 14px 24px}}
 .mapd>summary{cursor:pointer;font-size:13.5px;font-weight:600;color:var(--muted);padding:4px 0}
@@ -477,7 +512,7 @@ details.list{display:none}
 </head>
 <body>
 <div class="sheet">
- <header class="top"><span class="seal">办公室汉语</span><h1>Tiếng Trung Văn phòng</h1><button id="acct" hidden title="Tài khoản"></button></header>
+ <header class="top"><span class="seal">办公室汉语</span><h1>Tiếng Trung Văn phòng</h1><button id="admbtn" hidden>Quản lý</button><button id="acct" hidden title="Tài khoản"></button></header>
  <nav class="modes" aria-label="Chế độ"><button id="m-book" class="on">Bài học</button><button id="m-fc" hidden>Ôn tập</button><button id="m-px">Luyện tập</button><span class="prog" id="prog"></span></nav>
  <section id="fc" hidden>
   <div class="px-top"><button id="fc-back">‹ Luyện tập</button><span id="fc-title" class="fc-title">Thẻ ghi nhớ</span><span id="fc-count" class="count"></span></div>
@@ -559,6 +594,23 @@ details.list{display:none}
  <div class="mv-body" id="mv-body"></div>
  <div class="mv-hint" id="mv-hint"></div>
  <div class="mv-info" id="mv-info" hidden></div>
+</div>
+<div id="gate" hidden>
+ <div class="au-box">
+  <div class="g-ic" id="g-ic">⏳</div>
+  <h2 id="g-title">Tài khoản đang chờ duyệt</h2>
+  <p id="g-text"></p>
+  <button class="au-go" id="g-main">Kiểm tra lại</button>
+  <button class="au-go alt" id="g-out">Đăng xuất</button>
+ </div>
+</div>
+<div id="adm" hidden>
+ <div class="ad-top"><b>Quản lý người dùng</b><button id="ad-close">Đóng ✕</button></div>
+ <div class="ad-body">
+  <div class="ad-stats" id="ad-stats"></div>
+  <div class="ad-tools"><input id="ad-q" type="search" placeholder="Tìm theo tên hoặc email…"><button id="ad-all" hidden>Duyệt tất cả</button></div>
+  <div id="ad-list"></div>
+ </div>
 </div>
 <div id="auth" hidden>
  <form class="au-box" id="au-form" novalidate>
@@ -1607,7 +1659,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="24";
+const APP_VERSION="25";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
@@ -1623,17 +1675,23 @@ function checkUpdate(){
    Điền cấu hình dự án Firebase vào FB_CONFIG. Để null thì app chạy như cũ, không cần đăng nhập. */
 const FB_CONFIG={apiKey:"AIzaSyCmWSa0VhknJdO4axkF6HJRsIPcXBQfjWo",authDomain:"tieng-trung-van-phong.firebaseapp.com",projectId:"tieng-trung-van-phong",
  storageBucket:"tieng-trung-van-phong.firebasestorage.app",messagingSenderId:"503549271954",appId:"1:503549271954:web:def5dd42fad62d66d6eb4b"};
+const ADMIN_EMAILS=["phamvantu304@gmail.com"];
 (function(){
  if(!FB_CONFIG)return;
  const AU=document.getElementById("auth"),F=document.getElementById("au-form"),MSG=document.getElementById("au-msg"),GO=document.getElementById("au-go"),ACCT=document.getElementById("acct");
+ const GATE=document.getElementById("gate"),ADM=document.getElementById("adm"),ADB=document.getElementById("admbtn");
  const $=id=>document.getElementById(id);
- let mode="in",auth=null,db=null,user=null,saveT=null;
+ let mode="in",auth=null,db=null,user=null,saveT=null,unsubMe=null,unsubAll=null,approved=false,merged=false,ALLU=[],adFilter="pending";
+ const TS=()=>firebase.firestore.FieldValue.serverTimestamp();
  const msg=(t,ok)=>{MSG.textContent=t||"";MSG.className="au-msg"+(t?(ok?" ok":" err"):"")};
  const VI={"auth/invalid-email":"Email không hợp lệ.","auth/missing-password":"Vui lòng nhập mật khẩu.","auth/weak-password":"Mật khẩu cần ít nhất 6 ký tự.",
   "auth/email-already-in-use":"Email này đã có tài khoản. Hãy chọn Đăng nhập.","auth/invalid-credential":"Sai email hoặc mật khẩu.","auth/wrong-password":"Sai email hoặc mật khẩu.",
   "auth/user-not-found":"Chưa có tài khoản với email này. Hãy chọn Đăng ký.","auth/user-disabled":"Tài khoản này đã bị khoá. Vui lòng liên hệ quản trị.",
   "auth/too-many-requests":"Bạn thử quá nhiều lần. Vui lòng đợi ít phút rồi thử lại.","auth/network-request-failed":"Không có mạng. Kiểm tra kết nối rồi thử lại."};
  const err=e=>msg(VI[e&&e.code]||("Có lỗi: "+((e&&e.message)||e)));
+ const isAdminEmail=u=>!!u&&ADMIN_EMAILS.includes((u.email||"").toLowerCase());
+ const isAdmin=u=>isAdminEmail(u)&&u.emailVerified;
+ const okKey=u=>"ttvp-ok-"+u.uid;
  function setMode(m){mode=m;F.querySelectorAll("[data-au]").forEach(b=>b.classList.toggle("on",b.dataset.au===m));
   $("au-name-l").hidden=m!=="up";$("au-pass-l").hidden=m==="reset";$("au-forgot").hidden=m!=="in";
   GO.textContent=m==="in"?"Đăng nhập":m==="up"?"Tạo tài khoản":"Gửi email đặt lại mật khẩu";
@@ -1644,26 +1702,82 @@ const FB_CONFIG={apiKey:"AIzaSyCmWSa0VhknJdO4axkF6HJRsIPcXBQfjWo",authDomain:"ti
   const email=$("au-email").value.trim(),pass=$("au-pass").value;GO.disabled=true;msg("");
   try{
    if(mode==="reset"){await auth.sendPasswordResetEmail(email);msg("Đã gửi email đặt lại mật khẩu. Kiểm tra hộp thư (cả mục Spam).",true);setTimeout(()=>setMode("in"),2500)}
-   else if(mode==="up"){const c=await auth.createUserWithEmailAndPassword(email,pass);const name=$("au-name").value.trim();if(name)await c.user.updateProfile({displayName:name});
-    db.collection("users").doc(c.user.uid).set({email,name,createdAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}).catch(()=>{})}
+   else if(mode==="up"){const c=await auth.createUserWithEmailAndPassword(email,pass);const name=$("au-name").value.trim();if(name){await c.user.updateProfile({displayName:name});ACCT.textContent="👤 "+name}}
    else await auth.signInWithEmailAndPassword(email,pass);
   }catch(x){err(x)}finally{GO.disabled=false}
  });
  ACCT.addEventListener("click",()=>{if(user&&confirm(`Đang đăng nhập: ${user.email}\n\nĐăng xuất khỏi thiết bị này?`))auth.signOut()});
- // gộp tiến độ: trên máy + trên mạng (từ đã thuộc/khó lấy hợp; số liệu khác giữ bản mới hơn)
+ $("g-out").addEventListener("click",()=>auth&&auth.signOut());
+ let gateMain=null;$("g-main").addEventListener("click",()=>gateMain&&gateMain());
+ function gate(ic,title,text,mainLabel,fn){$("g-ic").textContent=ic;$("g-title").textContent=title;$("g-text").textContent=text;
+  $("g-main").textContent=mainLabel;$("g-main").hidden=!fn;gateMain=fn;GATE.hidden=false;AU.hidden=true;document.body.style.overflow="hidden"}
+ function unlock(){GATE.hidden=true;AU.hidden=true;document.body.style.overflow="";approved=true;
+  try{localStorage.setItem(okKey(user),"1")}catch(e){}
+  if(!merged){merged=true;db.collection("users").doc(user.uid).get().then(d=>{const r=d.exists&&d.data().state;
+   if(merge(r?JSON.parse(r):null)){try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}paintMarks()}cloudSave()}).catch(()=>{})}}
+ // gộp tiến độ: trên máy + trên mạng (từ đã thuộc/khó lấy hợp)
  function merge(remote){if(!remote)return false;let ch=false;
   for(const g of ["k","h"]){ST[g]=ST[g]||{};for(const z in (remote[g]||{}))if(!(z in ST[g])){ST[g][z]=remote[g][z];ch=true}}
   for(const z in remote)if(!(z in ST)){ST[z]=remote[z];ch=true}
   return ch}
- window.cloudSave=()=>{if(!user||!db)return;clearTimeout(saveT);saveT=setTimeout(()=>{
-  db.collection("users").doc(user.uid).set({state:JSON.stringify(ST),email:user.email,lastSeen:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}).catch(()=>{})},2500)};
- async function onUser(u){user=u;
-  if(!u){AU.hidden=false;ACCT.hidden=true;document.body.style.overflow="hidden";return}
-  AU.hidden=true;document.body.style.overflow="";ACCT.hidden=false;ACCT.textContent="👤 "+(u.displayName||u.email);
-  try{const d=await db.collection("users").doc(u.uid).get();const r=d.exists&&d.data().state;
-   if(merge(r?JSON.parse(r):null)){try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}paintMarks()}}catch(e){}
-  cloudSave();gcEvent("dang-nhap","Đăng nhập");
+ window.cloudSave=()=>{if(!user||!db||!approved)return;clearTimeout(saveT);saveT=setTimeout(()=>{
+  db.collection("users").doc(user.uid).update({state:JSON.stringify(ST),lastSeen:TS()}).catch(()=>{})},2500)};
+ function stop(){if(unsubMe){unsubMe();unsubMe=null}if(unsubAll){unsubAll();unsubAll=null}}
+ async function onUser(u){stop();user=u;approved=false;merged=false;ADB.hidden=true;ADM.hidden=true;
+  if(!u){GATE.hidden=true;AU.hidden=false;ACCT.hidden=true;document.body.style.overflow="hidden";return}
+  ACCT.hidden=false;ACCT.textContent="👤 "+(u.displayName||u.email);AU.hidden=true;
+  // tài khoản quản trị phải xác minh email trước (chống người khác đăng ký giả email quản trị)
+  if(isAdminEmail(u)&&!u.emailVerified){
+   const check=async()=>{await u.reload();if(auth.currentUser.emailVerified){await auth.currentUser.getIdToken(true);onUser(auth.currentUser)}else alert("Email chưa được xác minh. Mở email từ Firebase và bấm vào link xác minh.")};
+   gate("✉️","Xác minh email quản trị",`Mở hộp thư ${u.email}, bấm vào link xác minh Firebase vừa gửi (xem cả mục Spam), rồi bấm "Tôi đã xác minh".`,"Tôi đã xác minh",check);
+   u.sendEmailVerification().catch(()=>{});return}
+  const ref=db.collection("users").doc(u.uid);
+  let cached=false;try{cached=localStorage.getItem(okKey(u))==="1"}catch(e){}
+  if(cached||isAdmin(u))unlock();else gate("⏳","Đang kiểm tra tài khoản…","","",null);
+  unsubMe=ref.onSnapshot(d=>{
+   if(!d.exists){ref.set({email:u.email,name:u.displayName||"",status:isAdmin(u)?"approved":"pending",createdAt:TS(),lastSeen:TS()}).catch(()=>{});return}
+   const st=isAdmin(u)?"approved":(d.data().status||"pending");
+   if(st==="approved"){unlock();gcEvent("dang-nhap","Đăng nhập")}
+   else{approved=false;try{localStorage.removeItem(okKey(u))}catch(e){}
+    if(st==="blocked")gate("🔒","Tài khoản đã bị khoá","Vui lòng liên hệ quản trị viên để được hỗ trợ.","",null);
+    else gate("⏳","Tài khoản đang chờ duyệt",`Cảm ơn bạn đã đăng ký (${u.email}). Quản trị viên sẽ duyệt sớm; app tự mở khi được duyệt.`,"Kiểm tra lại",()=>ref.get({source:"server"}).catch(()=>{}))}
+  },()=>{if(!approved)gate("📶","Chưa kiểm tra được tài khoản","Cần có mạng cho lần mở đầu tiên. Kiểm tra kết nối rồi thử lại.","Thử lại",()=>onUser(u))});
+  if(isAdmin(u))startAdmin();
  }
+ // ---------- trang quản lý (chỉ quản trị viên) ----------
+ const fmt=t=>{try{const d=t&&t.toDate?t.toDate():null;return d?d.toLocaleDateString("vi-VN")+" "+d.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"}):"—"}catch(e){return "—"}};
+ const known=u=>{try{return Object.keys(JSON.parse(u.state||"{}").k||{}).length}catch(e){return 0}};
+ function startAdmin(){ADB.hidden=false;
+  unsubAll=db.collection("users").onSnapshot(q=>{ALLU=q.docs.map(d=>({id:d.id,...d.data()}));renderAdmin()},e=>{ALLU=null;renderAdmin(e)})}
+ ADB.addEventListener("click",()=>{ADM.hidden=false;document.body.style.overflow="hidden";renderAdmin();gcEvent("quan-ly","Mở trang quản lý")});
+ $("ad-close").addEventListener("click",()=>{ADM.hidden=true;document.body.style.overflow=""});
+ $("ad-q").addEventListener("input",()=>renderAdmin());
+ const stOf=u=>ADMIN_EMAILS.includes((u.email||"").toLowerCase())?"admin":(u.status||"pending");
+ function renderAdmin(e){
+  const L=$("ad-list");
+  if(!ALLU){L.innerHTML=`<div class="ad-err">Chưa đọc được danh sách người dùng. Hãy kiểm tra đã dán đúng quy tắc bảo mật (Règles) mới trong Firestore. ${e?esc(e.code||""):""}</div>`;return}
+  const cnt={pending:0,approved:0,blocked:0};ALLU.forEach(u=>{const s=stOf(u);if(cnt[s]!=null)cnt[s]++});
+  ADB.innerHTML="Quản lý"+(cnt.pending?`<b>${cnt.pending}</b>`:"");
+  const tabs=[["pending","Chờ duyệt",cnt.pending],["approved","Đã duyệt",cnt.approved],["blocked","Bị khoá",cnt.blocked],["all","Tất cả",ALLU.length]];
+  $("ad-stats").innerHTML=tabs.map(([k,l,n])=>`<button data-f="${k}" class="${k===adFilter?"on":""} ${k==="pending"?"pend":""}"><b>${n}</b><span>${l}</span></button>`).join("");
+  $("ad-all").hidden=!(adFilter==="pending"&&cnt.pending>1);
+  const q=$("ad-q").value.trim().toLowerCase();
+  const rows=ALLU.filter(u=>(adFilter==="all"||stOf(u)===adFilter||(adFilter==="approved"&&stOf(u)==="admin"))&&(!q||((u.email||"")+" "+(u.name||"")).toLowerCase().includes(q)))
+   .sort((a,b)=>((b.createdAt&&b.createdAt.seconds)||0)-((a.createdAt&&a.createdAt.seconds)||0));
+  const LAB={pending:"Chờ duyệt",approved:"Đã duyệt",blocked:"Bị khoá",admin:"Quản trị"};
+  L.innerHTML=rows.length?rows.map(u=>{const s=stOf(u);
+   const acts=s==="admin"?"":s==="pending"?`<button class="ok" data-set="approved" data-id="${u.id}">✓ Duyệt</button><button class="no" data-set="blocked" data-id="${u.id}">Từ chối</button>`
+    :s==="approved"?`<button class="no" data-set="blocked" data-id="${u.id}">Khoá</button>`:`<button class="ok" data-set="approved" data-id="${u.id}">Mở khoá</button>`;
+   return `<div class="ad-u"><div class="h"><b>${esc(u.name||"(chưa có tên)")}</b><span class="pill ${s}">${LAB[s]}</span></div>
+    <div class="em">${esc(u.email||"")}</div>
+    <div class="mt">Đăng ký: ${fmt(u.createdAt)} · Học gần nhất: ${fmt(u.lastSeen)} · Đã thuộc ${known(u)} từ</div>
+    ${acts?`<div class="acts">${acts}</div>`:""}</div>`}).join(""):`<div class="ad-empty">Không có người dùng nào ở mục này.</div>`;
+ }
+ $("ad-stats").addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(b){adFilter=b.dataset.f;renderAdmin()}});
+ const setStatus=(id,st)=>db.collection("users").doc(id).update({status:st,statusAt:TS(),statusBy:user.email}).catch(x=>alert("Không cập nhật được: "+(x.code||x.message)));
+ $("ad-list").addEventListener("click",e=>{const b=e.target.closest("[data-set]");if(!b)return;
+  if(b.dataset.set==="blocked"&&!confirm("Khoá tài khoản này? Người dùng sẽ không vào học được."))return;setStatus(b.dataset.id,b.dataset.set)});
+ $("ad-all").addEventListener("click",()=>{const ps=(ALLU||[]).filter(u=>stOf(u)==="pending");if(!confirm(`Duyệt tất cả ${ps.length} người đang chờ?`))return;ps.forEach(u=>setStatus(u.id,"approved"))});
  // nạp Firebase (bản compat, từ CDN chính thức của Google)
  AU.hidden=false;msg("Đang tải…",true);
  const V="10.12.2",load=f=>new Promise((ok,no)=>{const sc=document.createElement("script");sc.src=`https://www.gstatic.com/firebasejs/${V}/${f}`;sc.onload=ok;sc.onerror=no;document.head.appendChild(sc)});
