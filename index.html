@@ -535,7 +535,7 @@ details.list{display:none}
  </section>
  </div>
 <details class="src-note"><summary>Nguồn từ vựng</summary><p>Từ vựng được lọc từ 8 cuốn giáo trình <b class="han">博雅汉语</b> (初级 → 高级) và sắp theo 16 Unit của khung HanTalk. Phần 5 (Bất động sản, Unit 17–20) là phần bổ sung: từ vựng, mẫu câu và hội thoại được soạn riêng theo ngữ cảnh môi giới – mua bán – cho thuê nhà ở Việt Nam. Mỗi từ ghi <i>tên cuốn · số trang PDF</i> để tra lại sách. Những từ thương mại mà Boya không có được đánh dấu <i>Bổ sung chuyên ngành</i>. Câu ví dụ được viết mới theo ngữ cảnh văn phòng.</p></details>
- <p class="foot"><span id="appver"></span> · Pinyin có dấu thanh; 贵公司 = quý công ty, 我方/贵方 = bên tôi/quý bên. Giá, số lượng trong ví dụ là số minh hoạ.</p>
+ <p class="foot"><span id="appver"></span> · App đếm lượt dùng ẩn danh (GoatCounter), không thu thập thông tin cá nhân. · Pinyin có dấu thanh; 贵公司 = quý công ty, 我方/贵方 = bên tôi/quý bên. Giá, số lượng trong ví dụ là số minh hoạ.</p>
 </div>
 
 <div id="mapv" hidden role="dialog" aria-modal="true" aria-labelledby="mv-title">
@@ -545,6 +545,16 @@ details.list{display:none}
  <div class="mv-info" id="mv-info" hidden></div>
 </div>
 <script>
+/* thống kê lượt dùng ẩn danh (GoatCounter) — trang xem số liệu: https://tiengtrungvanphong.goatcounter.com */
+const GC_CODE="tiengtrungvanphong";
+let gcLast="",gcQ=[];
+function gcEvent(path,title){
+ if(path===gcLast)return;gcLast=path;
+ const send=()=>{try{window.goatcounter.count({path,title:title||path,event:true})}catch(e){}};
+ if(window.goatcounter&&window.goatcounter.count)send();else gcQ.push(send);
+}
+(function(){if(!/^https:/.test(location.protocol))return;const sc=document.createElement("script");sc.async=true;sc.src="https://gc.zgo.at/count.js";
+ sc.dataset.goatcounter=`https://${GC_CODE}.goatcounter.com/count`;sc.onload=()=>{gcQ.splice(0).forEach(f=>f())};document.head.appendChild(sc)})();
 const PARTS=[
  {k:"p1",han:"职场入门",py:"zhíchǎng rùmén",vi:"Phần 1 · Môi trường công sở"},
  {k:"p2",han:"国际商务谈判",py:"guójì shāngwù tánpàn",vi:"Phần 2 · Đàm phán thương mại"},
@@ -1277,11 +1287,11 @@ function mapHtml(w){
  <div class="mm-word">Mẹo nhớ cả từ: <span class="han">${w[0]}</span> = ${cs.map(c=>`${c} <b>${esc(HZ[c].hv)}</b>${HZ[c].m!==HZ[c].hv?` (${esc(HZ[c].m)})`:""}`).join(" + ")} → Hán Việt «${esc(hv)}» → ${esc(w[2])}</div></div></div>`;
 }
 document.getElementById("dlg-words").addEventListener("click",e=>{const b=e.target.closest("[data-map]");if(!b)return;
- const k=b.dataset.map;MOPEN.has(k)?MOPEN.delete(k):MOPEN.add(k);
+ const k=b.dataset.map;MOPEN.has(k)?MOPEN.delete(k):(MOPEN.add(k),gcEvent("bo-thu","Mở sơ đồ bộ thủ"));
  const redraw=()=>{const i=dIdx;dIdx=-1;dlgRender(i)};redraw();if(!HZ)loadHZ().then(redraw)});
 function lineAt(t){const ls=DLG[dU].lines;let i=0;for(let j=0;j<ls.length;j++)if(t>=ls[j].t-0.05)i=j;return i}
 function openDlg(n,autoplay){
- const d=DLG[n];if(!d)return;
+ const d=DLG[n];if(!d)return;gcEvent("hoi-thoai-"+n,"Hội thoại bài "+n);
  if(dU!==n){dU=n;dIdx=-1;DA.src=d.video||d.file;DSEC.classList.toggle("vid",!!d.video);
   document.getElementById("dlg-title").textContent=`Unit ${n} · Hội thoại`;
   document.getElementById("dlg-scene").textContent=d.scene;
@@ -1371,6 +1381,7 @@ document.getElementById("px-scopes").addEventListener("click",e=>{const b=e.targ
 function openPx(){show("px");window.scrollTo(0,0)}
 function scopeTitle(scope,words){return words?" · từ đã chọn":/^p\d$/.test(scope||"")?" · Phần "+(+scope[1]+1):/^\d/.test(scope||"")?" · Unit "+scope:scope==="hard"?" · Từ khó":scope==="new"?" · Chưa thuộc":""}
 function startPx(type,scope,words){
+ gcEvent("luyen-tap-"+type,"Luyện tập: "+(PXT[type]||type));
  if(type==="card"){startCard(scope,words,"Thẻ ghi nhớ"+scopeTitle(scope,words));return}
  const pool=words||pxPool(scope);
  PX={type,scope,i:0,ok:0,wrong:[],qs:[],words:pool,custom:words||null};
@@ -1479,7 +1490,7 @@ function show(view){
  if(view==="home")fillScope();
 }
 function openUnit(i,dir,hz){
- i=Math.max(0,Math.min(U.length-1,i));cu=i;show("unit");
+ i=Math.max(0,Math.min(U.length-1,i));cu=i;show("unit");gcEvent("bai-"+U[i].n,"Bài "+U[i].n+" · "+U[i].vi);
  SECS.forEach((s,j)=>{s.hidden=j!==i;s.classList.remove("in-l","in-r")});
  if(dir){void SECS[i].offsetWidth;SECS[i].classList.add(dir>0?"in-l":"in-r")}
  TABS.forEach((t,j)=>t.classList.toggle("on",j===i));
@@ -1513,7 +1524,7 @@ let mvSvg=null,mvHome=null,mvZ=1,mvW=1100;
 function mvFit(){return Math.min(1,(MVB.clientWidth-26)/mvW)}
 function mvZoom(z){mvZ=Math.max(.3,Math.min(2.5,z));MVB.style.setProperty("--mw",Math.round(mvW*mvZ)+"px")}
 function openMapView(svg,title,hint){
- if(!svg)return;closeMapView();
+ if(!svg)return;closeMapView();gcEvent("so-do-tu-duy","Sơ đồ tư duy: "+title);
  mvSvg=svg;mvHome=[svg.parentNode,svg.nextSibling];
  mvW=(svg.viewBox&&svg.viewBox.baseVal&&svg.viewBox.baseVal.width)||1100;
  document.getElementById("mv-title").textContent=title;
@@ -1566,7 +1577,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="21";
+const APP_VERSION="22";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
