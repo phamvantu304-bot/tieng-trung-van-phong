@@ -295,6 +295,17 @@ header.top .seal{white-space:nowrap;flex:none}
 .ad-u .acts .ok{background:var(--ok);border-color:var(--ok);color:#fff}
 .ad-u .acts .no{color:var(--red);border-color:var(--red)}
 .ad-empty{text-align:center;color:var(--muted);padding:30px 0}
+.au-try{border:1.5px dashed var(--ink);border-radius:10px;background:transparent;color:var(--ink);font:inherit;font-size:15px;font-weight:700;padding:11px;cursor:pointer}
+.au-or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px}.au-or::before,.au-or::after{content:"";flex:1;border-top:1px solid var(--rule)}
+#trialbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#FFF4D6;border:1px solid #E8C468;color:#6B4A00;border-radius:12px;padding:10px 12px;font-size:13.5px;font-weight:600;margin:4px 0 8px}
+#trialbar span{flex:1;min-width:180px}
+#trialbar button{border:0;border-radius:8px;background:var(--red);color:#fff;font:inherit;font-weight:700;padding:8px 12px;cursor:pointer}
+body.trial .ucard.lk,body.trial .utabs .lk{opacity:.5}
+body.trial .ucard.lk::after{content:"🔒";position:absolute;top:6px;right:8px;font-size:14px}
+body.trial #allplay{display:none!important}
+#tlock{position:fixed;inset:0;z-index:75;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:20px}
+#tlock .au-box{text-align:center;gap:12px}
+#tlock .au-go.alt{background:var(--paper);color:var(--ink);border:1px solid var(--rule)}
 .ad-err{background:var(--red-soft);color:var(--red);border-radius:10px;padding:10px 12px;font-size:13.5px}
 .sheet{gap:14px}
 @media (max-width:700px){body{padding-inline:0;padding-block:calc(env(safe-area-inset-top,0px) + 6px) calc(env(safe-area-inset-bottom,0px) + 16px)}.sheet{border-radius:0;box-shadow:none;padding:10px 14px 24px}}
@@ -513,6 +524,7 @@ details.list{display:none}
 <body>
 <div class="sheet">
  <header class="top"><span class="seal">办公室汉语</span><h1>Tiếng Trung Văn phòng</h1><button id="admbtn" hidden>Quản lý</button><button id="acct" hidden title="Tài khoản"></button></header>
+ <div id="trialbar" hidden><span>👀 Bạn đang dùng thử 5 bài mẫu (Unit 1, 6, 9, 12, 17).</span><button id="tb-up">Đăng ký để mở 20 bài</button></div>
  <nav class="modes" aria-label="Chế độ"><button id="m-book" class="on">Bài học</button><button id="m-fc" hidden>Ôn tập</button><button id="m-px">Luyện tập</button><span class="prog" id="prog"></span></nav>
  <section id="fc" hidden>
   <div class="px-top"><button id="fc-back">‹ Luyện tập</button><span id="fc-title" class="fc-title">Thẻ ghi nhớ</span><span id="fc-count" class="count"></span></div>
@@ -601,9 +613,18 @@ details.list{display:none}
   <h2 id="g-title">Tài khoản đang chờ duyệt</h2>
   <p id="g-text"></p>
   <button class="au-go" id="g-main">Kiểm tra lại</button>
+  <button class="au-try" id="g-try" type="button" data-trial hidden>👀 Dùng thử trong lúc chờ duyệt</button>
+  <button class="au-link" id="g-resend" type="button" hidden>Gửi lại email xác minh</button>
   <button class="au-go alt" id="g-out">Đăng xuất</button>
  </div>
 </div>
+<div id="tlock" hidden><div class="au-box">
+  <div class="g-ic" style="font-size:40px">🔒</div>
+  <h2 id="tl-title">Bài này dành cho tài khoản đã duyệt</h2>
+  <p>Bản dùng thử mở 5 bài mẫu: Unit 1, 6, 9, 12, 17. Đăng ký tài khoản để học đủ 20 bài, lưu tiến độ trên mọi thiết bị.</p>
+  <button class="au-go" id="tl-up">Đăng ký / Đăng nhập</button>
+  <button class="au-go alt" id="tl-stay">Tiếp tục dùng thử</button>
+ </div></div>
 <div id="adm" hidden>
  <div class="ad-top"><b>Quản lý người dùng</b><button id="ad-close">Đóng ✕</button></div>
  <div class="ad-body">
@@ -624,12 +645,18 @@ details.list{display:none}
   <div class="au-msg" id="au-msg"></div>
   <button class="au-go" id="au-go" type="submit">Đăng nhập</button>
   <button class="au-link" id="au-forgot" type="button">Quên mật khẩu?</button>
+  <div class="au-or">hoặc</div>
+  <button class="au-try" type="button" data-trial>👀 Dùng thử – không cần tài khoản</button>
  </form>
 </div>
 <script>
 /* thống kê lượt dùng ẩn danh (GoatCounter) — trang xem số liệu: https://tiengtrungvanphong.goatcounter.com */
 const GC_CODE="tiengtrungvanphong";
 let gcLast="",gcQ=[];
+/* chế độ dùng thử: chỉ mở bài đầu của mỗi phần */
+let TRIAL=false;const TRIAL_UNITS=["1","6","9","12","17"];
+const trialLocked=n=>TRIAL&&!TRIAL_UNITS.includes(String(n));
+function trialPrompt(u){const t=document.getElementById("tlock");document.getElementById("tl-title").textContent=u?`Unit ${u.n} dành cho tài khoản đã duyệt`:"Nội dung dành cho tài khoản đã duyệt";t.hidden=false}
 function gcEvent(path,title){
  if(path===gcLast)return;gcLast=path;
  const send=()=>{try{window.goatcounter.count({path,title:title||path,event:true})}catch(e){}};
@@ -1373,7 +1400,7 @@ document.getElementById("dlg-words").addEventListener("click",e=>{const b=e.targ
  const redraw=()=>{const i=dIdx;dIdx=-1;dlgRender(i)};redraw();if(!HZ)loadHZ().then(redraw)});
 function lineAt(t){const ls=DLG[dU].lines;let i=0;for(let j=0;j<ls.length;j++)if(t>=ls[j].t-0.05)i=j;return i}
 function openDlg(n,autoplay){
- const d=DLG[n];if(!d)return;gcEvent("hoi-thoai-"+n,"Hội thoại bài "+n);
+ const d=DLG[n];if(!d)return;if(trialLocked(n)){trialPrompt(U.find(u=>u.n===n));return}gcEvent("hoi-thoai-"+n,"Hội thoại bài "+n);
  if(dU!==n){dU=n;dIdx=-1;DA.src=d.video||d.file;DSEC.classList.toggle("vid",!!d.video);
   document.getElementById("dlg-title").textContent=`Unit ${n} · Hội thoại`;
   document.getElementById("dlg-scene").textContent=d.scene;
@@ -1426,6 +1453,7 @@ const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math
 function pxPool(scope){
  const seen=new Set(),p=[];
  ALLW.forEach(x=>{if(seen.has(x.w[0]))return;
+  if(TRIAL&&!TRIAL_UNITS.includes(x.u))return;
   if(scope==="hard"&&!ST.h[x.w[0]])return; if(scope==="new"&&ST.k[x.w[0]])return;
   if(/^p\d$/.test(scope)){const u=U.find(y=>y.n===x.u);if(!u||"p"+u.p!==scope)return}
   else if(!["all","hard","new"].includes(scope)&&x.u!==scope)return;
@@ -1455,7 +1483,7 @@ function fillScope(){
  const nh=pxPool("hard").length,nn=pxPool("new").length;
  s.innerHTML=`<option value="all">Cả khoá · trộn ${U.length} bài (${pxPool("all").length} từ)</option>`+PARTS.map((p,pi)=>{const us=U.filter(u=>u.p===pi).map(u=>u.n);return `<option value="p${pi}">${esc(p.vi.split(" · ")[0])} · Unit ${us[0]}–${us.at(-1)} (${pxPool("p"+pi).length} từ)</option>`}).join("")+`<option value="new">Từ chưa thuộc (${nn})</option><option value="hard">Từ khó (${nh})</option>`;
  s.value=[...s.options].some(o=>o.value===v)?v:"all";
- const lab={all:"Cả khoá",p0:"Phần 1",p1:"Phần 2",p2:"Phần 3",p3:"Phần 4",new:"Chưa thuộc",hard:"Từ khó"};
+ const lab={all:"Cả khoá",p0:"Phần 1",p1:"Phần 2",p2:"Phần 3",p3:"Phần 4",p4:"Phần 5",new:"Chưa thuộc",hard:"Từ khó"};
  document.getElementById("px-scopes").innerHTML=[...s.options].map(o=>{const n=(o.textContent.match(/\((\d+)/)||[])[1]||"";const sub=o.value.startsWith("p")?o.textContent.split(" · ")[1].split(" (")[0]:"";
   return `<button class="pxs${o.value===s.value?" on":""}" role="radio" aria-checked="${o.value===s.value}" data-scope="${o.value}"><b>${lab[o.value]}</b><span>${sub?sub+" · ":""}${n} từ</span></button>`}).join("");
 }
@@ -1572,7 +1600,7 @@ function show(view){
  if(view==="home")fillScope();
 }
 function openUnit(i,dir,hz){
- i=Math.max(0,Math.min(U.length-1,i));cu=i;show("unit");gcEvent("bai-"+U[i].n,"Bài "+U[i].n+" · "+U[i].vi);
+ i=Math.max(0,Math.min(U.length-1,i));if(trialLocked(U[i].n)){trialPrompt(U[i]);return}cu=i;show("unit");gcEvent("bai-"+U[i].n,"Bài "+U[i].n+" · "+U[i].vi);
  SECS.forEach((s,j)=>{s.hidden=j!==i;s.classList.remove("in-l","in-r")});
  if(dir){void SECS[i].offsetWidth;SECS[i].classList.add(dir>0?"in-l":"in-r")}
  TABS.forEach((t,j)=>t.classList.toggle("on",j===i));
@@ -1659,7 +1687,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="25";
+const APP_VERSION="26";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
@@ -1708,10 +1736,21 @@ const ADMIN_EMAILS=["phamvantu304@gmail.com"];
  });
  ACCT.addEventListener("click",()=>{if(user&&confirm(`Đang đăng nhập: ${user.email}\n\nĐăng xuất khỏi thiết bị này?`))auth.signOut()});
  $("g-out").addEventListener("click",()=>auth&&auth.signOut());
+ $("g-resend").addEventListener("click",()=>{if(!user)return;user.sendEmailVerification().then(()=>alert(`Đã gửi lại email xác minh tới ${user.email}.\nNgười gửi: noreply@tieng-trung-van-phong.firebaseapp.com — xem cả mục Spam / Quảng cáo.`)).catch(e=>alert(e.code==="auth/too-many-requests"?"Gửi quá nhiều lần. Đợi vài phút rồi thử lại.":"Không gửi được: "+(e.code||e.message)))});
  let gateMain=null;$("g-main").addEventListener("click",()=>gateMain&&gateMain());
  function gate(ic,title,text,mainLabel,fn){$("g-ic").textContent=ic;$("g-title").textContent=title;$("g-text").textContent=text;
-  $("g-main").textContent=mainLabel;$("g-main").hidden=!fn;gateMain=fn;GATE.hidden=false;AU.hidden=true;document.body.style.overflow="hidden"}
- function unlock(){GATE.hidden=true;AU.hidden=true;document.body.style.overflow="";approved=true;
+  $("g-main").textContent=mainLabel;$("g-main").hidden=!fn;gateMain=fn;$("g-try").hidden=!/chờ duyệt/.test(title);$("g-resend").hidden=!/Xác minh/.test(title);GATE.hidden=false;AU.hidden=true;document.body.style.overflow="hidden"}
+ function enterTrial(){TRIAL=true;AU.hidden=true;GATE.hidden=true;document.body.style.overflow="";document.body.classList.add("trial");$("trialbar").hidden=false;
+  document.querySelectorAll(".ucard[data-open]").forEach(c=>c.classList.toggle("lk",trialLocked(c.dataset.open)));
+  document.querySelectorAll(".utabs [role=tab],.utabs button").forEach((t,j)=>U[j]&&t.classList.toggle("lk",trialLocked(U[j].n)));
+  try{fillScope()}catch(e){}
+  if(!UV.hidden&&trialLocked(U[cu].n))goHome();gcEvent("dung-thu","Dùng thử")}
+ function leaveTrial(){TRIAL=false;document.body.classList.remove("trial");$("trialbar").hidden=true;$("tlock").hidden=true;document.querySelectorAll(".lk").forEach(c=>c.classList.remove("lk"));try{fillScope()}catch(e){}}
+ function toSignUp(){leaveTrial();if(user&&!approved){onUser(user);return}setMode(user?"in":"up");AU.hidden=false;document.body.style.overflow="hidden"}
+ document.querySelectorAll("[data-trial]").forEach(b=>b.addEventListener("click",enterTrial));
+ $("tb-up").addEventListener("click",toSignUp);$("tl-up").addEventListener("click",toSignUp);
+ $("tl-stay").addEventListener("click",()=>{$("tlock").hidden=true});
+ function unlock(){if(TRIAL)leaveTrial();GATE.hidden=true;AU.hidden=true;document.body.style.overflow="";approved=true;
   try{localStorage.setItem(okKey(user),"1")}catch(e){}
   if(!merged){merged=true;db.collection("users").doc(user.uid).get().then(d=>{const r=d.exists&&d.data().state;
    if(merge(r?JSON.parse(r):null)){try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}paintMarks()}cloudSave()}).catch(()=>{})}}
@@ -1724,12 +1763,13 @@ const ADMIN_EMAILS=["phamvantu304@gmail.com"];
   db.collection("users").doc(user.uid).update({state:JSON.stringify(ST),lastSeen:TS()}).catch(()=>{})},2500)};
  function stop(){if(unsubMe){unsubMe();unsubMe=null}if(unsubAll){unsubAll();unsubAll=null}}
  async function onUser(u){stop();user=u;approved=false;merged=false;ADB.hidden=true;ADM.hidden=true;
+  if(!u&&TRIAL){GATE.hidden=true;ACCT.hidden=true;return}
   if(!u){GATE.hidden=true;AU.hidden=false;ACCT.hidden=true;document.body.style.overflow="hidden";return}
   ACCT.hidden=false;ACCT.textContent="👤 "+(u.displayName||u.email);AU.hidden=true;
   // tài khoản quản trị phải xác minh email trước (chống người khác đăng ký giả email quản trị)
   if(isAdminEmail(u)&&!u.emailVerified){
    const check=async()=>{await u.reload();if(auth.currentUser.emailVerified){await auth.currentUser.getIdToken(true);onUser(auth.currentUser)}else alert("Email chưa được xác minh. Mở email từ Firebase và bấm vào link xác minh.")};
-   gate("✉️","Xác minh email quản trị",`Mở hộp thư ${u.email}, bấm vào link xác minh Firebase vừa gửi (xem cả mục Spam), rồi bấm "Tôi đã xác minh".`,"Tôi đã xác minh",check);
+   gate("✉️","Xác minh email quản trị",`Mở hộp thư ${u.email}, tìm email từ noreply@tieng-trung-van-phong.firebaseapp.com (xem cả mục Spam / Quảng cáo), bấm link xác minh, rồi quay lại bấm "Tôi đã xác minh".`,"Tôi đã xác minh",check);
    u.sendEmailVerification().catch(()=>{});return}
   const ref=db.collection("users").doc(u.uid);
   let cached=false;try{cached=localStorage.getItem(okKey(u))==="1"}catch(e){}
@@ -1740,6 +1780,7 @@ const ADMIN_EMAILS=["phamvantu304@gmail.com"];
    if(st==="approved"){unlock();gcEvent("dang-nhap","Đăng nhập")}
    else{approved=false;try{localStorage.removeItem(okKey(u))}catch(e){}
     if(st==="blocked")gate("🔒","Tài khoản đã bị khoá","Vui lòng liên hệ quản trị viên để được hỗ trợ.","",null);
+    else if(TRIAL)return;
     else gate("⏳","Tài khoản đang chờ duyệt",`Cảm ơn bạn đã đăng ký (${u.email}). Quản trị viên sẽ duyệt sớm; app tự mở khi được duyệt.`,"Kiểm tra lại",()=>ref.get({source:"server"}).catch(()=>{}))}
   },()=>{if(!approved)gate("📶","Chưa kiểm tra được tài khoản","Cần có mạng cho lần mở đầu tiên. Kiểm tra kết nối rồi thử lại.","Thử lại",()=>onUser(u))});
   if(isAdmin(u))startAdmin();
