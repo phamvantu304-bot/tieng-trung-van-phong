@@ -99,6 +99,28 @@ svg a:hover rect,svg a:focus rect{stroke-width:2.6}
 @media (max-width:520px){.w{grid-template-columns:1fr}}
 body.hide-mean .mn, body.hide-mean .v{visibility:hidden}
 body.hide-py .py, body.hide-py .p{visibility:hidden}
+#tr{display:flex;flex-direction:column;gap:10px;padding:14px 0}
+.tr-dir{display:flex;align-items:center;justify-content:center;gap:14px;font-size:15px}
+.tr-dir button{border:1.5px solid var(--rule);background:var(--row);border-radius:50%;width:38px;height:38px;font-size:18px;cursor:pointer;color:var(--ink)}
+#tr-in{width:100%;box-sizing:border-box;border:1.5px solid var(--rule);border-radius:10px;padding:12px;font:inherit;font-size:17px;line-height:1.45;background:var(--paper);color:var(--ink);resize:vertical;min-height:96px}
+#tr-in:focus{outline:2px solid var(--red);outline-offset:1px}
+.tr-acts{display:flex;gap:8px;align-items:center}
+.tr-acts button{border:0;border-radius:10px;background:var(--red);color:var(--paper);font-size:15px;font-weight:700;padding:11px 26px;cursor:pointer}
+.tr-acts button.ghost{background:var(--row);color:var(--ink);border:1px solid var(--rule);padding:11px 16px}
+.tr-acts button:disabled{opacity:.55}
+#tr-count{margin-left:auto;font-size:12px;color:var(--muted)}
+#tr-out{border:1.5px solid var(--ink);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;background:var(--row)}
+.tr-res{font-size:22px;line-height:1.45;font-weight:600;word-break:break-word}
+.tr-res.zh{font-family:var(--han);font-size:26px}
+.tr-py{font-size:14.5px;font-weight:600;color:var(--red)}
+.tr-bo .boi{font-size:13.5px}
+.tr-btns{display:flex;gap:8px;margin-top:4px}
+.tr-msg{font-size:13.5px;color:var(--red);margin:0}
+#tr-hist{display:flex;flex-direction:column;gap:6px}
+#tr-hist button{text-align:left;border:1px solid var(--rule);background:var(--paper);border-radius:10px;padding:9px 12px;cursor:pointer;color:var(--ink);font:inherit;font-size:13.5px;display:flex;flex-direction:column;gap:2px}
+#tr-hist button span{color:var(--muted)}
+#tr-hist h3{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:6px 0 0}
+.tr-note{font-size:12px;color:var(--muted);margin:4px 0 0}
 .boi{display:block;font-size:12.5px;font-weight:600;font-style:italic;color:#B5581B;line-height:1.45}
 .boi::before{content:"bồi ";font-size:10px;font-weight:700;font-style:normal;letter-spacing:.04em;text-transform:uppercase;opacity:.65}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .boi{color:#E8A06A}}
@@ -534,7 +556,7 @@ details.list{display:none}
 <div class="sheet">
  <header class="top"><span class="seal">办公室汉语</span><h1>Tiếng Trung Văn phòng</h1><button id="admbtn" hidden>Quản lý</button><button id="acct" hidden title="Tài khoản"></button></header>
  <div id="trialbar" hidden><span>👀 Bạn đang dùng thử <span class="n-tc">5</span> bài mẫu (<span class="n-tu">Unit 1, 6, 9, 12, 17</span>).</span><button id="tb-up">Đăng ký để mở <span class="n-les">20</span> bài</button></div>
- <nav class="modes" aria-label="Chế độ"><button id="m-book" class="on">Bài học</button><button id="m-fc" hidden>Ôn tập</button><button id="m-px">Luyện tập</button><span class="prog" id="prog"></span></nav>
+ <nav class="modes" aria-label="Chế độ"><button id="m-book" class="on">Bài học</button><button id="m-fc" hidden>Ôn tập</button><button id="m-px">Luyện tập</button><button id="m-tr">Dịch</button><span class="prog" id="prog"></span></nav>
  <section id="fc" hidden>
   <div class="px-top"><button id="fc-back">‹ Luyện tập</button><span id="fc-title" class="fc-title">Thẻ ghi nhớ</span><span id="fc-count" class="count"></span></div>
   <div class="fc-bar" hidden>
@@ -549,6 +571,20 @@ details.list{display:none}
   <div class="px-top"><button id="px-back">‹ Luyện tập</button><span id="px-title"></span><span id="px-score"></span></div>
   <div class="px-bar"><i id="px-fill"></i></div>
   <div id="px-body"></div>
+ </section>
+<section id="tr" hidden>
+  <div class="tr-dir"><b id="tr-from">Tiếng Việt</b><button id="tr-swap" aria-label="Đổi chiều dịch">⇄</button><b id="tr-to">Tiếng Trung</b></div>
+  <textarea id="tr-in" rows="4" maxlength="600" placeholder="Gõ hoặc dán câu cần dịch…" aria-label="Văn bản cần dịch"></textarea>
+  <div class="tr-acts"><button id="tr-go">Dịch</button><button id="tr-clear" class="ghost">Xoá</button><span id="tr-count"></span></div>
+  <div id="tr-out" hidden>
+   <div class="tr-res" id="tr-res"></div>
+   <div class="tr-py" id="tr-py"></div>
+   <div class="tr-bo" id="tr-bo"></div>
+   <div class="tr-btns"><button id="tr-say" class="act">▶ Nghe</button><button id="tr-copy" class="act">Sao chép</button></div>
+  </div>
+  <p id="tr-msg" class="tr-msg" hidden></p>
+  <div id="tr-hist"></div>
+  <p class="tr-note">Dịch tự động (Google Dịch), cần có mạng. Nội dung bạn gõ được gửi tới Google để dịch. Chỉ để tham khảo, câu quan trọng nên kiểm tra lại.</p>
  </section>
  <section id="dlg" hidden>
   <div class="dlg-top"><button id="dlg-back">‹ Về bài học</button><span id="dlg-title"></span></div>
@@ -1665,7 +1701,7 @@ document.getElementById("pxhome").addEventListener("click",e=>{const t=e.target.
 document.getElementById("px-back").addEventListener("click",()=>goHome(true));
 mP.addEventListener("click",()=>goHome(true));
 /* ---------- views: home · unit · flashcards ---------- */
-const mB=document.getElementById("m-book"),mF=document.getElementById("m-fc");
+const mB=document.getElementById("m-book"),mF=document.getElementById("m-fc"),mT=document.getElementById("m-tr"),TRS=document.getElementById("tr");
 const HOME=document.getElementById("home"),UV=document.getElementById("uview"),FC=document.getElementById("fc"),HDR=document.querySelector("header");
 const SECS=U.map(u=>document.getElementById(uid(u)));
 let cu=0;
@@ -1680,7 +1716,7 @@ const TABS=[...document.querySelectorAll(".utab")];
 function save2(v){try{localStorage.setItem("ttvp-view",JSON.stringify(v))}catch(e){}}
 function topOf(el){return el.getBoundingClientRect().top+window.scrollY}
 function show(view){
- DSEC.hidden=true;
+ DSEC.hidden=true;TRS.hidden=view!=="tr";mT.classList.toggle("on",view==="tr");
  HOME.hidden=view!=="home";UV.hidden=view!=="unit";FC.hidden=view!=="fc";HDR.hidden=view!=="home";
  mB.classList.toggle("on",view==="home"||view==="unit");mF.classList.toggle("on",view==="fc");
  PXS.hidden=view!=="px";mP.classList.toggle("on",view==="px"||view==="fc");
@@ -1748,6 +1784,44 @@ MVB.addEventListener("click",e=>{
 });
 document.getElementById("map").addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;closeMapView();e.preventDefault();const id=(a.getAttribute("href")||"").slice(1);const i=U.findIndex(u=>uid(u)===id);if(i>=0)openUnit(i)});
 mB.addEventListener("click",()=>goHome());
+/* ---------- dịch Việt ↔ Trung (Google Dịch, cần mạng) ---------- */
+(()=>{
+ const $=id=>document.getElementById(id);
+ let vi2zh=true,last=null;
+ const HK="ttvp-tr";
+ const hist=()=>{try{return JSON.parse(localStorage.getItem(HK)||"[]")}catch(e){return[]}};
+ const msg=t=>{$("tr-msg").textContent=t||"";$("tr-msg").hidden=!t};
+ function paintDir(){$("tr-from").textContent=vi2zh?"Tiếng Việt":"Tiếng Trung";$("tr-to").textContent=vi2zh?"Tiếng Trung":"Tiếng Việt";
+  $("tr-in").placeholder=vi2zh?"Gõ hoặc dán câu tiếng Việt cần dịch…":"Gõ hoặc dán câu tiếng Trung (chữ Hán) cần dịch…";$("tr-in").classList.toggle("han",!vi2zh)}
+ function paintHist(){const h=hist();$("tr-hist").innerHTML=h.length?`<h3>Đã dịch gần đây</h3>`+h.map((x,i)=>`<button data-i="${i}"><b class="${x.z?"han":""}">${esc(x.a)}</b><span class="${x.z?"":"han"}">${esc(x.b)}</span></button>`).join(""):""}
+ function showRes(o){last=o;const zh=o.dirVi2Zh;
+  $("tr-out").hidden=false;$("tr-res").textContent=o.out;$("tr-res").classList.toggle("zh",zh);
+  $("tr-py").textContent=o.py?(zh?"":"Pinyin câu gốc: ")+o.py:"";$("tr-bo").innerHTML=zh&&o.py&&BOIOK?`<span class="boi">${esc(BOI(o.py))}</span>`:""}
+ async function run(){
+  const q=$("tr-in").value.trim();if(!q){msg("Hãy nhập nội dung cần dịch.");return}
+  if(TRIAL){trialPrompt(null);return}
+  msg("");$("tr-go").disabled=true;$("tr-go").textContent="Đang dịch…";
+  try{
+   const u="https://translate.googleapis.com/translate_a/single?client=gtx&sl="+(vi2zh?"vi":"zh-CN")+"&tl="+(vi2zh?"zh-CN":"vi")+"&dt=t&dt=rm&q="+encodeURIComponent(q);
+   const r=await fetch(u);if(!r.ok)throw new Error(r.status);const d=await r.json();
+   let out="",py="";for(const e of d[0]||[]){if(e[0])out+=e[0];else if(e[2]||e[3])py+=(py?" ":"")+(vi2zh?e[2]:e[3])||""}
+   if(!out)throw new Error("empty");
+   showRes({out,py:py.trim(),dirVi2Zh:vi2zh});gcEvent("dich","Dịch");
+   const h=hist().filter(x=>x.a!==q);h.unshift({a:q,b:out,z:!vi2zh});try{localStorage.setItem(HK,JSON.stringify(h.slice(0,8)))}catch(e){}paintHist();
+  }catch(e){msg(navigator.onLine===false?"Không có mạng. Hãy kết nối mạng rồi thử lại.":"Chưa dịch được lúc này. Hãy thử lại sau ít phút.")}
+  finally{$("tr-go").disabled=false;$("tr-go").textContent="Dịch"}}
+ $("tr-go").addEventListener("click",run);
+ $("tr-in").addEventListener("input",()=>{$("tr-count").textContent=$("tr-in").value.length?`${$("tr-in").value.length}/600`:""});
+ $("tr-in").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();run()}});
+ $("tr-clear").addEventListener("click",()=>{$("tr-in").value="";$("tr-out").hidden=true;msg("");$("tr-count").textContent="";$("tr-in").focus()});
+ $("tr-swap").addEventListener("click",()=>{vi2zh=!vi2zh;paintDir();if(last&&!$("tr-out").hidden){$("tr-in").value=last.out;$("tr-out").hidden=true}$("tr-count").textContent=$("tr-in").value.length?`${$("tr-in").value.length}/600`:""});
+ $("tr-say").addEventListener("click",()=>{if(!last)return;const zh=last.dirVi2Zh?last.out:$("tr-in").value.trim();speak(zh)});
+ $("tr-copy").addEventListener("click",()=>{if(!last)return;const t=last.out;const done=()=>{$("tr-copy").textContent="Đã sao chép ✓";setTimeout(()=>$("tr-copy").textContent="Sao chép",1500)};
+  (navigator.clipboard?navigator.clipboard.writeText(t).then(done,()=>{}):Promise.resolve())});
+ $("tr-hist").addEventListener("click",e=>{const b=e.target.closest("button[data-i]");if(!b)return;const x=hist()[+b.dataset.i];if(!x)return;
+  vi2zh=!x.z;paintDir();$("tr-in").value=x.a;$("tr-count").textContent=`${x.a.length}/600`;showRes({out:x.b,py:"",dirVi2Zh:vi2zh});run()});
+ mT.addEventListener("click",()=>{if(TRIAL){trialPrompt(null);return}DA.pause();show("tr");HOME.classList.remove("only-px");paintDir();paintHist();window.scrollTo(0,0);save2({v:"home"})});
+})();
 mF.addEventListener("click",()=>goFC(UV.hidden?null:U[cu].n));
 // swipe between units
 (function(){
@@ -1774,7 +1848,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="30";
+const APP_VERSION="31";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
