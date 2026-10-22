@@ -667,6 +667,8 @@ let gcLast="",gcQ=[];
 /* chế độ dùng thử: chỉ mở bài đầu của mỗi phần */
 /* Phần 5 (Bất động sản) chỉ hiện với tài khoản quản trị: cờ này được bật khi quản trị viên đăng nhập */
 const BDS=(()=>{try{return localStorage.getItem("ttvp-bds")==="1"}catch(e){return false}})();
+/* "Bồi" chỉ hiện với tài khoản được cấp (cờ được bật khi tài khoản đó đăng nhập) */
+const BOIOK=(()=>{try{return localStorage.getItem("ttvp-boi-ok")==="1"}catch(e){return false}})();
 let TRIAL=false;const TRIAL_UNITS=BDS?["1","6","9","12","17"]:["1","6","9","12"];
 const trialLocked=n=>TRIAL&&!TRIAL_UNITS.includes(String(n));
 function trialPrompt(u){const t=document.getElementById("tlock");document.getElementById("tl-title").textContent=u?`Unit ${u.n} dành cho tài khoản đã duyệt`:"Nội dung dành cho tài khoản đã duyệt";t.hidden=false}
@@ -1106,7 +1108,7 @@ const BOI=(()=>{
    const w=one(tk);return w===null?tk:cap(tk,w)}).replace(/ +/g," ").replace(/ ([,.?!:;)»…])/g,"$1").trim()};
  function cap(src,out){return /^[A-ZÀ-Ý]/.test(src)?out[0].toUpperCase()+out.slice(1):out}
 })();
-const bo=(py,tag="span")=>py?`<${tag} class="boi">${esc(BOI(py))}</${tag}>`:"";
+const bo=(py,tag="span")=>py&&BOIOK?`<${tag} class="boi">${esc(BOI(py))}</${tag}>`:"";
 const uid=u=>"u"+u.n.split("–")[0];
 
 /* ---------- mindmap ---------- */
@@ -1342,7 +1344,7 @@ cnt.textContent=`${total} từ · ${nB} từ trong Boya`;
 document.getElementById("ob").addEventListener("change",filter);
 document.getElementById("hm").addEventListener("change",e=>document.body.classList.toggle("hide-mean",e.target.checked));
 document.getElementById("hp").addEventListener("change",e=>document.body.classList.toggle("hide-py",e.target.checked));
-(()=>{const sb=document.getElementById("sb");let on=true;try{on=localStorage.getItem("ttvp-boi")!=="0"}catch(e){}
+(()=>{const sb=document.getElementById("sb");if(!BOIOK){sb.parentNode.hidden=true;return}let on=true;try{on=localStorage.getItem("ttvp-boi")!=="0"}catch(e){}
  const set=v=>{sb.checked=v;document.body.classList.toggle("hide-boi",!v)};set(on);
  sb.addEventListener("change",()=>{set(sb.checked);try{localStorage.setItem("ttvp-boi",sb.checked?"1":"0")}catch(e){}})})();
 filter();
@@ -1459,7 +1461,7 @@ function dlgRender(i){
  document.getElementById("dlg-who").textContent=(d.roles&&d.roles[L.who])||L.who;
  document.getElementById("dlg-zh").textContent=L.zh;
  document.getElementById("dlg-vi").textContent=L.vi;
- document.getElementById("dlg-boi").innerHTML=L.py?`<span class="boi">${esc(BOI(L.py))}</span>`:"";
+ document.getElementById("dlg-boi").innerHTML=L.py&&BOIOK?`<span class="boi">${esc(BOI(L.py))}</span>`:"";
  const ws=wordsIn(L.zh,dU);
  document.getElementById("dlg-words").innerHTML=ws.length?ws.map(w=>{const o=MOPEN.has(w[0]);return `<div class="dwi${o?" open":""}"><div class="dwr"><button class="dw" data-say="${w[0]}"><span class="han">${w[0]}</span><span class="p py">/ ${esc(w[1])} /:</span>${bo(w[1])}<span class="m mn">${esc(w[2])}</span></button><button class="dw-x" data-map="${w[0]}" aria-expanded="${o}" title="Sơ đồ bộ thủ và mẹo nhớ">Bộ thủ ${o?"▴":"▾"}</button></div>${o?mapHtml(w):""}</div>`}).join(""):`<span class="dlg-none">Câu này không có từ mới của bài.</span>`;
  document.querySelectorAll("#dlg-list li").forEach((li,j)=>li.classList.toggle("on",j===i));
@@ -1772,7 +1774,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="29";
+const APP_VERSION="30";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
@@ -1848,9 +1850,12 @@ const ADMIN_EMAILS=["phamvantu304@gmail.com"];
   db.collection("users").doc(user.uid).update({state:JSON.stringify(ST),lastSeen:TS()}).catch(()=>{})},2500)};
  function stop(){if(unsubMe){unsubMe();unsubMe=null}if(unsubAll){unsubAll();unsubAll=null}}
  // Phần Bất động sản chỉ dành cho quản trị viên: đổi tài khoản thì tải lại app để hiện/ẩn phần này
- function bds(on){if(on===BDS)return false;try{if(on)localStorage.setItem("ttvp-bds","1");else localStorage.removeItem("ttvp-bds")}catch(e){return false}location.reload();return true}
+ const BOI_USERS=["phamvanvi.tech"];const hasBoi=u=>!!u&&u.email&&BOI_USERS.includes(u.email.split("@")[0].toLowerCase());
+ function flags(u){const want={"ttvp-bds":isAdmin(u),"ttvp-boi-ok":hasBoi(u)},have={"ttvp-bds":BDS,"ttvp-boi-ok":BOIOK};let ch=false;
+  try{for(const k in want)if(want[k]!==have[k]){ch=true;if(want[k])localStorage.setItem(k,"1");else localStorage.removeItem(k)}}catch(e){return false}
+  if(ch)location.reload();return ch}
  async function onUser(u){stop();user=u;approved=false;merged=false;ADB.hidden=true;ADM.hidden=true;
-  if(bds(isAdmin(u)))return;
+  if(flags(u))return;
   if(!u&&TRIAL){GATE.hidden=true;ACCT.hidden=true;return}
   if(!u){GATE.hidden=true;AU.hidden=false;ACCT.hidden=true;document.body.style.overflow="hidden";return}
   ACCT.hidden=false;ACCT.textContent="👤 "+(u.displayName||u.email);AU.hidden=true;
