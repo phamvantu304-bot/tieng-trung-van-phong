@@ -99,6 +99,14 @@ svg a:hover rect,svg a:focus rect{stroke-width:2.6}
 @media (max-width:520px){.w{grid-template-columns:1fr}}
 body.hide-mean .mn, body.hide-mean .v{visibility:hidden}
 body.hide-py .py, body.hide-py .p{visibility:hidden}
+.boi{display:block;font-size:12.5px;font-weight:600;font-style:italic;color:#B5581B;line-height:1.45}
+.boi::before{content:"bồi ";font-size:10px;font-weight:700;font-style:normal;letter-spacing:.04em;text-transform:uppercase;opacity:.65}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .boi{color:#E8A06A}}
+:root[data-theme="dark"] .boi{color:#E8A06A}
+body.hide-boi .boi,body.hide-boi .dlg-boi{display:none}
+.wr-tx .boi{display:block}.res .boi{display:inline;margin-left:6px}.res small.boi::before{content:""}
+.fc-card .boi{text-align:center;font-size:15px}.dlg-boi{margin-top:2px}.dlg-boi .boi{font-size:14px;color:#B5581B}
+#dlg-list .boi{font-size:11.5px}.dw .boi{display:inline;margin:0 6px}
 .empty{color:var(--muted);font-size:14px}
 .umap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--rule);border-radius:4px;background:var(--paper)}
 .umap svg{display:block;width:100%;height:auto}
@@ -549,6 +557,7 @@ details.list{display:none}
    <div class="dlg-who" id="dlg-who"></div>
    <div class="dlg-zh han" id="dlg-zh"></div>
    <div class="dlg-vi"><span id="dlg-vi"></span></div>
+   <div class="dlg-boi" id="dlg-boi"></div>
    <div class="dlg-new"><span class="dlg-tag">Từ mới :</span><div id="dlg-words"></div></div>
   </div>
   <div class="dlg-bar"><i id="dlg-fill"></i></div>
@@ -591,6 +600,7 @@ details.list{display:none}
   <div class="tools">
    <label><input type="checkbox" id="hm"> Ẩn nghĩa</label>
    <label><input type="checkbox" id="hp"> Ẩn pinyin</label>
+   <label><input type="checkbox" id="sb" checked> Hiện bồi</label>
    <label><input type="checkbox" id="ob"> Chỉ từ Boya</label>
   </div>
   <main id="units"></main>
@@ -1035,6 +1045,68 @@ const SRC={"上班": ["c2", 36, 46], "不满": ["c2", 29, 47], "专业": ["c1", 
 })();
 const col=k=>`var(--${k})`, soft=k=>`var(--${k}-soft)`;
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* ---------- tiếng Trung bồi: pinyin → cách đọc gần đúng bằng chữ Việt ---------- */
+const BOI=(()=>{
+ const SYL=new Set("a ai an ang ao ba bai ban bang bao bei ben beng bi bian biang biao bie bin bing bo bong bu ca cai can cang cao ce cei cen ceng cha chai chan chang chao che chen cheng chi chong chou chu chua chuai chuan chuang chui chun chuo ci cong cou cu cuan cui cun cuo da dai dan dang dao de dei den deng di dia dian diao die din ding diu dong dou du duan dui dun duo e ei en eng er fa fan fang fei fen feng fiao fo fou fu ga gai gan gang gao ge gei gen geng gong gou gu gua guai guan guang gui gun guo ha hai han hang hao he hei hen heng hong hou hu hua huai huan huang hui hun huo ji jia jian jiang jiao jie jin jing jiong jiu ju juan jue jun ka kai kan kang kao ke kei ken keng kong kou ku kua kuai kuan kuang kui kun kuo la lai lan lang lao le lei len leng li lia lian liang liao lie lin ling liu lo long lou lu luan lun luo lv lve ma mai man mang mao me mei men meng mi mian miao mie min ming miu mo mou mu na nai nan nang nao ne nei nen neng ni nia nian niang niao nie nin ning niu nong nou nu nuan nun nuo nv nve o ou pa pai pan pang pao pei pen peng pi pian piao pie pin ping po pou pu qi qia qian qiang qiao qie qin qing qiong qiu qu quan que qun ran rang rao re ren reng ri rong rou ru rua ruan rui run ruo sa sai san sang sao se sen seng sha shai shan shang shao she shei shen sheng shi shou shu shua shuai shuan shuang shui shun shuo si song sou su suan sui sun suo ta tai tan tang tao te tei teng ti tian tiao tie ting tong tou tu tuan tui tun tuo wa wai wan wang wei wen weng wo wong wu xi xia xian xiang xiao xie xin xing xiong xiu xu xuan xue xun ya yan yang yao ye yi yin ying yo yong you yu yuan yue yun za zai zan zang zao ze zei zen zeng zha zhai zhan zhang zhao zhe zhei zhen zheng zhi zhong zhou zhu zhua zhuai zhuan zhuang zhui zhun zhuo zi zong zou zu zuan zui zun zuo".split(" "));
+ const TONED={ā:"a1",á:"a2",ǎ:"a3",à:"a4",ē:"e1",é:"e2",ě:"e3",è:"e4",ī:"i1",í:"i2",ǐ:"i3",ì:"i4",ō:"o1",ó:"o2",ǒ:"o3",ò:"o4",ū:"u1",ú:"u2",ǔ:"u3",ù:"u4",ǖ:"v1",ǘ:"v2",ǚ:"v3",ǜ:"v4",ü:"v0"};
+ const INIT={b:"p",p:"ph",m:"m",f:"ph",d:"t",t:"th",n:"n",l:"l",g:"c",k:"kh",h:"h",j:"ch",q:"ch",x:"x",zh:"tr",ch:"ch",sh:"s",r:"r",z:"ch",c:"x",s:"s"};
+ const ZERO={a:"a",ai:"ai",an:"an",ang:"ang",ao:"ao",e:"ưa",ei:"ây",en:"ân",eng:"âng",er:"ơ",o:"ô",ou:"âu",
+  wa:"oa",wai:"oai",wan:"oan",wang:"oang",wei:"uây",wen:"uân",weng:"uâng",wo:"ua",wu:"u",
+  ya:"gia",yan:"den",yang:"dang",yao:"dao",ye:"dê",yi:"i",yin:"in",ying:"inh",yo:"dô",yong:"dung",you:"dâu",yu:"duy",yuan:"duyên",yue:"duê",yun:"duyn"};
+ const FIN={a:"a",o:"ô",e:"ưa",i:"i",u:"u",v:"uy",ai:"ai",ei:"ây",ao:"ao",ou:"âu",an:"an",en:"ân",ang:"ang",eng:"âng",ong:"ung",er:"ơ",
+  ia:"ia",ie:"iê",iao:"eo",iu:"iêu",ian:"iên",in:"in",iang:"iang",ing:"inh",iong:"iung",
+  ua:"oa",uo:"ua",uai:"oai",ui:"uây",uan:"oan",un:"uân",uang:"oang",ue:"uê",ve:"uê",van:"uyên",vn:"uyn",ueng:"uâng"};
+ const RETRO=/^(zh|ch|sh|r|z|c|s)$/;
+ const VOW="aăâeêioôơuưy";
+ const MARK=["","́","̉","̀"]; // 1 ngang · 2 sắc · 3 hỏi · 4 huyền
+ const norm=s=>{let tone=0,b="";for(const ch of s){const t=TONED[ch];if(t){b+=t[0];if(t[1]!=="0")tone=+t[1]}else b+=ch==="ü"?"v":ch}return {b,tone}};
+ function split(b){ // tách chuỗi pinyin dính liền thành các âm tiết (ít âm tiết nhất)
+  const n=b.length,best=Array(n+1).fill(null);best[0]={c:0,p:[]};
+  for(let i=0;i<n;i++){if(!best[i])continue;
+   for(let j=Math.min(n,i+6);j>i;j--){const s=b.slice(i,j);if(!SYL.has(s))continue;
+    const c=best[i].c+1;if(!best[j]||c<best[j].c||(c===best[j].c&&s.length>(best[j].p.at(-1)||"").length))best[j]={c,p:best[i].p.concat(s)}}}
+  return best[n]?best[n].p:null}
+ function conv(s,neutral){
+  let ini="",fin=s;
+  if(ZERO[s]!==undefined)return ZERO[s];
+  const m=/^(zh|ch|sh|[bpmfdtnlgkhjqxrzcs])(.*)$/.exec(s);if(!m)return null;ini=m[1];fin=m[2];
+  if(/^[jqx]$/.test(ini)&&fin[0]==="u")fin="v"+fin.slice(1); // ju/qu/xu = jü/qü/xü
+  if(fin==="i"&&RETRO.test(ini))return INIT[ini]+"ư";
+  if(fin==="e"&&neutral)return INIT[ini]+"ơ";
+  if(fin==="o"&&!/^[bpmf]$/.test(ini))return null;
+  let r=FIN[fin];if(r===undefined)return null;let o=INIT[ini];
+  if(/^[gkh]$/.test(ini)&&/^o(a|ai|an|ang)$/.test(r)){ // gua/guan/guang → qua/quan/quang
+   if(ini==="g")o="q",r="u"+r.slice(1);}
+  if(ini==="g"&&r==="uây")o="q";if(ini==="g"&&r==="uân")o="q";
+  return o+r}
+ function tone(syl,t){
+  if(!t||t===1)return syl;
+  let st=0;if(/^qu./.test(syl))st=2;else if(/^gi[aeiouyăâêôơư]/.test(syl))st=2;
+  while(st<syl.length&&!VOW.includes(syl[st]))st++;
+  let i=st;while(i<syl.length&&VOW.includes(syl[i]))i++;
+  const v=syl.slice(st,i);if(!v)return syl;
+  const sp=[...v].map((c,k)=>"ăâêôơư".includes(c)?k:-1).filter(k=>k>=0);
+  let k;if(sp.length)k=sp.at(-1);
+  else if(v.length===1)k=0;
+  else if(v.length===2)k=(i<syl.length||/^(oa|oe|uy)$/.test(v))?1:0;
+  else k=1;
+  const pos=st+k;return (syl.slice(0,pos)+(syl[pos]+MARK[t-1]).normalize("NFC")+syl.slice(pos+1))}
+ const one=tk=>{ tk=tk.toLowerCase();
+  const syls=[],{b,tone:_}=norm(tk);
+  const sy=split(b.toLowerCase());if(!sy)return null;
+  // tách thanh điệu theo từng âm tiết trong chuỗi gốc
+  let pos=0,out=[];
+  for(const s of sy){const raw=[...tk.toLowerCase()].slice(pos,pos+s.length).join("");pos+=s.length;
+   const t=norm(raw).tone,r=conv(s,t===0);if(r===null)return null;out.push(tone(r,t))}
+  return out.join(" ")}
+ return function(py){
+  return py.replace(/[A-Za-zÀ-ɏ]+/g,tk=>{
+   if(/^r$/i.test(tk))return "";
+   let t=tk,er="";if(/r$/i.test(t)&&t.length>2&&!/^(er|zher|nar)$/i.test(t)){const w=one(t.slice(0,-1));if(w)return cap(tk,w)}
+   const w=one(tk);return w===null?tk:cap(tk,w)}).replace(/ +/g," ").replace(/ ([,.?!:;)»…])/g,"$1").trim()};
+ function cap(src,out){return /^[A-ZÀ-Ý]/.test(src)?out[0].toUpperCase()+out.slice(1):out}
+})();
+const bo=(py,tag="span")=>py?`<${tag} class="boi">${esc(BOI(py))}</${tag}>`:"";
 const uid=u=>"u"+u.n.split("–")[0];
 
 /* ---------- mindmap ---------- */
@@ -1081,8 +1153,8 @@ function wordHtml(w,p){
  const s=SRC[w[0]];
  const badge=s?`<span class="src" title="Xuất hiện ${s[2]} lần trong bộ 博雅汉语">博雅 · ${BOOK[s[0]]} · tr.${s[1]}</span>`:`<span class="src add">Bổ sung chuyên ngành</span>`;
  return `<div class="w" data-b="${s?1:0}" data-k="${esc((w[0]+" "+w[1]+" "+w[2]).toLowerCase())}">
-  <div><div class="hz">${w[0]}</div><div class="py" style="color:${col(p.k)}">${esc(w[1])}</div><div class="mn">${esc(w[2])}</div>${badge}</div>
-  <div class="ex"><span class="zh">${w[3]}</span><span class="p">${esc(w[4])}</span><span class="v">${esc(w[5])}</span></div></div>`;
+  <div><div class="hz">${w[0]}</div><div class="py" style="color:${col(p.k)}">${esc(w[1])}</div>${bo(w[1],"div")}<div class="mn">${esc(w[2])}</div>${badge}</div>
+  <div class="ex"><span class="zh">${w[3]}</span><span class="p">${esc(w[4])}</span>${bo(w[4])}<span class="v">${esc(w[5])}</span></div></div>`;
 }
 function groupHtml(u,p){
  const seen=new Set(u.w.map(w=>w[0]));
@@ -1114,12 +1186,12 @@ host.innerHTML=html;
 
 /* ---------- accordion rows ---------- */
 function rowHtml(w){const s=SRC[w[0]];return `<div class="wr" data-hz="${w[0]}" data-b="${s?1:0}">
- <div class="wr-m" role="button" tabindex="0" aria-expanded="false"><span class="wr-hz">${w[0]}</span><span class="wr-tx"><span class="py">${esc(w[1])}</span><span class="mn">${esc(w[2])}</span></span><button class="say" data-say="${w[0]}" aria-label="Nghe ${w[0]}">▶</button></div>
- <div class="wr-x" hidden><div class="c-zh han">${w[3]}</div><div class="c-py py">${esc(w[4])}</div><div class="c-vi v">${esc(w[5])}</div>
+ <div class="wr-m" role="button" tabindex="0" aria-expanded="false"><span class="wr-hz">${w[0]}</span><span class="wr-tx"><span class="py">${esc(w[1])}</span>${bo(w[1])}<span class="mn">${esc(w[2])}</span></span><button class="say" data-say="${w[0]}" aria-label="Nghe ${w[0]}">▶</button></div>
+ <div class="wr-x" hidden><div class="c-zh han">${w[3]}</div><div class="c-py py">${esc(w[4])}</div>${bo(w[4],"div")}<div class="c-vi v">${esc(w[5])}</div>
  <div class="acts"><button class="act" data-say="${esc(w[3])}">▶ Nghe câu</button><button class="act mk" data-mark="k" data-hz="${w[0]}">Đã thuộc</button><button class="act mk" data-mark="h" data-hz="${w[0]}">Từ khó</button></div>
  <div class="wr-map" data-map-hz="${w[0]}"></div>
  <span class="src${s?"":" add"}">${s?`博雅 · ${BOOK[s[0]]} · tr.${s[1]}`:"Bổ sung chuyên ngành"}</span></div></div>`}
-function sentHtml(s){return `<div class="sr"><div class="c-zh han">${s[0]}</div><div class="c-py py">${esc(s[1])}</div><div class="c-vi v">${esc(s[2])}</div><button class="act" data-say="${esc(s[0])}">▶ Nghe câu</button></div>`}
+function sentHtml(s){return `<div class="sr"><div class="c-zh han">${s[0]}</div><div class="c-py py">${esc(s[1])}</div>${bo(s[1],"div")}<div class="c-vi v">${esc(s[2])}</div><button class="act" data-say="${esc(s[0])}">▶ Nghe câu</button></div>`}
 function toggleSec(sec,open){const head=sec.firstChild,body=sec.lastChild;if(open)sec._build();body.hidden=!open;head.setAttribute("aria-expanded",open);sec.classList.toggle("open",open)}
 function toggleRow(row,open){const x=row.querySelector(".wr-x");if(open===undefined)open=x.hidden;x.hidden=!open;row.classList.toggle("open",open);row.firstElementChild.setAttribute("aria-expanded",open);
  const mp=x.querySelector(".wr-map");if(open&&mp&&!mp.childElementCount){const it=ALLW.find(a=>a.w[0]===mp.dataset.mapHz);if(it)loadHZ().then(()=>{if(HZ)mp.innerHTML=`<span class="mm-h">Bộ thủ & mẹo nhớ</span>`+mapHtml(it.w)})}}
@@ -1270,6 +1342,9 @@ cnt.textContent=`${total} từ · ${nB} từ trong Boya`;
 document.getElementById("ob").addEventListener("change",filter);
 document.getElementById("hm").addEventListener("change",e=>document.body.classList.toggle("hide-mean",e.target.checked));
 document.getElementById("hp").addEventListener("change",e=>document.body.classList.toggle("hide-py",e.target.checked));
+(()=>{const sb=document.getElementById("sb");let on=true;try{on=localStorage.getItem("ttvp-boi")!=="0"}catch(e){}
+ const set=v=>{sb.checked=v;document.body.classList.toggle("hide-boi",!v)};set(on);
+ sb.addEventListener("change",()=>{set(sb.checked);try{localStorage.setItem("ttvp-boi",sb.checked?"1":"0")}catch(e){}})})();
 filter();
 
 /* ---------- app: state, speech, flashcards ---------- */
@@ -1347,7 +1422,7 @@ function drawCard(){
  const x=deck[cur],w=x.w,s=SRC[w[0]];
  fcN.textContent=`${cur+1}/${deck.length}`;
  fcC.innerHTML=`<div class="meta">Unit ${x.u}${ST.h[w[0]]?" · Từ khó":""}</div><div class="big">${w[0]}</div>`+
-  (flipped?`<div class="py">${esc(w[1])}</div><div class="mn">${esc(w[2])}</div><div class="ex">${w[3]}</div><div class="exp">${esc(w[4])}</div><div class="exv">${esc(w[5])}</div><div class="meta">${s?`博雅 · ${BOOK[s[0]]} · tr.${s[1]}`:"Bổ sung chuyên ngành"}</div>`:`<div class="meta">Nhớ nghĩa và pinyin, rồi chạm để lật</div>`)+
+  (flipped?`<div class="py">${esc(w[1])}</div>${bo(w[1],"div")}<div class="mn">${esc(w[2])}</div><div class="ex">${w[3]}</div><div class="exp">${esc(w[4])}</div>${bo(w[4],"div")}<div class="exv">${esc(w[5])}</div><div class="meta">${s?`博雅 · ${BOOK[s[0]]} · tr.${s[1]}`:"Bổ sung chuyên ngành"}</div>`:`<div class="meta">Nhớ nghĩa và pinyin, rồi chạm để lật</div>`)+
   `<div class="acts"><button class="act" data-say="${w[0]}">▶ Nghe</button>${flipped?`<button class="act" data-say="${esc(w[3])}">▶ Nghe câu</button>`:""}</div>`;
 }
 function next(ok){
@@ -1384,8 +1459,9 @@ function dlgRender(i){
  document.getElementById("dlg-who").textContent=(d.roles&&d.roles[L.who])||L.who;
  document.getElementById("dlg-zh").textContent=L.zh;
  document.getElementById("dlg-vi").textContent=L.vi;
+ document.getElementById("dlg-boi").innerHTML=L.py?`<span class="boi">${esc(BOI(L.py))}</span>`:"";
  const ws=wordsIn(L.zh,dU);
- document.getElementById("dlg-words").innerHTML=ws.length?ws.map(w=>{const o=MOPEN.has(w[0]);return `<div class="dwi${o?" open":""}"><div class="dwr"><button class="dw" data-say="${w[0]}"><span class="han">${w[0]}</span><span class="p py">/ ${esc(w[1])} /:</span><span class="m mn">${esc(w[2])}</span></button><button class="dw-x" data-map="${w[0]}" aria-expanded="${o}" title="Sơ đồ bộ thủ và mẹo nhớ">Bộ thủ ${o?"▴":"▾"}</button></div>${o?mapHtml(w):""}</div>`}).join(""):`<span class="dlg-none">Câu này không có từ mới của bài.</span>`;
+ document.getElementById("dlg-words").innerHTML=ws.length?ws.map(w=>{const o=MOPEN.has(w[0]);return `<div class="dwi${o?" open":""}"><div class="dwr"><button class="dw" data-say="${w[0]}"><span class="han">${w[0]}</span><span class="p py">/ ${esc(w[1])} /:</span>${bo(w[1])}<span class="m mn">${esc(w[2])}</span></button><button class="dw-x" data-map="${w[0]}" aria-expanded="${o}" title="Sơ đồ bộ thủ và mẹo nhớ">Bộ thủ ${o?"▴":"▾"}</button></div>${o?mapHtml(w):""}</div>`}).join(""):`<span class="dlg-none">Câu này không có từ mới của bài.</span>`;
  document.querySelectorAll("#dlg-list li").forEach((li,j)=>li.classList.toggle("on",j===i));
  const on=document.querySelector("#dlg-list li.on");if(on&&!DA.paused&&!DSEC.classList.contains("vid"))on.scrollIntoView({block:"nearest"});
 }
@@ -1413,7 +1489,7 @@ function openDlg(n,autoplay){
  if(dU!==n){dU=n;dIdx=-1;DA.src=d.video||d.file;DSEC.classList.toggle("vid",!!d.video);
   document.getElementById("dlg-title").textContent=`Unit ${n} · Hội thoại`;
   document.getElementById("dlg-scene").textContent=d.scene;
-  document.getElementById("dlg-list").innerHTML=d.lines.map((L,j)=>`<li class="${L.who}" data-i="${j}"><span class="r">${L.who}</span><span class="t"><span class="han">${L.zh}</span><span class="v">${esc(L.vi)}</span></span></li>`).join("");
+  document.getElementById("dlg-list").innerHTML=d.lines.map((L,j)=>`<li class="${L.who}" data-i="${j}"><span class="r">${L.who}</span><span class="t"><span class="han">${L.zh}</span>${L.py?bo(L.py):""}<span class="v">${esc(L.vi)}</span></span></li>`).join("");
   if("mediaSession" in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:`Unit ${n} · ${d.title}`,artist:"Tiếng Trung Văn phòng",artwork:[{src:"icon-512.png",sizes:"512x512",type:"image/png"}]})}catch(e){}}
  }
  HOME.hidden=true;UV.hidden=true;FC.hidden=true;HDR.hidden=true;PXS.hidden=true;DSEC.hidden=false;mP.classList.remove("on");
@@ -1685,7 +1761,7 @@ QI.addEventListener("input",()=>{
  const q=strip(QI.value.trim().toLowerCase());
  if(!q){RES.innerHTML="";return}
  const hits=ALLW.filter(x=>{const k=(x.w[0]+" "+x.w[1]+" "+x.w[2]).toLowerCase();return k.includes(q)||strip(k).includes(q)}).slice(0,30);
- RES.innerHTML=hits.length?hits.map(x=>`<button class="res" data-u="${x.u}" data-hz="${x.w[0]}"><span class="hz">${x.w[0]}</span><span class="rm"><b>${esc(x.w[1])}</b>${esc(x.w[2])}</span><span class="ru">Unit ${x.u}</span></button>`).join(""):`<p class="count">Không tìm thấy từ nào khớp “${esc(QI.value)}”.</p>`;
+ RES.innerHTML=hits.length?hits.map(x=>`<button class="res" data-u="${x.u}" data-hz="${x.w[0]}"><span class="hz">${x.w[0]}</span><span class="rm"><b>${esc(x.w[1])}</b>${esc(x.w[2])}${bo(x.w[1],"small")}</span><span class="ru">Unit ${x.u}</span></button>`).join(""):`<p class="count">Không tìm thấy từ nào khớp “${esc(QI.value)}”.</p>`;
 });
 RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;openUnit(U.findIndex(u=>u.n===b.dataset.u),0,b.dataset.hz)});
 // restore last view
@@ -1696,7 +1772,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="28";
+const APP_VERSION="29";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
