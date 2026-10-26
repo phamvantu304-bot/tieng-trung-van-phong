@@ -1,0 +1,16 @@
+{
+  "name": "Sổ tay Tiếng Trung Văn phòng",
+  "short_name": "Tiếng Trung VP",
+  "description": "Từ vựng 16 bài tiếng Trung văn phòng theo sơ đồ tư duy, có phát âm và flashcard.",
+  "lang": "vi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#E6E9E4",
+  "theme_color": "#C23A2B",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
