@@ -484,6 +484,11 @@ details.list{display:none}
 #px-score{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
 .px-bar{height:6px;background:var(--row);border-radius:3px;overflow:hidden}
 .px-bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .25s}
+.sxhome{margin-top:18px;padding-top:14px;border-top:2px solid var(--rule)}
+.xtf{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px}
+.xtf button{border:1.5px solid var(--rule);background:var(--paper);border-radius:12px;padding:16px;font-size:18px;font-weight:700;cursor:pointer;color:var(--ink)}
+.xtf button.ok{background:var(--ok-soft);border-color:var(--ok)}.xtf button.bad{background:var(--red-soft);border-color:var(--red)}
+.xopt .xpy{display:block;font-family:var(--body);font-size:12.5px;font-weight:600;color:var(--muted);margin-top:2px}
 .exhome{margin-top:18px;padding-top:14px;border-top:2px solid var(--p6)}
 .xans{min-height:58px;border:2px dashed var(--rule);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 10px;align-items:center}
 .xans.ok{border-style:solid;border-color:var(--ok);background:var(--ok-soft)}.xans.bad{border-style:solid;border-color:var(--red);background:var(--red-soft)}
@@ -649,6 +654,15 @@ details.list{display:none}
     <button class="pxt" data-px="fill"><b>Điền từ</b><span>Hoàn thành câu ví dụ</span></button>
     <button class="pxt" data-px="match"><b>Ghép cặp</b><span>Nối từ với nghĩa</span></button>
     <button class="pxt wide" data-px="card"><b>Thẻ ghi nhớ</b><span>Tự nhớ nghĩa & pinyin, rồi lật thẻ</span></button>
+   </div>
+   <div class="sxhome">
+    <div class="home-h"><h2>Ôn câu nhanh</h2><span class="count">Dùng phạm vi đã chọn ở trên · 15 câu mỗi lượt</span></div>
+    <div class="pxtiles">
+     <button class="pxt main" data-sx="mix"><b>Ôn câu nhanh</b><span>Trộn 3 dạng dưới đây, mỗi câu một thao tác</span></button>
+     <button class="pxt" data-sx="vz"><b>Việt → Trung</b><span>Đọc nghĩa, chọn câu tiếng Trung</span></button>
+     <button class="pxt" data-sx="listen"><b>Nghe câu</b><span>Nghe, chọn nghĩa tiếng Việt</span></button>
+     <button class="pxt" data-sx="tf"><b>Đúng hay sai?</b><span>Nhanh nhất: chạm Đúng / Sai</span></button>
+    </div>
    </div>
    <div class="exhome" id="exhome" hidden>
     <div class="home-h"><h2>HSK3 – HSKK</h2><span class="count">Luyện tập ngữ pháp & đề thi</span></div>
@@ -2022,7 +2036,7 @@ exScopes();
 function startEx(type,scope,list){
  gcEvent("luyen-tap-hsk-"+type,"Luyện tập HSK: "+EXT[type]);
  const pool=list||exPool(scope).filter(q=>type==="mix"||q.t===type);
- EX={type,scope,i:0,ok:0,wrong:[],qs:list?shuf(list):shuf(pool).slice(0,10)};PX=null;
+ EX={type,scope,i:0,ok:0,wrong:[],qs:list?shuf(list):shuf(pool).slice(0,10)};PX=null;SX=null;
  document.getElementById("px-title").textContent=EXT[type]+" · "+EXN[scope];openPx();
  if(!EX.qs.length){PB.innerHTML=`<div class="pempty">Chưa có bài tập cho mục này.</div>`;pxBar(0,1);document.getElementById("px-score").textContent="";return}
  exRender()}
@@ -2081,6 +2095,63 @@ PB.addEventListener("click",e=>{if(!EX||PX)return;
    const d=q.d;exFeedback(ok,q.t==="fix"?exAns(d[1],d[2],d[3]):`<div class="ex han" style="font-size:20px">${esc(mcqFull(d))}</div><div class="exv">${esc(d[3])}</div><button class="act" data-say="${esc(mcqFull(d))}">▶ Nghe câu</button>`,q.t==="fix"?d[1]:null);return}
  }else if(q.t==="make"&&e.target.closest("#xshow")&&!c.done){const d=q.d;exFeedback(true,exAns(d[1],d[2],d[3]),d[1],true)}
 });
+/* ---------- ôn câu nhanh: Việt → Trung · nghe câu · đúng hay sai ---------- */
+const SXT={mix:"Ôn câu nhanh",vz:"Việt → Trung",listen:"Nghe câu → nghĩa",tf:"Đúng hay sai?"};
+let SX=null;
+function sentPool(scope){
+ const seen=new Set(),out=[],add=(zh,py,vi,u)=>{if(!zh||seen.has(zh))return;seen.add(zh);out.push({zh,py,vi,u})};
+ pxPool(scope).forEach(x=>add(x.w[3],x.w[4],x.w[5],x.u));
+ if(scope!=="hard"&&scope!=="new")U.forEach(u=>{if(trialLocked(u.n))return;
+  if(/^p\d$/.test(scope)){if("p"+u.p!==scope)return}else if(scope!=="all"&&u.n!==scope)return;
+  (u.s||[]).forEach(t=>add(t[0],t[1],t[2],u.n))});
+ return out}
+function sentDistract(it,key,all,n){const out=[],vals=new Set([it[key]]);
+ shuf(all.filter(y=>y.u===it.u)).concat(shuf(all)).forEach(y=>{if(out.length<n&&!vals.has(y[key])&&y.zh!==it.zh){vals.add(y[key]);out.push(y)}});return out}
+function startSent(type,scope,list){
+ gcEvent("on-cau-"+type,"Ôn câu: "+SXT[type]);
+ let all=sentPool(scope);if(all.length<4)all=sentPool("all");
+ const pool=list||sentPool(scope);
+ SX={type,scope,i:0,ok:0,wrong:[],qs:[]};PX=null;EX=null;
+ document.getElementById("px-title").textContent=SXT[type]+scopeTitle(scope,!!list);openPx();
+ if(pool.length<2){PB.innerHTML=`<div class="pempty">${scope==="hard"||scope==="new"?"Chưa có câu nào trong nhóm này. Hãy chọn phạm vi khác.":"Phạm vi này có quá ít câu. Hãy chọn phạm vi lớn hơn."}</div>`;pxBar(0,1);document.getElementById("px-score").textContent="";return}
+ SX.qs=shuf(pool).slice(0,15).map(it=>{
+  const t=type==="mix"?["vz","listen","tf"][Math.floor(Math.random()*3)]:type;
+  if(t==="tf"){const truth=Math.random()<0.5,o=truth?null:sentDistract(it,"vi",all,1)[0];return {t,it,truth:truth||!o,shown:(truth||!o)?it.vi:o.vi}}
+  return {t,it,opts:shuf([it].concat(sentDistract(it,t==="vz"?"zh":"vi",all,3)))}});
+ sRender()}
+function sHead(){const n=SX.qs.length;pxBar(SX.i,n);document.getElementById("px-score").textContent=`Câu ${SX.i+1}/${n} · ✓${SX.ok}`}
+function sRender(){
+ const q=SX.qs[SX.i],it=q.it;sHead();SX.done=false;
+ if(q.t==="vz")PB.innerHTML=`<div class="pq"><span class="ask">Chọn câu tiếng Trung đúng</span><div class="bigvi" style="font-size:20px">${esc(it.vi)}</div></div><div class="xopts">${q.opts.map((o,j)=>`<button type="button" class="xopt" data-s="${j}">${esc(o.zh)}<span class="xpy py">${esc(o.py)}</span></button>`).join("")}</div><div id="pfb"></div>`;
+ else if(q.t==="listen")PB.innerHTML=`<div class="pq"><span class="ask">Nghe và chọn nghĩa đúng</span><button class="ear" data-say="${esc(it.zh)}" aria-label="Nghe lại">▶</button><span class="sub">Chạm để nghe lại</span></div><div class="xopts">${q.opts.map((o,j)=>`<button type="button" class="xopt" style="font-family:var(--body);font-size:16px;font-weight:600" data-s="${j}">${esc(o.vi)}</button>`).join("")}</div><div id="pfb"></div>`;
+ else PB.innerHTML=`<div class="pq"><span class="ask">Câu này dịch có đúng không?</span><div class="sent han">${esc(it.zh)}</div><span class="spy py">${esc(it.py)}</span><div class="bigvi" style="font-size:19px;margin-top:4px">“${esc(q.shown)}”</div></div><div class="xtf"><button type="button" data-tf="1">✓ Đúng</button><button type="button" data-tf="0">✗ Sai</button></div><div id="pfb"></div>`;
+ if(q.t==="listen")setTimeout(()=>speak(it.zh),250);
+ window.scrollTo(0,0)}
+function sFeedback(ok){
+ if(SX.done)return;SX.done=true;const q=SX.qs[SX.i],it=q.it;if(ok)SX.ok++;else SX.wrong.push(it);
+ const last=SX.i===SX.qs.length-1;sHead();
+ document.getElementById("pfb").outerHTML=`<div class="pfb${ok?"":" bad"}"><span class="r">${ok?"Đúng rồi!":"Chưa đúng"}</span><div class="ex han" style="font-size:20px">${esc(it.zh)}</div><div class="expy">${esc(it.py)}</div><div class="exv">${esc(it.vi)}</div><button class="act" data-say="${esc(it.zh)}">▶ Nghe câu</button></div><button class="pnext" id="snext">${last?"Xem kết quả":"Tiếp tục"}</button>`;
+ if(q.t!=="listen")speak(it.zh);
+ const nb=document.getElementById("snext");if(nb)nb.scrollIntoView({block:"nearest",behavior:"smooth"})}
+function sEnd(){
+ pxBar(1,1);document.getElementById("px-score").textContent="";
+ const n=SX.qs.length,pct=n?Math.round(100*SX.ok/n):0,ws=[...new Map(SX.wrong.map(x=>[x.zh,x])).values()];
+ PB.innerHTML=`<div class="pend"><div class="sc">${SX.ok}/${n}</div><div class="msg">${pct===100?"Tuyệt vời! Bạn làm đúng hết.":pct>=70?"Tốt lắm! Xem lại vài câu sai nhé.":"Cố lên! Làm lại các câu sai để nhớ lâu hơn."}</div>
+  ${ws.length?`<div class="pwrong">${ws.map(x=>`<div><span class="han">${esc(x.zh)}</span><span class="p py">${esc(x.py)}</span><span>${esc(x.vi)}</span></div>`).join("")}</div>`:""}
+  <div class="pbtns">${ws.length?`<button class="pri" id="s-redo">Làm lại ${ws.length} câu sai</button>`:""}<button class="${ws.length?"":"pri"}" id="s-again">Ôn tiếp 15 câu</button><button id="s-home">Chọn dạng bài khác</button></div></div>`;
+ if(ws.length)document.getElementById("s-redo").onclick=()=>startSent(SX.type,SX.scope,ws);
+ document.getElementById("s-again").onclick=()=>startSent(SX.type,SX.scope);
+ document.getElementById("s-home").onclick=()=>goHome(true)}
+PB.addEventListener("click",e=>{if(!SX||PX||EX)return;const q=SX.qs&&SX.qs[SX.i];if(!q)return;
+ if(e.target.closest("#snext")){SX.i++;if(SX.i<SX.qs.length)sRender();else sEnd();return}
+ if(SX.done)return;
+ const o=e.target.closest("[data-s]");
+ if(o){const j=+o.dataset.s,ok=q.opts[j]===q.it;
+  document.querySelectorAll(".xopt").forEach((b,k)=>{b.disabled=true;if(q.opts[k]===q.it)b.classList.add("ok");else if(k===j)b.classList.add("bad")});sFeedback(ok);return}
+ const t=e.target.closest("[data-tf]");
+ if(t){const ok=(t.dataset.tf==="1")===q.truth;document.querySelectorAll(".xtf button").forEach(b=>{b.disabled=true;if((b.dataset.tf==="1")===q.truth)b.classList.add("ok");else if(b===t)b.classList.add("bad")});sFeedback(ok)}
+});
+document.querySelector(".sxhome").addEventListener("click",e=>{const t=e.target.closest("[data-sx]");if(t)startSent(t.dataset.sx,document.getElementById("px-scope").value)});
 /* ---------- views: home · unit · flashcards ---------- */
 const mB=document.getElementById("m-book"),mF=document.getElementById("m-fc"),mT=document.getElementById("m-tr"),TRS=document.getElementById("tr");
 const HOME=document.getElementById("home"),UV=document.getElementById("uview"),FC=document.getElementById("fc"),HDR=document.querySelector("header");
@@ -2229,7 +2300,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="35";
+const APP_VERSION="36";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
