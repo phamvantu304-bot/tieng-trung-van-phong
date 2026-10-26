@@ -22,7 +22,7 @@
  --p2:#3A5391; --p2-soft:#E6EBF6;
  --p3:#A8661A; --p3-soft:#F7ECDD;
  --p4:#9A3D6B; --p4-soft:#F5E3EC;
- --p5:#1F6F8B; --p5-soft:#DFEEF3; --p6:#B0453A; --p6-soft:#F8E4E1;
+ --p5:#1F6F8B; --p5-soft:#DFEEF3; --p6:#B0453A; --p6-soft:#F8E4E1; --p7:#6B5BA8; --p7-soft:#E9E5F5;
  --shadow:0 18px 40px -18px rgba(30,40,40,.35);
  --ok:#2E7A55; --ok-soft:#DDEFE3;
  --han:"Noto Serif SC","Songti SC","SimSun",serif;
@@ -31,11 +31,11 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
  color-scheme:dark;--ground:#141918;--paper:#1D2322;--ink:#E8ECEA;--muted:#9AA7A3;--rule:#3A4442;--row:#232A29;
  --red:#E4685A;--red-soft:#3A2522;--p1:#5FB89E;--p1-soft:#1E332D;--p2:#8BA2E0;--p2-soft:#232B40;
- --p3:#DDA05A;--p3-soft:#3A2E1E;--p4:#D883AE;--p4-soft:#3A2330;--p5:#6FB7CF;--p5-soft:#1C3038;--p6:#E08A7E;--p6-soft:#3A2522;--shadow:0 18px 40px -18px rgba(0,0,0,.7);--ok:#6CC596;--ok-soft:#1D3327;}}
+ --p3:#DDA05A;--p3-soft:#3A2E1E;--p4:#D883AE;--p4-soft:#3A2330;--p5:#6FB7CF;--p5-soft:#1C3038;--p6:#E08A7E;--p6-soft:#3A2522;--p7:#A99BE0;--p7-soft:#2B2740;--shadow:0 18px 40px -18px rgba(0,0,0,.7);--ok:#6CC596;--ok-soft:#1D3327;}}
 :root[data-theme="dark"]{
  color-scheme:dark;--ground:#141918;--paper:#1D2322;--ink:#E8ECEA;--muted:#9AA7A3;--rule:#3A4442;--row:#232A29;
  --red:#E4685A;--red-soft:#3A2522;--p1:#5FB89E;--p1-soft:#1E332D;--p2:#8BA2E0;--p2-soft:#232B40;
- --p3:#DDA05A;--p3-soft:#3A2E1E;--p4:#D883AE;--p4-soft:#3A2330;--p5:#6FB7CF;--p5-soft:#1C3038;--p6:#E08A7E;--p6-soft:#3A2522;--shadow:0 18px 40px -18px rgba(0,0,0,.7);--ok:#6CC596;--ok-soft:#1D3327;}
+ --p3:#DDA05A;--p3-soft:#3A2E1E;--p4:#D883AE;--p4-soft:#3A2330;--p5:#6FB7CF;--p5-soft:#1C3038;--p6:#E08A7E;--p6-soft:#3A2522;--p7:#A99BE0;--p7-soft:#2B2740;--shadow:0 18px 40px -18px rgba(0,0,0,.7);--ok:#6CC596;--ok-soft:#1D3327;}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
@@ -716,7 +716,7 @@ let gcLast="",gcQ=[];
 const BDS=(()=>{try{return localStorage.getItem("ttvp-bds")==="1"}catch(e){return false}})();
 /* "Bồi" chỉ hiện với tài khoản được cấp (cờ được bật khi tài khoản đó đăng nhập) */
 const BOIOK=(()=>{try{return localStorage.getItem("ttvp-boi-ok")==="1"}catch(e){return false}})();
-/* Phần 6 (HSK3 – HSKK) chỉ hiện với tài khoản phamvantu304 (cờ được bật khi tài khoản đó đăng nhập) */
+/* Phần 6 · Ngữ pháp và Phần 7 · Bài tập chỉ hiện với tài khoản phamvantu304 (cờ được bật khi tài khoản đó đăng nhập) */
 const HSKOK=(()=>{try{return localStorage.getItem("ttvp-hsk")==="1"}catch(e){return false}})();
 let TRIAL=false;const TRIAL_UNITS=BDS?["1","6","9","12","17"]:["1","6","9","12"];
 const trialLocked=n=>TRIAL&&!TRIAL_UNITS.includes(String(n));
@@ -734,7 +734,8 @@ const PARTS=[
  {k:"p3",han:"制造与工厂",py:"zhìzào yǔ gōngchǎng",vi:"Phần 3 · Chế tạo & Nhà máy"},
  {k:"p4",han:"合同·物流·售后",py:"hétong · wùliú · shòuhòu",vi:"Phần 4 · Hợp đồng – Logistics – Hậu mãi"},
  {k:"p5",han:"房地产",py:"fángdìchǎn",vi:"Phần 5 · Bất động sản"},
- {k:"p6",han:"HSK3 · HSKK",py:"HSK sān jí · HSKK chūjí",vi:"Phần 6 · HSK3 – HSKK"}
+ {k:"p6",han:"语法",py:"yǔfǎ",vi:"Phần 6 · Ngữ pháp"},
+ {k:"p7",han:"练习",py:"liànxí",vi:"Phần 7 · Bài tập"}
 ];
 // [hanzi, pinyin, nghĩa, ví dụ, pinyin ví dụ, dịch]
 const U=[
@@ -1068,7 +1069,7 @@ const U=[
  ["请您签字确认交房。", "Qǐng nín qiānzì quèrèn jiāofáng.", "Mời anh/chị ký xác nhận nhận nhà."],
  ["有任何问题请联系物业服务中心。", "Yǒu rènhé wèntí qǐng liánxì wùyè fúwù zhōngxīn.", "Có vấn đề gì xin liên hệ trung tâm dịch vụ của ban quản lý."]]}
 ,
-{n:"H1",p:5,han:"把字句 · 着",vi:"Câu chữ 把 & trợ từ 着",hsk:true,
+{n:"21",p:5,han:"把字句 · 着",vi:"Câu chữ 把 & trợ từ 着",hsk:true,
  t:["Ngữ pháp: cấu trúc 把 (sách tr.8–9)", "Trợ từ động thái 着 (đang/trạng thái kéo dài)", "Ví dụ & mẫu câu tự soạn"],
  w:[
  ["把", "bǎ", "đưa tân ngữ lên trước động từ", "我把作业做完了。", "Wǒ bǎ zuòyè zuò wán le.", "Tôi làm xong bài tập rồi."],
@@ -1083,7 +1084,7 @@ const U=[
  ["我想把这本书还给图书馆。", "Wǒ xiǎng bǎ zhè běn shū huán gěi túshūguǎn.", "Tôi muốn trả cuốn sách này cho thư viện."],
  ["墙上挂着一张地图。", "Qiáng shang guà zhe yì zhāng dìtú.", "Trên tường treo một tấm bản đồ."],
  ["孩子们笑着跑进了教室。", "Háizimen xiào zhe pǎo jìn le jiàoshì.", "Bọn trẻ vừa cười vừa chạy vào lớp."]]},
-{n:"H2",p:5,han:"了 · 就 · 如果",vi:"Trợ từ 了, phó từ 就, câu giả thiết",hsk:true,
+{n:"22",p:5,han:"了 · 就 · 如果",vi:"Trợ từ 了, phó từ 就, câu giả thiết",hsk:true,
  t:["Trợ từ 了 (cuối câu & sau động từ) (tr.12–15)", "Phó từ 就 (tr.15–16)", "如果/要是/只要/只有/为了 (tr.28–31)"],
  w:[
  ["了(句尾)", "le", "cuối câu: thay đổi trạng thái", "下雪了，路很滑。", "Xià xuě le, lù hěn huá.", "Tuyết rơi rồi, đường rất trơn."],
@@ -1104,7 +1105,7 @@ const U=[
  ["如果你有问题，就问老师吧。", "Rúguǒ nǐ yǒu wèntí, jiù wèn lǎoshī ba.", "Nếu bạn có vấn đề thì hỏi thầy cô."],
  ["只有多说，才能说得好。", "Zhǐyǒu duō shuō, cái néng shuō de hǎo.", "Chỉ có nói nhiều mới nói tốt được."],
  ["我马上就去买票。", "Wǒ mǎshàng jiù qù mǎi piào.", "Tôi đi mua vé ngay đây."]]},
-{n:"H3",p:5,han:"这么 · 合适 · 以后 · 来去 · 能",vi:"这么/这样, 合适/适合, 以后/后来, 来/去/到, 能/可以",hsk:true,
+{n:"23",p:5,han:"这么 · 合适 · 以后 · 来去 · 能",vi:"这么/这样, 合适/适合, 以后/后来, 来/去/到, 能/可以",hsk:true,
  t:["这么/这样 (tr.17–19)", "合适 và 适合 (tr.20–21)", "以后 và 后来 (tr.22–23)", "Bổ ngữ xu hướng 来/去/到 (tr.23–24)", "能 và 可以 (tr.24–25)"],
  w:[
  ["这么", "zhème", "thế này (chỉ mức độ)", "你怎么起得这么早？", "Nǐ zěnme qǐ de zhème zǎo?", "Sao bạn dậy sớm thế?"],
@@ -1124,7 +1125,7 @@ const U=[
  ["这份工作很适合你。", "Zhè fèn gōngzuò hěn shìhé nǐ.", "Công việc này rất hợp với bạn."],
  ["毕业以后，我想去中国工作。", "Bìyè yǐhòu, wǒ xiǎng qù Zhōngguó gōngzuò.", "Tốt nghiệp xong tôi muốn sang Trung Quốc làm việc."],
  ["你能帮我拿一下吗？", "Nǐ néng bāng wǒ ná yíxià ma?", "Bạn cầm giúp tôi một chút được không?"]]},
-{n:"H4",p:5,han:"câu so sánh",vi:"Các cấu trúc so sánh với 比 · 没有 · 跟…一样",hsk:true,
+{n:"24",p:5,han:"câu so sánh",vi:"Các cấu trúc so sánh với 比 · 没有 · 跟…一样",hsk:true,
  t:["So sánh hơn: 比 (tr.25–26)", "So sánh kém: 没有 (tr.27)", "So sánh bằng: 跟/和/像…一样 (tr.27–28)"],
  w:[
  ["A比B+adj", "A bǐ B + adj", "A hơn B", "弟弟比我高。", "Dìdi bǐ wǒ gāo.", "Em trai cao hơn tôi."],
@@ -1139,7 +1140,7 @@ const U=[
  ["他跑得比我快得多。", "Tā pǎo de bǐ wǒ kuài de duō.", "Anh ấy chạy nhanh hơn tôi nhiều."],
  ["我写汉字写得没有他那么好。", "Wǒ xiě Hànzì xiě de méiyǒu tā nàme hǎo.", "Tôi viết chữ Hán không đẹp bằng anh ấy."],
  ["姐姐跟妈妈一样喜欢旅游。", "Jiějie gēn māma yíyàng xǐhuan lǚyóu.", "Chị gái cũng thích du lịch như mẹ."]]},
-{n:"H5",p:5,han:"liên từ · bị động · bổ ngữ",vi:"Liên từ, câu bị động, bổ ngữ thời lượng & động lượng",hsk:true,
+{n:"25",p:5,han:"liên từ · bị động · bổ ngữ",vi:"Liên từ, câu bị động, bổ ngữ thời lượng & động lượng",hsk:true,
  t:["除了/不但/虽然/从…起 (tr.32–34)", "一…也不 (tr.34–35)", "被/叫/让 và 帮 (tr.30–33)", "Bổ ngữ thời lượng, động lượng, 过 (tr.35–40)"],
  w:[
  ["除了…以外", "chúle… yǐwài", "ngoài… ra (còn)", "除了中文以外，我还会英语。", "Chúle Zhōngwén yǐwài, wǒ hái huì Yīngyǔ.", "Ngoài tiếng Trung ra, tôi còn biết tiếng Anh."],
@@ -1162,7 +1163,7 @@ const U=[
  ["他不但会唱歌，而且会跳舞。", "Tā búdàn huì chànggē, érqiě huì tiàowǔ.", "Anh ấy không những biết hát mà còn biết nhảy."],
  ["我在这儿住了一年了。", "Wǒ zài zhèr zhù le yì nián le.", "Tôi sống ở đây được một năm rồi."],
  ["我的自行车被人骑走了。", "Wǒ de zìxíngchē bèi rén qí zǒu le.", "Xe đạp của tôi bị người ta đi mất rồi."]]},
-{n:"H6",p:5,han:"Đề số 1",vi:"Từ vựng đề số 1 (tr.42–49)",hsk:true,
+{n:"26",p:6,han:"Bài tập 1",vi:"Từ vựng & luyện tập 1 (tr.42–49)",hsk:true,
  t:["Giao thông · du lịch", "Công ty · thời tiết · sức khoẻ", "Ảnh · kỷ niệm"],
  w:[
  ["交通工具", "jiāotōng gōngjù", "phương tiện giao thông", "飞机是我最喜欢的交通工具。", "Fēijī shì wǒ zuì xǐhuan de jiāotōng gōngjù.", "Máy bay là phương tiện tôi thích nhất."],
@@ -1195,7 +1196,7 @@ const U=[
  ["哥哥考上大学以后，爸爸给他买了摩托车。", "Gēge kǎoshàng dàxué yǐhòu, bàba gěi tā mǎi le mótuōchē.", "Sau khi anh trai thi đậu đại học, bố mua xe máy cho anh."],
  ["明天会下雪，出门要多穿点儿衣服。", "Míngtiān huì xià xuě, chūmén yào duō chuān diǎnr yīfu.", "Mai sẽ có tuyết, ra ngoài nhớ mặc ấm."],
  ["这些照片洗得很漂亮。", "Zhèxiē zhàopiàn xǐ de hěn piàoliang.", "Những tấm ảnh này rửa ra rất đẹp."]]},
-{n:"H7",p:5,han:"Đề số 2",vi:"Từ vựng đề số 2 (tr.55–61)",hsk:true,
+{n:"27",p:6,han:"Bài tập 2",vi:"Từ vựng & luyện tập 2 (tr.55–61)",hsk:true,
  t:["Học tập · công việc", "Mua sắm · đời sống", "Gia đình · quà tặng"],
  w:[
  ["主动", "zhǔdòng", "chủ động", "他很主动，常常帮同事做事。", "Tā hěn zhǔdòng, chángcháng bāng tóngshì zuòshì.", "Anh ấy rất chủ động, hay giúp đồng nghiệp."],
@@ -1221,7 +1222,7 @@ const U=[
  ["这条裤子太短了，我想退货。", "Zhè tiáo kùzi tài duǎn le, wǒ xiǎng tuìhuò.", "Cái quần này ngắn quá, tôi muốn trả hàng."],
  ["我们周末有个聚会，你也来吧。", "Wǒmen zhōumò yǒu ge jùhuì, nǐ yě lái ba.", "Cuối tuần chúng tôi có buổi họp mặt, bạn cũng đến nhé."],
  ["父母的收入会影响孩子的选择。", "Fùmǔ de shōurù huì yǐngxiǎng háizi de xuǎnzé.", "Thu nhập của bố mẹ có thể ảnh hưởng đến lựa chọn của con."]]},
-{n:"H8",p:5,han:"Đề số 3",vi:"Từ vựng đề số 3 (tr.67–73)",hsk:true,
+{n:"28",p:6,han:"Bài tập 3",vi:"Từ vựng & luyện tập 3 (tr.67–73)",hsk:true,
  t:["Thể thao · sức khoẻ", "Du lịch · hộ chiếu", "Cuộc sống hằng ngày"],
  w:[
  ["国球", "guóqiú", "môn thể thao quốc dân", "中国人把乒乓球叫做国球。", "Zhōngguórén bǎ pīngpāngqiú jiàozuò guóqiú.", "Người Trung Quốc gọi bóng bàn là quốc cầu."],
@@ -1251,7 +1252,7 @@ const U=[
  ["飞机马上要起飞了，快上去吧。", "Fēijī mǎshàng yào qǐfēi le, kuài shàngqu ba.", "Máy bay sắp cất cánh rồi, mau lên đi."],
  ["我好不容易找到一个合适的房子。", "Wǒ hǎobù róngyì zhǎodào yí ge héshì de fángzi.", "Mãi tôi mới tìm được một căn nhà phù hợp."],
  ["他昨晚没睡好，所以上课总是打瞌睡。", "Tā zuówǎn méi shuìhǎo, suǒyǐ shàngkè zǒngshì dǎ kēshuì.", "Tối qua anh ấy ngủ không ngon nên lên lớp cứ ngủ gật."]]},
-{n:"H9",p:5,han:"Đề số 4",vi:"Từ vựng đề số 4 (tr.80–86)",hsk:true,
+{n:"29",p:6,han:"Bài tập 4",vi:"Từ vựng & luyện tập 4 (tr.80–86)",hsk:true,
  t:["Học hành · tin tức", "Đường phố · giao thông", "Ngôn ngữ · cuộc sống"],
  w:[
  ["迟到", "chídào", "đến muộn", "对不起，我迟到了。", "Duìbuqǐ, wǒ chídào le.", "Xin lỗi, tôi đến muộn."],
@@ -1280,7 +1281,7 @@ const U=[
  ["从这儿一直走，到十字路口右拐。", "Cóng zhèr yìzhí zǒu, dào shízì lùkǒu yòu guǎi.", "Từ đây đi thẳng, đến ngã tư thì rẽ phải."],
  ["刚来的时候，我对这里很陌生。", "Gāng lái de shíhou, wǒ duì zhèlǐ hěn mòshēng.", "Lúc mới đến, tôi thấy nơi này rất lạ lẫm."],
  ["她得到了奖学金，我们都为她高兴。", "Tā dédào le jiǎngxuéjīn, wǒmen dōu wèi tā gāoxìng.", "Cô ấy nhận được học bổng, chúng tôi đều mừng cho cô."]]},
-{n:"H10",p:5,han:"Đề số 5",vi:"Từ vựng đề số 5 (tr.92–99)",hsk:true,
+{n:"30",p:6,han:"Bài tập 5",vi:"Từ vựng & luyện tập 5 (tr.92–99)",hsk:true,
  t:["Quần áo · thời tiết", "Sức khoẻ · tập luyện", "Hình ảnh tình huống"],
  w:[
  ["穿不上", "chuān bu shàng", "mặc không vừa", "这条裤子我已经穿不上了。", "Zhè tiáo kùzi wǒ yǐjīng chuān bu shàng le.", "Cái quần này tôi mặc không vừa nữa."],
@@ -1303,9 +1304,9 @@ const U=[
 ];
 /* tách một phần ra khỏi danh sách nếu tài khoản không được xem; các phần sau được đánh số lại */
 const dropPart=i=>{PARTS.splice(i,1);for(let j=U.length-1;j>=0;j--){if(U[j].p===i)U.splice(j,1);else if(U[j].p>i)U[j].p--}};
-if(!HSKOK)dropPart(5);
+if(!HSKOK){dropPart(6);dropPart(5)}
 if(!BDS)dropPart(4);
-const HSKEX={"H1": {"sort": [[["我", "把", "作业", "做完", "了"], "Wǒ bǎ zuòyè zuò wán le.", "Tôi làm xong bài tập rồi."], [["请", "把", "门", "关上"], "Qǐng bǎ mén guānshang.", "Xin đóng cửa lại."], [["他", "坐着", "看", "电视"], "Tā zuò zhe kàn diànshì.", "Anh ấy ngồi xem tivi."]], "fix": [["我把作业做。", "我把作业做完了。", "Wǒ bǎ zuòyè zuò wán le.", "Sau 把, động từ cần có thành phần kết quả (完) và thường có 了."], ["他在看电视着。", "他在看着电视。", "Tā zài kàn zhe diànshì.", "着 đặt ngay sau động từ, không đặt cuối câu."]], "mcq": [["Chọn câu đúng:", ["我把书看。", "我把书看完了。", "我书把看完了。"], 1, "Câu 把 cần: chủ ngữ + 把 + tân ngữ + động từ + thành phần khác."], ["门___，你直接进来吧。", ["开着", "开了着", "着开"], 0, "V + 着 diễn tả trạng thái đang kéo dài: 门开着."]]}, "H2": {"sort": [[["下了班", "我", "就", "去", "超市"], "Xià le bān wǒ jiù qù chāoshì.", "Tan làm xong tôi đi siêu thị."], [["只有", "多练习", "才能", "说得好"], "Zhǐyǒu duō liànxí cái néng shuō de hǎo.", "Chỉ có luyện nhiều mới nói tốt được."], [["如果", "明天", "下雨", "我们", "就", "不去了"], "Rúguǒ míngtiān xià yǔ, wǒmen jiù bú qù le.", "Nếu mai mưa thì chúng ta không đi nữa."]], "fix": [["我六点起床就了。", "我六点就起床了。", "Wǒ liù diǎn jiù qǐchuáng le.", "就 đứng trước động từ."], ["如果下雨，我们才不去。", "如果下雨，我们就不去。", "Rúguǒ xià yǔ, wǒmen jiù bú qù.", "如果…就… đi với nhau; 才 thường đi với 只有."]], "mcq": [["___认真听课，才能听懂。", ["只要", "只有", "如果"], 1, "只有…才… (chỉ có… mới…)."], ["Diễn tả “sắp xảy ra”, dùng:", ["快…了", "就…了", "着…了"], 0, "快 + động từ + 了 = sắp… rồi."]]}, "H3": {"sort": [[["这份", "工作", "适合", "你"], "Zhè fèn gōngzuò shìhé nǐ.", "Công việc này hợp với bạn."], [["毕业", "以后", "我", "想", "去中国"], "Bìyè yǐhòu wǒ xiǎng qù Zhōngguó.", "Tốt nghiệp xong tôi muốn sang Trung Quốc."], [["你", "怎么", "起得", "这么", "早"], "Nǐ zěnme qǐ de zhème zǎo?", "Sao bạn dậy sớm thế?"]], "fix": [["这个颜色很合适你。", "这个颜色适合你。", "Zhège yánsè shìhé nǐ.", "合适 không mang tân ngữ; dùng 适合 hoặc 对你很合适."], ["吃饭后来，我们去散步。", "吃饭以后，我们去散步。", "Chīfàn yǐhòu, wǒmen qù sànbù.", "后来 chỉ chuyện đã xảy ra trong quá khứ, không đi sau động từ như 以后."]], "mcq": [["___他搬到了北京，我们很少见面。", ["以后", "后来", "后面"], 1, "Chuyện quá khứ “sau đó” dùng 后来."], ["你上___吧，我在楼上等你。", ["来", "去", "到"], 0, "Hướng về phía người nói dùng 来."]]}, "H4": {"sort": [[["弟弟", "比", "我", "高"], "Dìdi bǐ wǒ gāo.", "Em trai cao hơn tôi."], [["我", "没有", "他", "那么", "高"], "Wǒ méiyǒu tā nàme gāo.", "Tôi không cao bằng anh ấy."], [["这个", "跟", "那个", "一样", "大"], "Zhège gēn nàge yíyàng dà.", "Cái này to bằng cái kia."]], "fix": [["他比我很高。", "他比我高。", "Tā bǐ wǒ gāo.", "Câu chữ 比 không dùng 很/非常 trước tính từ; dùng 更/还 hoặc 得多."], ["我跑得比他不快。", "我跑得没有他快。", "Wǒ pǎo de méiyǒu tā kuài.", "So sánh kém dùng 没有, không dùng 比 + 不."]], "mcq": [["Chọn câu so sánh kém đúng:", ["我没有他高。", "我不比他很高。", "我没比他高很。"], 0, "A 没有 B + tính từ."], ["北方比南方冷___。", ["很", "得多", "非常"], 1, "比 + … + 得多 (hơn nhiều)."]]}, "H5": {"sort": [[["除了", "苹果", "以外", "我", "还", "买了", "香蕉"], "Chúle píngguǒ yǐwài, wǒ hái mǎi le xiāngjiāo.", "Ngoài táo ra tôi còn mua chuối."], [["他", "不但", "会唱歌", "而且", "会跳舞"], "Tā búdàn huì chànggē, érqiě huì tiàowǔ.", "Anh ấy không những biết hát mà còn biết nhảy."], [["我的", "手机", "被", "朋友", "拿走了"], "Wǒ de shǒujī bèi péngyou názǒu le.", "Điện thoại của tôi bị bạn lấy đi rồi."]], "fix": [["我学了汉语三年。", "我学了三年汉语。", "Wǒ xué le sān nián Hànyǔ.", "Bổ ngữ thời lượng đứng trước tân ngữ (hoặc lặp động từ: 学汉语学了三年)."], ["我一口水不喝。", "我一口水也没喝。", "Wǒ yì kǒu shuǐ yě méi hē.", "Cấu trúc nhấn mạnh phủ định: 一 + lượng từ + 也 + 不/没."]], "mcq": [["你来这儿多长时间___？", ["了", "着", "过"], 0, "Hỏi thời gian đã trôi qua và còn tiếp diễn: …多长时间了?"], ["我去___三次北京。", ["过", "着", "被"], 0, "过 diễn tả đã từng có kinh nghiệm."]]}, "H6": {"sort": [[["飞机", "是", "我", "最喜欢", "的", "交通工具"], "Fēijī shì wǒ zuì xǐhuan de jiāotōng gōngjù.", "Máy bay là phương tiện tôi thích nhất."], [["照片", "已经", "洗好", "了"], "Zhàopiàn yǐjīng xǐ hǎo le.", "Ảnh đã rửa xong rồi."], [["明天", "我", "坐", "公共汽车", "去", "公司"], "Míngtiān wǒ zuò gōnggòng qìchē qù gōngsī.", "Ngày mai tôi đi xe bus đến công ty."]], "fix": [["今天比昨天很冷。", "今天比昨天冷。", "Jīntiān bǐ zuótiān lěng.", "Sau 比 không dùng 很."], ["她考大学了。", "她考上大学了。", "Tā kǎoshàng dàxué le.", "“Thi đậu” cần bổ ngữ kết quả 上."]], "mcq": [["我___一家贸易公司工作。", ["在", "是", "给"], 0, "在 + nơi chốn + động từ."], ["照片洗___了。", ["好", "着", "过"], 0, "洗好 = rửa xong (bổ ngữ kết quả)."]], "make": [["累", "我今天走了很多路，真累。", "Wǒ jīntiān zǒu le hěn duō lù, zhēn lèi.", "Hôm nay tôi đi nhiều, mệt thật."], ["打车", "下雨了，我们打车去吧。", "Xià yǔ le, wǒmen dǎchē qù ba.", "Mưa rồi, chúng ta bắt taxi đi."], ["告诉", "请告诉我怎么去机场。", "Qǐng gàosu wǒ zěnme qù jīchǎng.", "Làm ơn chỉ tôi đường ra sân bay."], ["出差", "他经常去外地出差。", "Tā jīngcháng qù wàidì chūchāi.", "Anh ấy thường đi công tác tỉnh khác."]]}, "H7": {"sort": [[["他", "很", "主动", "帮助", "同事"], "Tā hěn zhǔdòng bāngzhù tóngshì.", "Anh ấy rất chủ động giúp đồng nghiệp."], [["这条", "裤子", "尺寸", "太小了"], "Zhè tiáo kùzi chǐcùn tài xiǎo le.", "Cái quần này nhỏ size quá."], [["下班", "时", "路上", "堵车"], "Xiàbān shí lù shang dǔchē.", "Giờ tan làm đường kẹt xe."]], "fix": [["多运动有好处对身体。", "多运动对身体有好处。", "Duō yùndòng duì shēntǐ yǒu hǎochù.", "Cụm 对…有好处: giới từ 对 đứng trước 有."]], "mcq": [["多运动___身体有好处。", ["对", "把", "被"], 0, "对 + đối tượng + 有好处."], ["我想给妈妈买一份___。", ["礼物", "聚会", "成绩"], 0, "买一份礼物 = mua một món quà."]], "make": [["好处", "早睡早起对健康有好处。", "Zǎo shuì zǎo qǐ duì jiànkāng yǒu hǎochù.", "Ngủ sớm dậy sớm có lợi cho sức khoẻ."], ["谈", "他们在咖啡馆谈工作。", "Tāmen zài kāfēiguǎn tán gōngzuò.", "Họ bàn công việc ở quán cà phê."], ["礼物", "女儿送给我一份生日礼物。", "Nǚ'ér sòng gěi wǒ yí fèn shēngrì lǐwù.", "Con gái tặng tôi một món quà sinh nhật."], ["女儿", "我的女儿喜欢画画儿。", "Wǒ de nǚ'ér xǐhuan huà huàr.", "Con gái tôi thích vẽ tranh."]]}, "H8": {"sort": [[["他", "学会了", "做", "中国菜"], "Tā xuéhuì le zuò Zhōngguó cài.", "Anh ấy đã học được cách nấu món Trung."], [["我", "好不容易", "才", "买到", "车票"], "Wǒ hǎobù róngyì cái mǎidào chēpiào.", "Mãi tôi mới mua được vé."], [["请", "按时", "吃药"], "Qǐng ànshí chī yào.", "Hãy uống thuốc đúng giờ."]], "fix": [["我昨天买了一书。", "我昨天买了一本书。", "Wǒ zuótiān mǎi le yì běn shū.", "Số từ phải đi với lượng từ: 一本书."], ["这个问题不难解决得。", "这个问题不难解决。", "Zhège wèntí bù nán jiějué.", "Không cần thêm 得 sau động từ khi không có bổ ngữ."]], "mcq": [["我们要___照顾自己。", ["学会", "学着", "学了"], 0, "学会 + động từ = học được cách làm gì."], ["出国要带___。", ["护照", "邻居", "梦想"], 0, "护照 = hộ chiếu."]], "make": [["结婚", "我姐姐去年结婚了。", "Wǒ jiějie qùnián jiéhūn le.", "Chị tôi kết hôn năm ngoái."], ["好吃", "妈妈做的菜特别好吃。", "Māma zuò de cài tèbié hǎochī.", "Món mẹ nấu đặc biệt ngon."], ["感冒", "他感冒了，在家休息。", "Tā gǎnmào le, zài jiā xiūxi.", "Anh ấy bị cảm, nghỉ ở nhà."], ["图书馆", "图书馆周末也开门。", "Túshūguǎn zhōumò yě kāimén.", "Thư viện cuối tuần cũng mở cửa."]]}, "H9": {"sort": [[["要是", "你", "迟到了", "请", "打电话"], "Yàoshi nǐ chídào le qǐng dǎ diànhuà.", "Nếu bạn đến muộn thì hãy gọi điện."], [["到", "路口", "请", "右拐"], "Dào lùkǒu qǐng yòu guǎi.", "Đến ngã rẽ xin rẽ phải."], [["她", "得到了", "奖学金"], "Tā dédào le jiǎngxuéjīn.", "Cô ấy nhận được học bổng."]], "fix": [["我去超市在买水果。", "我在超市买水果。", "Wǒ zài chāoshì mǎi shuǐguǒ.", "在 + nơi chốn đứng trước động từ chính."], ["他放假去旅游在下个星期。", "他下个星期放假去旅游。", "Tā xià ge xīngqī fàngjià qù lǚyóu.", "Từ chỉ thời gian đứng trước động từ."]], "mcq": [["这里的一切对我都很___。", ["陌生", "奖学金", "胡同"], 0, "陌生 = xa lạ."], ["老师常常___我们学习。", ["鼓励", "迟到", "放假"], 0, "鼓励 = khích lệ."]], "make": [["放假", "春节我们放假一个星期。", "Chūnjié wǒmen fàngjià yí ge xīngqī.", "Tết chúng tôi nghỉ một tuần."], ["讨论", "同学们在教室里讨论问题。", "Tóngxuémen zài jiàoshì li tǎolùn wèntí.", "Các bạn thảo luận vấn đề trong lớp."], ["毕业", "他去年大学毕业了。", "Tā qùnián dàxué bìyè le.", "Năm ngoái anh ấy tốt nghiệp đại học."], ["超市", "楼下有一家很大的超市。", "Lóu xià yǒu yì jiā hěn dà de chāoshì.", "Dưới lầu có một siêu thị rất lớn."]]}, "H10": {"sort": [[["多吃", "蔬菜", "对", "身体", "好"], "Duō chī shūcài duì shēntǐ hǎo.", "Ăn nhiều rau tốt cho cơ thể."], [["你", "得", "穿得", "暖和", "一点儿"], "Nǐ děi chuān de nuǎnhuo yìdiǎnr.", "Bạn phải mặc ấm hơn một chút."], [["周末", "我", "想", "安排", "一次", "旅行"], "Zhōumò wǒ xiǎng ānpái yí cì lǚxíng.", "Cuối tuần tôi muốn sắp xếp một chuyến đi."]], "fix": [["我头疼很。", "我头很疼。", "Wǒ tóu hěn téng.", "Phó từ chỉ mức độ 很 đứng trước tính từ."], ["他去体育馆两次每周。", "他每周去两次体育馆。", "Tā měi zhōu qù liǎng cì tǐyùguǎn.", "Thời gian đứng trước động từ, bổ ngữ động lượng đứng sau động từ."]], "mcq": [["快走吧，___要迟到了。", ["否则", "而且", "虽然"], 0, "否则 = nếu không thì."], ["这双鞋穿着很___。", ["舒服", "安排", "蔬菜"], 0, "舒服 = thoải mái."]], "make": [["上课", "我们周一到周五上课。", "Wǒmen zhōuyī dào zhōuwǔ shàngkè.", "Chúng tôi học từ thứ Hai đến thứ Sáu."], ["头疼", "他昨晚没睡好，今天头疼。", "Tā zuówǎn méi shuìhǎo, jīntiān tóuténg.", "Tối qua anh ấy ngủ không ngon, hôm nay đau đầu."], ["干杯", "新年快乐，我们干杯！", "Xīnnián kuàilè, wǒmen gānbēi!", "Chúc mừng năm mới, cạn ly!"], ["笑", "孩子们笑得很开心。", "Háizimen xiào de hěn kāixīn.", "Bọn trẻ cười rất vui."]]}};
+const HSKEX={"21": {"sort": [[["我", "把", "作业", "做完", "了"], "Wǒ bǎ zuòyè zuò wán le.", "Tôi làm xong bài tập rồi."], [["请", "把", "门", "关上"], "Qǐng bǎ mén guānshang.", "Xin đóng cửa lại."], [["他", "坐着", "看", "电视"], "Tā zuò zhe kàn diànshì.", "Anh ấy ngồi xem tivi."]], "fix": [["我把作业做。", "我把作业做完了。", "Wǒ bǎ zuòyè zuò wán le.", "Sau 把, động từ cần có thành phần kết quả (完) và thường có 了."], ["他在看电视着。", "他在看着电视。", "Tā zài kàn zhe diànshì.", "着 đặt ngay sau động từ, không đặt cuối câu."]], "mcq": [["Chọn câu đúng:", ["我把书看。", "我把书看完了。", "我书把看完了。"], 1, "Câu 把 cần: chủ ngữ + 把 + tân ngữ + động từ + thành phần khác."], ["门___，你直接进来吧。", ["开着", "开了着", "着开"], 0, "V + 着 diễn tả trạng thái đang kéo dài: 门开着."]]}, "22": {"sort": [[["下了班", "我", "就", "去", "超市"], "Xià le bān wǒ jiù qù chāoshì.", "Tan làm xong tôi đi siêu thị."], [["只有", "多练习", "才能", "说得好"], "Zhǐyǒu duō liànxí cái néng shuō de hǎo.", "Chỉ có luyện nhiều mới nói tốt được."], [["如果", "明天", "下雨", "我们", "就", "不去了"], "Rúguǒ míngtiān xià yǔ, wǒmen jiù bú qù le.", "Nếu mai mưa thì chúng ta không đi nữa."]], "fix": [["我六点起床就了。", "我六点就起床了。", "Wǒ liù diǎn jiù qǐchuáng le.", "就 đứng trước động từ."], ["如果下雨，我们才不去。", "如果下雨，我们就不去。", "Rúguǒ xià yǔ, wǒmen jiù bú qù.", "如果…就… đi với nhau; 才 thường đi với 只有."]], "mcq": [["___认真听课，才能听懂。", ["只要", "只有", "如果"], 1, "只有…才… (chỉ có… mới…)."], ["Diễn tả “sắp xảy ra”, dùng:", ["快…了", "就…了", "着…了"], 0, "快 + động từ + 了 = sắp… rồi."]]}, "23": {"sort": [[["这份", "工作", "适合", "你"], "Zhè fèn gōngzuò shìhé nǐ.", "Công việc này hợp với bạn."], [["毕业", "以后", "我", "想", "去中国"], "Bìyè yǐhòu wǒ xiǎng qù Zhōngguó.", "Tốt nghiệp xong tôi muốn sang Trung Quốc."], [["你", "怎么", "起得", "这么", "早"], "Nǐ zěnme qǐ de zhème zǎo?", "Sao bạn dậy sớm thế?"]], "fix": [["这个颜色很合适你。", "这个颜色适合你。", "Zhège yánsè shìhé nǐ.", "合适 không mang tân ngữ; dùng 适合 hoặc 对你很合适."], ["吃饭后来，我们去散步。", "吃饭以后，我们去散步。", "Chīfàn yǐhòu, wǒmen qù sànbù.", "后来 chỉ chuyện đã xảy ra trong quá khứ, không đi sau động từ như 以后."]], "mcq": [["___他搬到了北京，我们很少见面。", ["以后", "后来", "后面"], 1, "Chuyện quá khứ “sau đó” dùng 后来."], ["你上___吧，我在楼上等你。", ["来", "去", "到"], 0, "Hướng về phía người nói dùng 来."]]}, "24": {"sort": [[["弟弟", "比", "我", "高"], "Dìdi bǐ wǒ gāo.", "Em trai cao hơn tôi."], [["我", "没有", "他", "那么", "高"], "Wǒ méiyǒu tā nàme gāo.", "Tôi không cao bằng anh ấy."], [["这个", "跟", "那个", "一样", "大"], "Zhège gēn nàge yíyàng dà.", "Cái này to bằng cái kia."]], "fix": [["他比我很高。", "他比我高。", "Tā bǐ wǒ gāo.", "Câu chữ 比 không dùng 很/非常 trước tính từ; dùng 更/还 hoặc 得多."], ["我跑得比他不快。", "我跑得没有他快。", "Wǒ pǎo de méiyǒu tā kuài.", "So sánh kém dùng 没有, không dùng 比 + 不."]], "mcq": [["Chọn câu so sánh kém đúng:", ["我没有他高。", "我不比他很高。", "我没比他高很。"], 0, "A 没有 B + tính từ."], ["北方比南方冷___。", ["很", "得多", "非常"], 1, "比 + … + 得多 (hơn nhiều)."]]}, "25": {"sort": [[["除了", "苹果", "以外", "我", "还", "买了", "香蕉"], "Chúle píngguǒ yǐwài, wǒ hái mǎi le xiāngjiāo.", "Ngoài táo ra tôi còn mua chuối."], [["他", "不但", "会唱歌", "而且", "会跳舞"], "Tā búdàn huì chànggē, érqiě huì tiàowǔ.", "Anh ấy không những biết hát mà còn biết nhảy."], [["我的", "手机", "被", "朋友", "拿走了"], "Wǒ de shǒujī bèi péngyou názǒu le.", "Điện thoại của tôi bị bạn lấy đi rồi."]], "fix": [["我学了汉语三年。", "我学了三年汉语。", "Wǒ xué le sān nián Hànyǔ.", "Bổ ngữ thời lượng đứng trước tân ngữ (hoặc lặp động từ: 学汉语学了三年)."], ["我一口水不喝。", "我一口水也没喝。", "Wǒ yì kǒu shuǐ yě méi hē.", "Cấu trúc nhấn mạnh phủ định: 一 + lượng từ + 也 + 不/没."]], "mcq": [["你来这儿多长时间___？", ["了", "着", "过"], 0, "Hỏi thời gian đã trôi qua và còn tiếp diễn: …多长时间了?"], ["我去___三次北京。", ["过", "着", "被"], 0, "过 diễn tả đã từng có kinh nghiệm."]]}, "26": {"sort": [[["飞机", "是", "我", "最喜欢", "的", "交通工具"], "Fēijī shì wǒ zuì xǐhuan de jiāotōng gōngjù.", "Máy bay là phương tiện tôi thích nhất."], [["照片", "已经", "洗好", "了"], "Zhàopiàn yǐjīng xǐ hǎo le.", "Ảnh đã rửa xong rồi."], [["明天", "我", "坐", "公共汽车", "去", "公司"], "Míngtiān wǒ zuò gōnggòng qìchē qù gōngsī.", "Ngày mai tôi đi xe bus đến công ty."]], "fix": [["今天比昨天很冷。", "今天比昨天冷。", "Jīntiān bǐ zuótiān lěng.", "Sau 比 không dùng 很."], ["她考大学了。", "她考上大学了。", "Tā kǎoshàng dàxué le.", "“Thi đậu” cần bổ ngữ kết quả 上."]], "mcq": [["我___一家贸易公司工作。", ["在", "是", "给"], 0, "在 + nơi chốn + động từ."], ["照片洗___了。", ["好", "着", "过"], 0, "洗好 = rửa xong (bổ ngữ kết quả)."]], "make": [["累", "我今天走了很多路，真累。", "Wǒ jīntiān zǒu le hěn duō lù, zhēn lèi.", "Hôm nay tôi đi nhiều, mệt thật."], ["打车", "下雨了，我们打车去吧。", "Xià yǔ le, wǒmen dǎchē qù ba.", "Mưa rồi, chúng ta bắt taxi đi."], ["告诉", "请告诉我怎么去机场。", "Qǐng gàosu wǒ zěnme qù jīchǎng.", "Làm ơn chỉ tôi đường ra sân bay."], ["出差", "他经常去外地出差。", "Tā jīngcháng qù wàidì chūchāi.", "Anh ấy thường đi công tác tỉnh khác."]]}, "27": {"sort": [[["他", "很", "主动", "帮助", "同事"], "Tā hěn zhǔdòng bāngzhù tóngshì.", "Anh ấy rất chủ động giúp đồng nghiệp."], [["这条", "裤子", "尺寸", "太小了"], "Zhè tiáo kùzi chǐcùn tài xiǎo le.", "Cái quần này nhỏ size quá."], [["下班", "时", "路上", "堵车"], "Xiàbān shí lù shang dǔchē.", "Giờ tan làm đường kẹt xe."]], "fix": [["多运动有好处对身体。", "多运动对身体有好处。", "Duō yùndòng duì shēntǐ yǒu hǎochù.", "Cụm 对…有好处: giới từ 对 đứng trước 有."]], "mcq": [["多运动___身体有好处。", ["对", "把", "被"], 0, "对 + đối tượng + 有好处."], ["我想给妈妈买一份___。", ["礼物", "聚会", "成绩"], 0, "买一份礼物 = mua một món quà."]], "make": [["好处", "早睡早起对健康有好处。", "Zǎo shuì zǎo qǐ duì jiànkāng yǒu hǎochù.", "Ngủ sớm dậy sớm có lợi cho sức khoẻ."], ["谈", "他们在咖啡馆谈工作。", "Tāmen zài kāfēiguǎn tán gōngzuò.", "Họ bàn công việc ở quán cà phê."], ["礼物", "女儿送给我一份生日礼物。", "Nǚ'ér sòng gěi wǒ yí fèn shēngrì lǐwù.", "Con gái tặng tôi một món quà sinh nhật."], ["女儿", "我的女儿喜欢画画儿。", "Wǒ de nǚ'ér xǐhuan huà huàr.", "Con gái tôi thích vẽ tranh."]]}, "28": {"sort": [[["他", "学会了", "做", "中国菜"], "Tā xuéhuì le zuò Zhōngguó cài.", "Anh ấy đã học được cách nấu món Trung."], [["我", "好不容易", "才", "买到", "车票"], "Wǒ hǎobù róngyì cái mǎidào chēpiào.", "Mãi tôi mới mua được vé."], [["请", "按时", "吃药"], "Qǐng ànshí chī yào.", "Hãy uống thuốc đúng giờ."]], "fix": [["我昨天买了一书。", "我昨天买了一本书。", "Wǒ zuótiān mǎi le yì běn shū.", "Số từ phải đi với lượng từ: 一本书."], ["这个问题不难解决得。", "这个问题不难解决。", "Zhège wèntí bù nán jiějué.", "Không cần thêm 得 sau động từ khi không có bổ ngữ."]], "mcq": [["我们要___照顾自己。", ["学会", "学着", "学了"], 0, "学会 + động từ = học được cách làm gì."], ["出国要带___。", ["护照", "邻居", "梦想"], 0, "护照 = hộ chiếu."]], "make": [["结婚", "我姐姐去年结婚了。", "Wǒ jiějie qùnián jiéhūn le.", "Chị tôi kết hôn năm ngoái."], ["好吃", "妈妈做的菜特别好吃。", "Māma zuò de cài tèbié hǎochī.", "Món mẹ nấu đặc biệt ngon."], ["感冒", "他感冒了，在家休息。", "Tā gǎnmào le, zài jiā xiūxi.", "Anh ấy bị cảm, nghỉ ở nhà."], ["图书馆", "图书馆周末也开门。", "Túshūguǎn zhōumò yě kāimén.", "Thư viện cuối tuần cũng mở cửa."]]}, "29": {"sort": [[["要是", "你", "迟到了", "请", "打电话"], "Yàoshi nǐ chídào le qǐng dǎ diànhuà.", "Nếu bạn đến muộn thì hãy gọi điện."], [["到", "路口", "请", "右拐"], "Dào lùkǒu qǐng yòu guǎi.", "Đến ngã rẽ xin rẽ phải."], [["她", "得到了", "奖学金"], "Tā dédào le jiǎngxuéjīn.", "Cô ấy nhận được học bổng."]], "fix": [["我去超市在买水果。", "我在超市买水果。", "Wǒ zài chāoshì mǎi shuǐguǒ.", "在 + nơi chốn đứng trước động từ chính."], ["他放假去旅游在下个星期。", "他下个星期放假去旅游。", "Tā xià ge xīngqī fàngjià qù lǚyóu.", "Từ chỉ thời gian đứng trước động từ."]], "mcq": [["这里的一切对我都很___。", ["陌生", "奖学金", "胡同"], 0, "陌生 = xa lạ."], ["老师常常___我们学习。", ["鼓励", "迟到", "放假"], 0, "鼓励 = khích lệ."]], "make": [["放假", "春节我们放假一个星期。", "Chūnjié wǒmen fàngjià yí ge xīngqī.", "Tết chúng tôi nghỉ một tuần."], ["讨论", "同学们在教室里讨论问题。", "Tóngxuémen zài jiàoshì li tǎolùn wèntí.", "Các bạn thảo luận vấn đề trong lớp."], ["毕业", "他去年大学毕业了。", "Tā qùnián dàxué bìyè le.", "Năm ngoái anh ấy tốt nghiệp đại học."], ["超市", "楼下有一家很大的超市。", "Lóu xià yǒu yì jiā hěn dà de chāoshì.", "Dưới lầu có một siêu thị rất lớn."]]}, "30": {"sort": [[["多吃", "蔬菜", "对", "身体", "好"], "Duō chī shūcài duì shēntǐ hǎo.", "Ăn nhiều rau tốt cho cơ thể."], [["你", "得", "穿得", "暖和", "一点儿"], "Nǐ děi chuān de nuǎnhuo yìdiǎnr.", "Bạn phải mặc ấm hơn một chút."], [["周末", "我", "想", "安排", "一次", "旅行"], "Zhōumò wǒ xiǎng ānpái yí cì lǚxíng.", "Cuối tuần tôi muốn sắp xếp một chuyến đi."]], "fix": [["我头疼很。", "我头很疼。", "Wǒ tóu hěn téng.", "Phó từ chỉ mức độ 很 đứng trước tính từ."], ["他去体育馆两次每周。", "他每周去两次体育馆。", "Tā měi zhōu qù liǎng cì tǐyùguǎn.", "Thời gian đứng trước động từ, bổ ngữ động lượng đứng sau động từ."]], "mcq": [["快走吧，___要迟到了。", ["否则", "而且", "虽然"], 0, "否则 = nếu không thì."], ["这双鞋穿着很___。", ["舒服", "安排", "蔬菜"], 0, "舒服 = thoải mái."]], "make": [["上课", "我们周一到周五上课。", "Wǒmen zhōuyī dào zhōuwǔ shàngkè.", "Chúng tôi học từ thứ Hai đến thứ Sáu."], ["头疼", "他昨晚没睡好，今天头疼。", "Tā zuówǎn méi shuìhǎo, jīntiān tóuténg.", "Tối qua anh ấy ngủ không ngon, hôm nay đau đầu."], ["干杯", "新年快乐，我们干杯！", "Xīnnián kuàilè, wǒmen gānbēi!", "Chúc mừng năm mới, cạn ly!"], ["笑", "孩子们笑得很开心。", "Háizimen xiào de hěn kāixīn.", "Bọn trẻ cười rất vui."]]}};
 U.forEach(u=>{if(u.hsk&&HSKEX[u.n])u.x=HSKEX[u.n]});
 const HSKW=new Set(U.filter(u=>u.hsk).flatMap(u=>u.w.map(w=>w[0])));
 
@@ -1442,7 +1443,7 @@ const uid=u=>"u"+u.n.split("–")[0];
 const BOOK={c1:"初级起步篇1",c2:"初级起步篇2",q1:"准中级加速篇1",q2:"准中级加速篇2",z1:"中级冲刺篇1",z2:"中级冲刺篇2",g1:"高级飞翔篇1",g2:"高级飞翔篇2"};
 function wordHtml(w,p){
  const s=SRC[w[0]];
- const badge=s?`<span class="src" title="Xuất hiện ${s[2]} lần trong bộ 博雅汉语">博雅 · ${BOOK[s[0]]} · tr.${s[1]}</span>`:`<span class="src add">${HSKW.has(w[0])?"HSK3 · sách":"Bổ sung chuyên ngành"}</span>`;
+ const badge=s?`<span class="src" title="Xuất hiện ${s[2]} lần trong bộ 博雅汉语">博雅 · ${BOOK[s[0]]} · tr.${s[1]}</span>`:`<span class="src add">${HSKW.has(w[0])?"Sách ngữ pháp":"Bổ sung chuyên ngành"}</span>`;
  return `<div class="w" data-b="${s?1:0}" data-k="${esc((w[0]+" "+w[1]+" "+w[2]).toLowerCase())}">
   <div><div class="hz">${w[0]}</div><div class="py" style="color:${col(p.k)}">${esc(w[1])}</div>${bo(w[1],"div")}<div class="mn">${esc(w[2])}</div>${badge}</div>
   <div class="ex"><span class="zh">${w[3]}</span><span class="p">${esc(w[4])}</span>${bo(w[4])}<span class="v">${esc(w[5])}</span></div></div>`;
@@ -1450,7 +1451,7 @@ function wordHtml(w,p){
 function groupHtml(u,p){
  const seen=new Set(u.w.map(w=>w[0]));
  const all=u.w.concat((EXTRA[u.n]||[]).filter(w=>!seen.has(w[0])));
- if(u.hsk)return `<div class="grp"><b>Từ vựng · mẫu ngữ pháp HSK3 – HSKK</b><span>${all.length} từ</span></div>${all.map(w=>wordHtml(w,p)).join("")}`;
+ if(u.hsk)return `<div class="grp"><b>${p.k==="p7"?"Từ vựng & bài tập":"Mẫu ngữ pháp · từ vựng"}</b><span>${all.length} từ</span></div>${all.map(w=>wordHtml(w,p)).join("")}`;
  const inB=all.filter(w=>SRC[w[0]]), add=all.filter(w=>!SRC[w[0]]);
  return `<div class="grp"><b>Từ có trong giáo trình 博雅汉语</b><span>${inB.length} từ</span></div>${inB.map(w=>wordHtml(w,p)).join("")}`+
   (add.length?`<div class="grp add"><b>Bổ sung chuyên ngành</b><span>${add.length} từ · không có trong Boya</span></div>${add.map(w=>wordHtml(w,p)).join("")}`:"");
@@ -1482,7 +1483,7 @@ function rowHtml(w){const s=SRC[w[0]];return `<div class="wr" data-hz="${w[0]}" 
  <div class="wr-x" hidden><div class="c-zh han">${w[3]}</div><div class="c-py py">${esc(w[4])}</div>${bo(w[4],"div")}<div class="c-vi v">${esc(w[5])}</div>
  <div class="acts"><button class="act" data-say="${esc(w[3])}">▶ Nghe câu</button><button class="act mk" data-mark="k" data-hz="${w[0]}">Đã thuộc</button><button class="act mk" data-mark="h" data-hz="${w[0]}">Từ khó</button></div>
  <div class="wr-map" data-map-hz="${w[0]}"></div>
- <span class="src${s?"":" add"}">${s?`博雅 · ${BOOK[s[0]]} · tr.${s[1]}`:HSKW.has(w[0])?"HSK3 · sách":"Bổ sung chuyên ngành"}</span></div></div>`}
+ <span class="src${s?"":" add"}">${s?`博雅 · ${BOOK[s[0]]} · tr.${s[1]}`:HSKW.has(w[0])?"Sách ngữ pháp":"Bổ sung chuyên ngành"}</span></div></div>`}
 function exHtml(u,p){
  const x=u.x,c=col(p.k),sh=a=>{const n=a.length,r=a.slice().reverse();return n>2?r.concat(r.splice(0,1)):r};
  let h=`<div class="exr" style="background:${soft(p.k)}"><b style="color:${c}">Bài tập luyện tập (tự soạn)</b>`;
@@ -1507,16 +1508,16 @@ let FCSET=null;
 /* ---------- per-unit mindmaps ---------- */
 const UAPI={};
 const MAP={
-"H1":[["Câu chữ 把", "把 把…放在 把…给 把…洗干净"], ["Trợ từ 着", "着 正在…着 …着…呢 坐着"]],
-"H2":[["Trợ từ 了", "了(句尾) 了(动态) V1了…就V2 快…了"], ["Phó từ 就", "就(早) 很快就 马上就 就是"], ["Giả thiết · điều kiện · mục đích", "如果…就… 要是…的话 只要…就… 只有…才… 为了 而"]],
-"H3":[["这么 · 这样", "这么 这样 这样的+N"], ["合适 · 适合", "合适 适合 合适的+N"], ["以后 · 后来", "以后 后来"], ["来 · 去 · 到 · 能 · 可以", "V+来 V+去 V+到 能 可以"]],
-"H4":[["So sánh hơn", "A比B+adj 比…得多 比…更/还 V得比B+adj"], ["So sánh kém", "没有 V得没有B那么+adj"], ["So sánh bằng", "跟…一样 像…一样"]],
-"H5":[["Liên từ", "除了…以外 不但…而且… 虽然…但是… 从…起 一…也不 一点儿…也不"], ["Bị động · 帮", "被 叫/让 帮 帮忙 帮助"], ["Bổ ngữ thời lượng · động lượng", "V+了+时量 …了…了 多长时间 次 过"]],
-"H6":[["Giao thông & du lịch", "交通工具 旅游 干净 安静 摩托车 考上 公共汽车 累 打车 出差"], ["Công ty & nhân viên", "贸易公司 员工 大概 告诉"], ["Thời tiết & sức khoẻ", "阴天 下雪 感冒 小心 医院 医生 照顾"], ["Ảnh & kỷ niệm", "照片 洗 开心 难忘"]],
-"H7":[["Học tập & công việc", "主动 好好儿 成绩 聚会 影响 收入 珍惜 谈"], ["Mua sắm & đời sống", "尺寸 退货 暖气 字典 地图 十字路口 堵车 西边"], ["Gia đình & quà", "好处 礼物 女儿"]],
-"H8":[["Thể thao & sức khoẻ", "国球 棒 学会 健康 从而 得到 嗓子疼 厉害 严重 打瞌睡"], ["Du lịch & giấy tờ", "护照 错过 留学 梦想 好不容易"], ["Cuộc sống hằng ngày", "按时 完成 来往 邻居 结婚 好吃 图书馆 解决"]],
-"H9":[["Học hành & tin tức", "迟到 要求 学期 奖学金 消息 讨论 放假 鼓励"], ["Đường phố & giao thông", "胡同 交通 直走 右拐 环岛 上下班时间 选择 超市"], ["Ngôn ngữ & cuộc sống", "方言 陌生 习惯 儿女 每到…就… 毕业"]],
-"H10":[["Quần áo & thời tiết", "穿不上 暖和 舒服 否则"], ["Sức khoẻ & tập luyện", "蔬菜 安排 体育馆 锻炼身体 头疼"], ["Tình huống hằng ngày", "顺化 上课 干杯 笑"]],
+"21":[["Câu chữ 把", "把 把…放在 把…给 把…洗干净"], ["Trợ từ 着", "着 正在…着 …着…呢 坐着"]],
+"22":[["Trợ từ 了", "了(句尾) 了(动态) V1了…就V2 快…了"], ["Phó từ 就", "就(早) 很快就 马上就 就是"], ["Giả thiết · điều kiện · mục đích", "如果…就… 要是…的话 只要…就… 只有…才… 为了 而"]],
+"23":[["这么 · 这样", "这么 这样 这样的+N"], ["合适 · 适合", "合适 适合 合适的+N"], ["以后 · 后来", "以后 后来"], ["来 · 去 · 到 · 能 · 可以", "V+来 V+去 V+到 能 可以"]],
+"24":[["So sánh hơn", "A比B+adj 比…得多 比…更/还 V得比B+adj"], ["So sánh kém", "没有 V得没有B那么+adj"], ["So sánh bằng", "跟…一样 像…一样"]],
+"25":[["Liên từ", "除了…以外 不但…而且… 虽然…但是… 从…起 一…也不 一点儿…也不"], ["Bị động · 帮", "被 叫/让 帮 帮忙 帮助"], ["Bổ ngữ thời lượng · động lượng", "V+了+时量 …了…了 多长时间 次 过"]],
+"26":[["Giao thông & du lịch", "交通工具 旅游 干净 安静 摩托车 考上 公共汽车 累 打车 出差"], ["Công ty & nhân viên", "贸易公司 员工 大概 告诉"], ["Thời tiết & sức khoẻ", "阴天 下雪 感冒 小心 医院 医生 照顾"], ["Ảnh & kỷ niệm", "照片 洗 开心 难忘"]],
+"27":[["Học tập & công việc", "主动 好好儿 成绩 聚会 影响 收入 珍惜 谈"], ["Mua sắm & đời sống", "尺寸 退货 暖气 字典 地图 十字路口 堵车 西边"], ["Gia đình & quà", "好处 礼物 女儿"]],
+"28":[["Thể thao & sức khoẻ", "国球 棒 学会 健康 从而 得到 嗓子疼 厉害 严重 打瞌睡"], ["Du lịch & giấy tờ", "护照 错过 留学 梦想 好不容易"], ["Cuộc sống hằng ngày", "按时 完成 来往 邻居 结婚 好吃 图书馆 解决"]],
+"29":[["Học hành & tin tức", "迟到 要求 学期 奖学金 消息 讨论 放假 鼓励"], ["Đường phố & giao thông", "胡同 交通 直走 右拐 环岛 上下班时间 选择 超市"], ["Ngôn ngữ & cuộc sống", "方言 陌生 习惯 儿女 每到…就… 毕业"]],
+"30":[["Quần áo & thời tiết", "穿不上 暖和 舒服 否则"], ["Sức khoẻ & tập luyện", "蔬菜 安排 体育馆 锻炼身体 头疼"], ["Tình huống hằng ngày", "顺化 上课 干杯 笑"]],
 "1":[["Bản thân & hồ sơ","简历 求职信 申请 毕业 专业 能力 性格 经验"],["Tuyển dụng – phỏng vấn","招聘 应聘 职位 面试 录用"],["Điểm mạnh/yếu · lương · kế hoạch","优点 缺点 责任心 薪资 待遇 职业规划 前途"]],
 "2":[["Quy trình nhận việc","入职 手续 劳动合同 试用期 培训 规定 制度"],["Khi mới vào làm","同事 上班 加班 请假 适应 岗位"]],
 "3":[["Giới thiệu công ty","成立 总部 规模 员工"],["Cơ cấu phòng ban","部门 人事部 财务部 销售部 总经理 秘书 负责"]],
@@ -1741,7 +1742,7 @@ function drawCard(){
  const x=deck[cur],w=x.w,s=SRC[w[0]];
  fcN.textContent=`${cur+1}/${deck.length}`;
  fcC.innerHTML=`<div class="meta">Unit ${x.u}${ST.h[w[0]]?" · Từ khó":""}</div><div class="big">${w[0]}</div>`+
-  (flipped?`<div class="py">${esc(w[1])}</div>${bo(w[1],"div")}<div class="mn">${esc(w[2])}</div><div class="ex">${w[3]}</div><div class="exp">${esc(w[4])}</div>${bo(w[4],"div")}<div class="exv">${esc(w[5])}</div><div class="meta">${s?`博雅 · ${BOOK[s[0]]} · tr.${s[1]}`:HSKW.has(w[0])?"HSK3 · sách":"Bổ sung chuyên ngành"}</div>`:`<div class="meta">Nhớ nghĩa và pinyin, rồi chạm để lật</div>`)+
+  (flipped?`<div class="py">${esc(w[1])}</div>${bo(w[1],"div")}<div class="mn">${esc(w[2])}</div><div class="ex">${w[3]}</div><div class="exp">${esc(w[4])}</div>${bo(w[4],"div")}<div class="exv">${esc(w[5])}</div><div class="meta">${s?`博雅 · ${BOOK[s[0]]} · tr.${s[1]}`:HSKW.has(w[0])?"Sách ngữ pháp":"Bổ sung chuyên ngành"}</div>`:`<div class="meta">Nhớ nghĩa và pinyin, rồi chạm để lật</div>`)+
   `<div class="acts"><button class="act" data-say="${w[0]}">▶ Nghe</button>${flipped?`<button class="act" data-say="${esc(w[3])}">▶ Nghe câu</button>`:""}</div>`;
 }
 function next(ok){
@@ -1887,7 +1888,7 @@ function fillScope(){
  const nh=pxPool("hard").length,nn=pxPool("new").length;
  s.innerHTML=`<option value="all">Cả khoá · trộn ${U.length} bài (${pxPool("all").length} từ)</option>`+PARTS.map((p,pi)=>{const us=U.filter(u=>u.p===pi).map(u=>u.n);return `<option value="p${pi}">${esc(p.vi.split(" · ")[0])} · Unit ${us[0]}–${us.at(-1)} (${pxPool("p"+pi).length} từ)</option>`}).join("")+`<option value="new">Từ chưa thuộc (${nn})</option><option value="hard">Từ khó (${nh})</option>`;
  s.value=[...s.options].some(o=>o.value===v)?v:"all";
- const lab={all:"Cả khoá",p0:"Phần 1",p1:"Phần 2",p2:"Phần 3",p3:"Phần 4",p4:"Phần 5",new:"Chưa thuộc",hard:"Từ khó"};
+ const lab={all:"Cả khoá",p0:"Phần 1",p1:"Phần 2",p2:"Phần 3",p3:"Phần 4",p4:"Phần 5",new:"Chưa thuộc",hard:"Từ khó"};PARTS.forEach((pp,pi)=>{lab["p"+pi]=pp.vi.split(" · ")[0]});
  document.getElementById("px-scopes").innerHTML=[...s.options].map(o=>{const n=(o.textContent.match(/\((\d+)/)||[])[1]||"";const sub=o.value.startsWith("p")?o.textContent.split(" · ")[1].split(" (")[0]:"";
   return `<button class="pxs${o.value===s.value?" on":""}" role="radio" aria-checked="${o.value===s.value}" data-scope="${o.value}"><b>${lab[o.value]}</b><span>${sub?sub+" · ":""}${n} từ</span></button>`}).join("");
 }
@@ -2129,7 +2130,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="33";
+const APP_VERSION="34";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
