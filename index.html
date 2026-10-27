@@ -114,6 +114,7 @@ body.hide-py .py, body.hide-py .p{visibility:hidden}
 .tr-res.zh{font-family:var(--han);font-size:26px}
 .tr-py{font-size:14.5px;font-weight:600;color:var(--red)}
 .tr-bo .boi{font-size:13.5px}
+.tr-map{margin-top:8px;border-top:1px solid var(--rule);padding-top:10px}
 .tr-btns{display:flex;gap:8px;margin-top:4px}
 .tr-msg{font-size:13.5px;color:var(--red);margin:0}
 #tr-hist{display:flex;flex-direction:column;gap:6px}
@@ -610,6 +611,7 @@ details.list{display:none}
    <div class="tr-py" id="tr-py"></div>
    <div class="tr-bo" id="tr-bo"></div>
    <div class="tr-btns"><button id="tr-say" class="act">▶ Nghe</button><button id="tr-copy" class="act">Sao chép</button></div>
+   <div class="tr-map" id="tr-map" hidden></div>
   </div>
   <p id="tr-msg" class="tr-msg" hidden></p>
   <div id="tr-hist"></div>
@@ -1826,17 +1828,30 @@ function dlgRender(i){
 /* sơ đồ bộ thủ + mẹo nhớ cho từ mới (dữ liệu: hanzi.json) */
 let HZ=null,HZP=null;const MOPEN=new Set();
 const loadHZ=()=>HZP||(HZP=fetch("hanzi.json").then(r=>r.ok?r.json():null).then(j=>(HZ=j)).catch(()=>{HZP=null;return null}));
+/* dữ liệu mở rộng (~6.400 chữ thông dụng, tạo bằng tools/build_hanzi_ext.py): chỉ tải khi dùng mục Dịch */
+let HZXP=null;
+const loadHZX=()=>HZXP||(HZXP=loadHZ().then(()=>HZ?fetch("hanzi-x.json").then(r=>r.ok?r.json():null):null).then(x=>{
+ if(!x||!HZ)return HZ;
+ const nm=p=>{const h=HZ[p];if(h)return [h.hv,h.m!==h.hv?h.m:""];if(x.r[p])return x.r[p];const c=x.c[p];return c?[c[0],""]:["",""]};
+ const lab=p=>{const n=nm(p);return n[0]?`${p} (${n[0]}${n[1]?" – "+n[1]:""})`:p};
+ for(const c in x.c){if(HZ[c])continue;const [hv,py,ps,sm,ph]=x.c[c];
+  const parts=[...ps].map(q=>{const n=nm(q);return [q,n[0],n[1]]});let note="";
+  if(sm&&ph){const pc=x.c[ph],pp=pc?pc[1]:(HZ[ph]?HZ[ph].py:""),pn=nm(ph)[0];
+   note=`Bộ ${lab(sm)} cho nghĩa, phần ${ph} (${pn?pn+", ":""}đọc ${pp}) cho âm → ${c} đọc ${py}.`+(x.f[sm]?` Gặp bộ ${sm} thường là chữ liên quan đến ${x.f[sm]}.`:"")}
+  else if(parts.length)note=`${c} ghép từ ${parts.map(q=>lab(q[0])).join(" + ")}.`;
+  HZ[c]={hv,m:hv,py,parts,note,...(sm&&ph?{s:sm,p:ph}:{})}}
+ return HZ}).catch(()=>{HZXP=null;return HZ}));
 function mapHtml(w){
  if(!HZ)return `<div class="dmap"><span class="mm-key">Đang tải…</span></div>`;
  const cs=[...w[0]].filter(c=>HZ[c]);if(!cs.length)return "";
  const kid=c=>{const h=HZ[c];const parts=h.parts.length?`<div class="mm-kids">${h.parts.map(p=>`<div class="mm-kid"><span class="mm-part${p[0]===h.s?" s":p[0]===h.p?" p":""}"><span class="han">${p[0]}</span>${p[1]?`<b>${esc(p[1])}</b>`:""}${p[2]?` ${esc(p[2])}`:""}</span></div>`).join("")}</div>`:"";
   return `<div class="mm-kid"><div class="mm-node"><span class="han">${c}</span><span class="py">${esc(h.py)}</span><span class="hv">${esc(h.hv)}</span>${h.m!==h.hv?`<span class="mn">${esc(h.m)}</span>`:""}</div>${parts}</div>`};
- const hv=cs.map(c=>HZ[c].hv).join(" ");
+ const hv=cs.map(c=>HZ[c].hv).filter(Boolean).join(" "),allHv=cs.every(c=>HZ[c].hv);
  const anyS=cs.some(c=>HZ[c].s);
  return `<div class="dmap"><div class="mm"><div class="mm-node mm-root"><span class="han">${w[0]}</span><span class="py">${esc(w[1])}</span><span class="hv">${esc(hv)}</span></div><div class="mm-kids">${cs.map(kid).join("")}</div></div>
  ${anyS?`<span class="mm-key">Viền đậm: bộ cho nghĩa · viền đứt: phần cho âm</span>`:""}
  <div class="mm-notes">${cs.map(c=>`<div><span class="han">${c}</span> <b>${esc(HZ[c].hv)}</b>: ${esc(HZ[c].note)}</div>`).join("")}
- <div class="mm-word">Mẹo nhớ cả từ: <span class="han">${w[0]}</span> = ${cs.map(c=>`${c} <b>${esc(HZ[c].hv)}</b>${HZ[c].m!==HZ[c].hv?` (${esc(HZ[c].m)})`:""}`).join(" + ")} → Hán Việt «${esc(hv)}» → ${esc(w[2])}</div></div></div>`;
+ <div class="mm-word">Mẹo nhớ cả từ: <span class="han">${w[0]}</span> = ${cs.map(c=>`${c}${HZ[c].hv?` <b>${esc(HZ[c].hv)}</b>`:""}${HZ[c].m!==HZ[c].hv?` (${esc(HZ[c].m)})`:""}`).join(" + ")}${allHv?` → Hán Việt «${esc(hv)}»`:""} → ${esc(w[2])}</div></div></div>`;
 }
 document.getElementById("dlg-words").addEventListener("click",e=>{const b=e.target.closest("[data-map]");if(!b)return;
  const k=b.dataset.map;MOPEN.has(k)?MOPEN.delete(k):(MOPEN.add(k),gcEvent("bo-thu","Mở sơ đồ bộ thủ"));
@@ -2246,9 +2261,14 @@ mB.addEventListener("click",()=>goHome());
  function paintDir(){$("tr-from").textContent=vi2zh?"Tiếng Việt":"Tiếng Trung";$("tr-to").textContent=vi2zh?"Tiếng Trung":"Tiếng Việt";
   $("tr-in").placeholder=vi2zh?"Gõ hoặc dán câu tiếng Việt cần dịch…":"Gõ hoặc dán câu tiếng Trung (chữ Hán) cần dịch…";$("tr-in").classList.toggle("han",!vi2zh)}
  function paintHist(){const h=hist();$("tr-hist").innerHTML=h.length?`<h3>Đã dịch gần đây</h3>`+h.map((x,i)=>`<button data-i="${i}"><b class="${x.z?"han":""}">${esc(x.a)}</b><span class="${x.z?"":"han"}">${esc(x.b)}</span></button>`).join(""):""}
+ function trMap(o){const box=$("tr-map");box.hidden=true;box.innerHTML="";
+  const zhw=o.dirVi2Zh?o.out:o.src;if(!/^[\u4e00-\u9fff]{1,5}$/.test(zhw||""))return;
+  const w=[zhw,(o.py||"").toLowerCase(),o.dirVi2Zh?o.src:o.out];
+  box.hidden=false;box.innerHTML=`<span class="mm-h">Bộ thủ & mẹo nhớ</span><div class="dmap"><span class="mm-key">Đang tải…</span></div>`;
+  loadHZX().then(()=>{if(last!==o)return;const h=HZ?mapHtml(w):"";if(h)box.innerHTML=`<span class="mm-h">Bộ thủ & mẹo nhớ</span>`+h;else box.hidden=true}).catch(()=>{box.hidden=true})}
  function showRes(o){last=o;const zh=o.dirVi2Zh;
   $("tr-out").hidden=false;$("tr-res").textContent=o.out;$("tr-res").classList.toggle("zh",zh);
-  $("tr-py").textContent=o.py?(zh?"":"Pinyin câu gốc: ")+o.py:"";$("tr-bo").innerHTML=zh&&o.py&&BOIOK?`<span class="boi">${esc(BOI(o.py))}</span>`:""}
+  $("tr-py").textContent=o.py?(zh?"":"Pinyin câu gốc: ")+o.py:"";$("tr-bo").innerHTML=zh&&o.py&&BOIOK?`<span class="boi">${esc(BOI(o.py))}</span>`:"";trMap(o)}
  async function run(){
   const q=$("tr-in").value.trim();if(!q){msg("Hãy nhập nội dung cần dịch.");return}
   if(TRIAL){trialPrompt(null);return}
@@ -2258,7 +2278,7 @@ mB.addEventListener("click",()=>goHome());
    const r=await fetch(u);if(!r.ok)throw new Error(r.status);const d=await r.json();
    let out="",py="";for(const e of d[0]||[]){if(e[0])out+=e[0];else if(e[2]||e[3])py+=(py?" ":"")+(vi2zh?e[2]:e[3])||""}
    if(!out)throw new Error("empty");
-   showRes({out,py:py.trim(),dirVi2Zh:vi2zh});gcEvent("dich","Dịch");
+   showRes({out,py:py.trim(),dirVi2Zh:vi2zh,src:q});gcEvent("dich","Dịch");
    const h=hist().filter(x=>x.a!==q);h.unshift({a:q,b:out,z:!vi2zh});try{localStorage.setItem(HK,JSON.stringify(h.slice(0,8)))}catch(e){}paintHist();
   }catch(e){msg(navigator.onLine===false?"Không có mạng. Hãy kết nối mạng rồi thử lại.":"Chưa dịch được lúc này. Hãy thử lại sau ít phút.")}
   finally{$("tr-go").disabled=false;$("tr-go").textContent="Dịch"}}
@@ -2271,7 +2291,7 @@ mB.addEventListener("click",()=>goHome());
  $("tr-copy").addEventListener("click",()=>{if(!last)return;const t=last.out;const done=()=>{$("tr-copy").textContent="Đã sao chép ✓";setTimeout(()=>$("tr-copy").textContent="Sao chép",1500)};
   (navigator.clipboard?navigator.clipboard.writeText(t).then(done,()=>{}):Promise.resolve())});
  $("tr-hist").addEventListener("click",e=>{const b=e.target.closest("button[data-i]");if(!b)return;const x=hist()[+b.dataset.i];if(!x)return;
-  vi2zh=!x.z;paintDir();$("tr-in").value=x.a;$("tr-count").textContent=`${x.a.length}/600`;showRes({out:x.b,py:"",dirVi2Zh:vi2zh});run()});
+  vi2zh=!x.z;paintDir();$("tr-in").value=x.a;$("tr-count").textContent=`${x.a.length}/600`;showRes({out:x.b,py:"",dirVi2Zh:vi2zh,src:x.a});run()});
  mT.addEventListener("click",()=>{if(TRIAL){trialPrompt(null);return}DA.pause();show("tr");HOME.classList.remove("only-px");paintDir();paintHist();window.scrollTo(0,0);save2({v:"home"})});
 })();
 mF.addEventListener("click",()=>goFC(UV.hidden?null:U[cu].n));
@@ -2300,7 +2320,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="36";
+const APP_VERSION="37";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
