@@ -2320,7 +2320,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="37";
+const APP_VERSION="38";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
@@ -2337,6 +2337,13 @@ function checkUpdate(){
 const FB_CONFIG={apiKey:"AIzaSyCmWSa0VhknJdO4axkF6HJRsIPcXBQfjWo",authDomain:"tieng-trung-van-phong.firebaseapp.com",projectId:"tieng-trung-van-phong",
  storageBucket:"tieng-trung-van-phong.firebasestorage.app",messagingSenderId:"503549271954",appId:"1:503549271954:web:def5dd42fad62d66d6eb4b"};
 const ADMIN_EMAILS=["phamvantu304@gmail.com"];
+/* Gửi email thông báo qua EmailJS (emailjs.com): điền 3 mã công khai để bật. Để trống thì app không gửi email. */
+const EMAILJS={service:"",template:"",key:""};
+const APP_URL="https://phamvantu304-bot.github.io/tieng-trung-van-phong/";
+function sendMail(to,subject,message,name){
+ if(!EMAILJS.service||!EMAILJS.template||!EMAILJS.key||!to)return Promise.resolve(false);
+ return fetch("https://api.emailjs.com/api/v1.0/email/send",{method:"POST",headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({service_id:EMAILJS.service,template_id:EMAILJS.template,user_id:EMAILJS.key,template_params:{to_email:to,to_name:name||"",subject,message}})}).then(r=>r.ok).catch(()=>false)}
 (function(){
  if(!FB_CONFIG)return;
  const AU=document.getElementById("auth"),F=document.getElementById("au-form"),MSG=document.getElementById("au-msg"),GO=document.getElementById("au-go"),ACCT=document.getElementById("acct");
@@ -2415,7 +2422,8 @@ const ADMIN_EMAILS=["phamvantu304@gmail.com"];
   let cached=false;try{cached=localStorage.getItem(okKey(u))==="1"}catch(e){}
   if(cached||isAdmin(u))unlock();else gate("⏳","Đang kiểm tra tài khoản…","","",null);
   unsubMe=ref.onSnapshot(d=>{
-   if(!d.exists){ref.set({email:u.email,name:u.displayName||"",status:isAdmin(u)?"approved":"pending",createdAt:TS(),lastSeen:TS()}).catch(()=>{});return}
+   if(!d.exists){ref.set({email:u.email,name:u.displayName||"",status:isAdmin(u)?"approved":"pending",createdAt:TS(),lastSeen:TS()})
+     .then(()=>{if(!isAdmin(u))sendMail(ADMIN_EMAILS[0],"Có người đăng ký mới – Tiếng Trung Văn phòng",`${u.displayName?u.displayName+" · ":""}${u.email} vừa đăng ký và đang chờ duyệt.\n\nMở app → nút "Quản lý" → bấm "Duyệt":\n${APP_URL}`,"")}).catch(()=>{});return}
    const st=isAdmin(u)?"approved":(d.data().status||"pending");
    if(st==="approved"){unlock();gcEvent("dang-nhap","Đăng nhập")}
    else{approved=false;try{localStorage.removeItem(okKey(u))}catch(e){}
@@ -2455,7 +2463,10 @@ const ADMIN_EMAILS=["phamvantu304@gmail.com"];
     ${s==="admin"?"":`<div class="acts">${acts}<button class="del" data-del="${u.id}" title="Xoá khỏi danh sách">Xoá</button></div>`}</div>`}).join(""):`<div class="ad-empty">Không có người dùng nào ở mục này.</div>`;
  }
  $("ad-stats").addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(b){adFilter=b.dataset.f;renderAdmin()}});
- const setStatus=(id,st)=>db.collection("users").doc(id).update({status:st,statusAt:TS(),statusBy:user.email}).catch(x=>alert("Không cập nhật được: "+(x.code||x.message)));
+ const setStatus=(id,st)=>{const u=(ALLU||[]).find(x=>x.id===id),was=u&&stOf(u);
+  return db.collection("users").doc(id).update({status:st,statusAt:TS(),statusBy:user.email})
+   .then(()=>{if(st==="approved"&&was==="pending"&&u&&u.email)sendMail(u.email,"Tài khoản đã được duyệt – Tiếng Trung Văn phòng",`Xin chào${u.name?" "+u.name:""},\n\nTài khoản ${u.email} của bạn đã được duyệt. Mở app và đăng nhập để bắt đầu học:\n${APP_URL}\n\nChúc bạn học tốt!`,u.name||"")})
+   .catch(x=>alert("Không cập nhật được: "+(x.code||x.message)))};
  $("ad-list").addEventListener("click",e=>{const d=e.target.closest("[data-del]");
   if(d){const u=(ALLU||[]).find(x=>x.id===d.dataset.del);if(confirm(`Xoá ${u&&u.email||"người dùng này"} khỏi danh sách?\n\nTiến độ học của họ sẽ bị xoá. Nếu họ đăng nhập lại, tài khoản sẽ quay về "Chờ duyệt". Muốn chặn hẳn thì dùng "Khoá".`))
    db.collection("users").doc(d.dataset.del).delete().catch(x=>alert("Không xoá được: "+(x.code||x.message)));return}
