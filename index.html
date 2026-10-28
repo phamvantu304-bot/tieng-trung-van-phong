@@ -2373,7 +2373,7 @@ RES.addEventListener("click",e=>{const b=e.target.closest(".res");if(!b)return;o
 })();
 paintMarks();
 /* auto-update: compare with version.txt each time the app opens or comes back */
-const APP_VERSION="39";
+const APP_VERSION="40";
 function checkUpdate(){
  if(location.protocol!=="https:")return;
  fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.text():"").then(v=>{
@@ -2391,7 +2391,7 @@ const FB_CONFIG={apiKey:"AIzaSyCmWSa0VhknJdO4axkF6HJRsIPcXBQfjWo",authDomain:"ti
  storageBucket:"tieng-trung-van-phong.firebasestorage.app",messagingSenderId:"503549271954",appId:"1:503549271954:web:def5dd42fad62d66d6eb4b"};
 const ADMIN_EMAILS=["phamvantu304@gmail.com"];
 /* Gửi email thông báo qua EmailJS (emailjs.com): điền 3 mã công khai để bật. Để trống thì app không gửi email. */
-const EMAILJS={service:"",template:"",key:""};
+const EMAILJS={service:"service_zx8etvi",template:"template_u4ckx0q",key:"duArUCU7KKAZZjVrf"};
 const APP_URL="https://phamvantu304-bot.github.io/tieng-trung-van-phong/";
 function sendMail(to,subject,message,name){
  if(!EMAILJS.service||!EMAILJS.template||!EMAILJS.key||!to)return Promise.resolve(false);
